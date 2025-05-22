@@ -4,15 +4,17 @@ import './global.css';
 
 import SignUpForm from './pages/signup';
 import ForgotPassword from './pages/forgotpassword';
+import AppRouter from './routes';
 
 
 function App() {
   return (
-    <div className="App">
-      {/* <Login /> */}
-      {/* <SignUpForm /> */}
-      <ForgotPassword />
-    </div>
+    // <Provider store={store}>
+    // <PersistGate loading={null} persistor={persistor}>
+    <AppRouter />
+    // <Toaster />
+    // </PersistGate>
+    // </Provider>
   );
 }
 
