@@ -298,7 +298,7 @@ const Dashboard = () => {
                                 <div className="card">
                                     <div className="card-body">
                                         <div className="flex-between gap-8 mb-24">
-                                            <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-purple-600 text-white text-2xl"><i className="phph-certificate"></i></span>
+                                            <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-purple-600 text-white text-2xl"><i className="ph ph-certificate"></i></span>
                                             <img src={graph} className="rounded-circle" />
                                         </div>
 
@@ -311,7 +311,7 @@ const Dashboard = () => {
                                 <div className="card">
                                     <div className="card-body">
                                         <div className="flex-between gap-8 mb-24">
-                                            <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-warning-600 text-white text-2xl"><i className="phph-users-four"></i></span>
+                                            <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-warning-600 text-white text-2xl"><i className="ph ph-users-four"></i></span>
                                             <img src={graph} className="rounded-circle" />
                                         </div>
 
@@ -334,7 +334,7 @@ const Dashboard = () => {
                                     <h5 className="mb-0">Progress Statistics</h5>
                                     <div className="dropdown flex-shrink-0">
                                         <button className="text-gray-400 text-xl d-flex rounded-4" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i className="phph-dots-three-outline"></i>
+                                            <i className="ph ph-dots-three-outline"></i>
                                         </button>
                                         <div className="dropdown-menu dropdown-menu--md border-0 bg-transparent p-0">
                                             <div className="card border border-gray-100 rounded-12 box-shadow-custom">
@@ -403,7 +403,7 @@ const Dashboard = () => {
                                     <h5 className="mb-0">Most Activity</h5>
                                     <div className="dropdown flex-shrink-0">
                                         <button className="text-gray-400 text-xl d-flex rounded-4" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i className="phph-dots-three-outline"></i>
+                                            <i className="ph ph-dots-three-outline"></i>
                                         </button>
                                         <div className="dropdown-menu dropdown-menu--md border-0 bg-transparent p-0">
                                             <div className="card border border-gray-100 rounded-12 box-shadow-custom">
