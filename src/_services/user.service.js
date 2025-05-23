@@ -1,10 +1,10 @@
-// import axiosInstance from "./axiosInstance";
+import axiosInstance from "./axiosInstance";
 
-// const userService = {
-//   checkUser,
+const userService = {
+    login,
+};
 
-// };
-
-// async function checkUser(email) {
-//   return await axiosInstance.post(`/checkuser`, { email });
-// }
+async function login(data) {
+    return await axiosInstance.post(`/api/v1/auth/login`, data);
+}
+export default userService;
