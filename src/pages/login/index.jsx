@@ -6,8 +6,11 @@ import loginImage from '../../assets/images/auth-img1.png';
 import userService from '../../_services/user.service';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { login } from '../../_store/_reducers/auth';
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [passwordShown, setPasswordShown] = useState(false);
   const [requiresLockCode, setRequiresLockCode] = useState(false);
   const togglePasswordVisibility = () => setPasswordShown(prev => !prev);
@@ -29,7 +32,14 @@ const Login = () => {
 
   const handleSubmit = async ({ ...values }) => {
     try {
-      await userService.login(values);
+      const response = await userService.login(values);
+      const userData = response.data.data;
+      console.log(userData, "Testing Jamtech.....");
+      dispatch(login({
+        token: userData.token,
+        first_name: userData.first_name,
+        last_name: userData.last_name,
+      }));
       toast.success('Login successful!');
       navigate("dashboard");
     } catch (err) {
