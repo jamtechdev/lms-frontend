@@ -60,7 +60,6 @@ const SignUp = () => {
                                     </span>
                                 </div>
                             </div>
-
                             <div className="mb-24">
                                 <label htmlFor="current-password" className="form-label mb-8 h6">
                                     Current Password
@@ -85,50 +84,32 @@ const SignUp = () => {
                                     Must be at least 8 characters
                                 </span>
                             </div>
-
                             <div className="mb-32 flex-between flex-wrap gap-8">
-                                <div className="form-check mb-0 flex-shrink-0">
-                                    <input
-                                        className="form-check-input flex-shrink-0 rounded-4"
-                                        type="checkbox"
-                                        id="remember"
-                                    />
-                                    <label
-                                        className="form-check-label text-15 flex-grow-1"
-                                        htmlFor="remember"
-                                    >
-                                        Remember Me
-                                    </label>
-                                </div>
                                 <Link
-                                    to="/forgot-password"
+                                    to="/forgotpassword"
                                     className="text-main-600 hover-text-decoration-underline text-15 fw-medium"
                                 >
                                     Forgot Password?
                                 </Link>
                             </div>
-
                             <button type="submit" className="btn btn-main rounded-pill w-100">
                                 Sign Up
                             </button>
-
                             <p className="mt-32 text-gray-600 text-center">
                                 Already have an account?
                                 <Link
-                                    to="/sign-in"
+                                    to="/"
                                     className="text-main-600 hover-text-decoration-underline"
                                 >
                                     {' '}
                                     Log In
                                 </Link>
                             </p>
-
                             <div className="divider my-32 position-relative text-center">
                                 <span className="divider__text text-gray-600 text-13 fw-medium px-26 bg-white">
                                     or
                                 </span>
                             </div>
-
                             <ul className="flex-align gap-10 flex-wrap justify-content-center">
                                 <li>
                                     <a

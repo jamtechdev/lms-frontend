@@ -5,11 +5,13 @@ import logo from '../../assets/images/logo/logo.png';
 import loginImage from '../../assets/images/auth-img1.png';
 import userService from '../../_services/user.service';
 import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [passwordShown, setPasswordShown] = useState(false);
   const [requiresLockCode, setRequiresLockCode] = useState(false);
   const togglePasswordVisibility = () => setPasswordShown(prev => !prev);
+  const navigate = useNavigate();
   const initialValues = { email: '', password: '', lock_code: '' };
 
   const validationSchema = Yup.object({
@@ -29,6 +31,7 @@ const Login = () => {
     try {
       await userService.login(values);
       toast.success('Login successful!');
+      navigate("dashboard");
     } catch (err) {
       if (err?.response?.status === 403) {
         if (err?.response?.data?.message === 'Invalid lock code') {
@@ -128,18 +131,18 @@ const Login = () => {
                   </div>
                 )}
                 <div className="mb-32 flex-between flex-wrap gap-8">
-                  <a href="forgot-password.html" className="text-main-600 hover-text-decoration-underline text-15 fw-medium">
+                  <Link to="/forgotpassword" className="text-main-600 hover-text-decoration-underline text-15 fw-medium">
                     Forgot Password?
-                  </a>
+                  </Link>
                 </div>
                 <button type="submit" className="btn btn-main rounded-pill w-100">
                   {requiresLockCode ? 'Verify Lock Code' : 'Sign In'}
                 </button>
                 <p className="mt-32 text-gray-600 text-center">
                   New on our platform?{' '}
-                  <a href="sign-up.html" className="text-main-600 hover-text-decoration-underline">
+                  <Link to="/signup" className="text-main-600 hover-text-decoration-underline">
                     Create an account
-                  </a>
+                  </Link>
                 </p>
                 <div className="divider my-32 position-relative text-center">
                   <span className="divider__text text-gray-600 text-13 fw-medium px-26 bg-white">or</span>

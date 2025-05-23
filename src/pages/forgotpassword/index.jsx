@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from '../../assets/images/logo/logo.png';
 import forgotImage from '../../assets/images/auth-img3.png';
+import { Link } from 'react-router-dom';
 const ForgotPassword = () => {
   return (
     <div className="auth d-flex">
@@ -15,7 +16,7 @@ const ForgotPassword = () => {
       <div className="auth-right py-40 px-24 flex-center flex-column">
         <div className="auth-right__inner mx-auto w-100">
           <a href="index.html" className="auth-right__logo">
-            <img  alt="LMS" />
+            <img alt="LMS" />
           </a>
           <h2 className="mb-8">Forgot Password?</h2>
           <p className="text-gray-600 text-15 mb-32">
@@ -40,11 +41,9 @@ const ForgotPassword = () => {
             <button type="submit" className="btn btn-main rounded-pill w-100">
               Send Reset Link
             </button>
-
-            <a href="sign-in.html" className="my-32 text-main-600 flex-align gap-8 justify-content-center">
+            <Link to="/" className="my-32 text-main-600 flex-align gap-8 justify-content-center">
               <i className="ph ph-arrow-left d-flex"></i> Back To Login
-            </a>
-
+            </Link>
             <ul className="flex-align gap-10 flex-wrap justify-content-center">
               <li>
                 <a href="https://www.facebook.com" className="w-38 h-38 flex-center rounded-6 text-facebook-600 bg-facebook-50 hover-bg-facebook-600 hover-text-white text-lg">
