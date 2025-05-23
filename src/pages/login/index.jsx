@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import logo from '../../assets/images/logo/logo.png';
 import loginImage from '../../assets/images/auth-img1.png';
 import userService from '../../_services/user.service';
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const [passwordShown, setPasswordShown] = useState(false);
@@ -27,12 +28,17 @@ const Login = () => {
   const handleSubmit = async ({ ...values }) => {
     try {
       await userService.login(values);
+      toast.success('Login successful!');
     } catch (err) {
       if (err?.response?.status === 403) {
-        console.warn('403 received. Lock code required.');
+        if (err?.response?.data?.message === 'Invalid lock code') {
+          toast.error('Invalid lock code');
+        } else {
+          toast.success('Lock code is required.');
+        }
         setRequiresLockCode(true);
       } else {
-        console.error('Login failed:', err);
+        toast.error('Invalid credentials, please try again');
       }
     }
   };
@@ -115,7 +121,7 @@ const Login = () => {
                         placeholder="Enter your lock code"
                       />
                       <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
-                        <i className="ph ph-lock-key"></i>
+                        <i className="ph ph-key"></i>
                       </span>
                     </div>
                     <ErrorMessage name="lock_code" component="div" className="text-danger text-13" />
