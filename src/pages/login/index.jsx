@@ -66,8 +66,8 @@ const Login = () => {
         </div>
         <div className="auth-right py-40 px-24 flex-center flex-column">
           <div className="auth-right__inner mx-auto w-100">
-            <a href="index.html" className="auth-right__logo">
-              <img alt="LMS" />
+            <a href="/" className="auth-right__logo">
+              <img src={logo} alt="LMS" />
             </a>
             <h2 className="mb-8">Welcome Back! 👋</h2>
             <p className="text-gray-600 text-15 mb-32">
