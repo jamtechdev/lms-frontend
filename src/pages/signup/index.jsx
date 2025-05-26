@@ -21,7 +21,7 @@ const SignUp = () => {
                 <div className="auth-right py-40 px-24 flex-center flex-column">
                     <div className="auth-right__inner mx-auto w-100">
                         <Link to="/" className="auth-right__logo">
-                            <img alt="LMS" />
+                            <img src={logo} alt="LMS" />
                         </Link>
                         <h2 className="mb-8">Sign Up</h2>
                         <p className="text-gray-600 text-15 mb-32">
