@@ -12,7 +12,7 @@ const Sidebar = () => {
                 <i className="ph ph-x"></i>
             </button>
             <a href="/" className="sidebar__logo text-center p-20 position-sticky inset-block-start-0 bg-white w-100 z-1 pb-10">
-                <img alt="LMS" />
+                <img src={logo} alt="LMS" />
             </a>
             <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm">
                 <div className="p-20 pt-10">
