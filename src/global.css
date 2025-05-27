@@ -9,3 +9,188 @@
 @import url('./assets/css/jquery-jvectormap-2.0.5.css');
 @import url('./assets/css/main.css');
 @import url('./assets/css/styleIcon.css');
+
+.quiz-container {
+    background-color: #ffffff;
+    border-radius: 15px;
+    /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
+    padding: 40px;
+    /* max-width: 800px; */
+    width: 100%;
+}
+
+.question-card {
+    margin-bottom: 30px;
+    padding: 25px;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+}
+
+.question-text {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #343a40;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.blank-item {
+    margin-bottom: 20px;
+}
+
+.blank-item label {
+    font-size: 1.1rem;
+    color: #495057;
+    margin-bottom: 8px;
+    display: block;
+    /* Ensures label is on its own line */
+}
+
+.blank-item .form-control {
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blank-item .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+.option-item {
+    background-color: #ffffff;
+    /* border: 1px solid #ced4da; */
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.option-item:hover {
+    border-color: #007bff;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.option-item input[type="radio"] {
+    margin-right: 7px;
+    min-width: 20px;
+    /* Ensure radio button is visible */
+    min-height: 20px;
+    /* Ensure radio button is visible */
+    accent-color: #007bff;
+    /* Custom color for radio button */
+    --bs-form-check-bg-image: #fff !important;
+}
+
+.option-item label {
+    font-size: 1.1rem;
+    color: #495057;
+    cursor: pointer;
+    flex-grow: 1;
+    /* Allow label to take available space */
+}
+
+.answer-item label {
+    font-size: 1.1rem;
+    color: #495057;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.answer-item .form-control {
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    min-height: 100px;
+    /* Make textarea larger */
+    resize: vertical;
+    /* Allow vertical resizing */
+}
+
+.answer-item .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.shadowBox .card {
+    --webkit-animation: bounce .4s ease infinite alternate;
+}
+
+@-webkit-keyframes bounce {
+    0% {
+        text-shadow:
+            0 5px 0 #ccc,
+            0 2px 3px rgba(0, 0, 0, 1);
+    }
+
+    100% {
+        transform: translateY(-20px);
+        text-shadow: 0 50px 0 #000, 0 0px 20px rgba(0, 0, 0, .8);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .quiz-container {
+        padding: 25px;
+    }
+
+    .question-text {
+        font-size: 1.2rem;
+    }
+
+    .option-item {
+        padding: 12px 15px;
+    }
+
+    .option-item label {
+        font-size: 1rem;
+    }
+
+    .blank-item label {
+        font-size: 1rem;
+    }
+
+    .blank-item .form-control {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
+
+    .answer-item label {
+        font-size: 1rem;
+    }
+
+    .answer-item .form-control {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+        min-height: 80px;
+    }
+}

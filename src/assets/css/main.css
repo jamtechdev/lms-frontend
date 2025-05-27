@@ -9816,7 +9816,6 @@ button:focus {
 }
 
 .auth-right__logo {
-    width: 20%;
     margin-bottom: clamp(2rem, -1.651rem + 7.607vw, 5rem);
 }
 
@@ -9917,7 +9916,3 @@ button:focus {
 
 /* Email Css End */
 /*# sourceMappingURL=main.css.map */
-
-.shadowBox .card {
-    box-shadow: 1px 4px 7px rgb(0 0 0 / 23%);
-}
