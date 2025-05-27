@@ -12,10 +12,9 @@ import { login } from '../../_store/_reducers/auth';
 const Login = () => {
   const dispatch = useDispatch();
   const [passwordShown, setPasswordShown] = useState(false);
-  const [requiresLockCode, setRequiresLockCode] = useState(false);
   const togglePasswordVisibility = () => setPasswordShown(prev => !prev);
   const navigate = useNavigate();
-  const initialValues = { email: '', password: '', lock_code: '' };
+  const initialValues = { email: '', password: '' };
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -25,16 +24,12 @@ const Login = () => {
     password: Yup.string()
       .min(6, 'Password must be at least 6 characters')
       .required('Password is required'),
-    lock_code: requiresLockCode
-      ? Yup.string().required('Lock code is required')
-      : Yup.string().notRequired(),
   });
 
   const handleSubmit = async ({ ...values }) => {
     try {
       const response = await userService.login(values);
       const userData = response.data.data;
-      console.log(userData, "Testing Jamtech.....");
       dispatch(login({
         token: userData.token,
         first_name: userData.first_name,
@@ -43,16 +38,7 @@ const Login = () => {
       toast.success('Login successful!');
       navigate("dashboard");
     } catch (err) {
-      if (err?.response?.status === 403) {
-        if (err?.response?.data?.message === 'Invalid lock code') {
-          toast.error('Invalid lock code');
-        } else {
-          toast.success('Lock code is required.');
-        }
-        setRequiresLockCode(true);
-      } else {
-        toast.error('Invalid credentials, please try again');
-      }
+      toast.error(err?.response?.data?.message || 'Login failed, please try again');
     }
   };
 
@@ -120,33 +106,13 @@ const Login = () => {
                   </div>
                   <ErrorMessage name="password" component="div" className="text-danger text-13" />
                 </div>
-                {requiresLockCode && (
-                  <div className="mb-24">
-                    <label htmlFor="lock_code" className="form-label mb-8 h6">
-                      Enter Lock Code
-                    </label>
-                    <div className="position-relative">
-                      <Field
-                        id="lock_code"
-                        name="lock_code"
-                        type="text"
-                        className="form-control py-11 ps-40"
-                        placeholder="Enter your lock code"
-                      />
-                      <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
-                        <i className="ph ph-key"></i>
-                      </span>
-                    </div>
-                    <ErrorMessage name="lock_code" component="div" className="text-danger text-13" />
-                  </div>
-                )}
                 <div className="mb-32 flex-between flex-wrap gap-8">
                   <Link to="/forgotpassword" className="text-main-600 hover-text-decoration-underline text-15 fw-medium">
                     Forgot Password?
                   </Link>
                 </div>
                 <button type="submit" className="btn btn-main rounded-pill w-100">
-                  {requiresLockCode ? 'Verify Lock Code' : 'Sign In'}
+                  Sign In
                 </button>
                 <p className="mt-32 text-gray-600 text-center">
                   New on our platform?{' '}
