@@ -69,7 +69,7 @@ const Dashboard = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-24">
+                    {/* <div className="mt-24">
                         <div className="row gy-4">
                             <div className="col-xxl-3 col-sm-6">
                                 <div className="card h-100">
@@ -184,7 +184,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <Footer />
             </div>
