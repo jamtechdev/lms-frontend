@@ -18,10 +18,10 @@ const Sidebar = () => {
                                 <span className="text">Dashboard</span>
                             </a>
                         </li>
-                        <li className={`sidebar-menu__item ${activeItem === 'Courses' ? 'activePage' : ''}`} onClick={() => setActiveItem('Courses')}>
-                            <a href="#" className="sidebar-menu__link">
-                                <span className="icon"><i className="ph ph-graduation-cap"></i></span>
-                                <span className="text">Courses</span>
+                        <li className={`sidebar-menu__item ${activeItem === 'Questions' ? 'activePage' : ''}`} onClick={() => setActiveItem('Questions')}>
+                            <a href="/questions" className="sidebar-menu__link">
+                                <span className="icon"><i className="ph ph-clipboard-text"></i></span>
+                                <span className="text">Questions</span>
                             </a>
                         </li>
                     </ul>
