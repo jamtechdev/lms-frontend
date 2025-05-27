@@ -131,7 +131,7 @@
     --main-two-900: hsl(var(--main-two-h), var(--main-two-s), calc(var(--main-two-l) - var(--main-two-l) * 0.3));
     --gray-50: #ECF1F9;
     --gray-100: #D5DBE7;
-    --gray-200: #7585A5;
+    --gray-200: #5977f4;
     --gray-300: #667797;
     --gray-400: #3B465E;
     --gray-500: #0F141E;
@@ -9254,6 +9254,7 @@ button:focus {
 .dashboard-body {
     padding-block-start: 24px;
     padding-block-end: 24px;
+    background: rgb(89 119 244 / 6%);
 }
 
 .top-navbar,
@@ -9916,3 +9917,7 @@ button:focus {
 
 /* Email Css End */
 /*# sourceMappingURL=main.css.map */
+
+.shadowBox .card {
+    box-shadow: 1px 4px 7px rgb(0 0 0 / 23%);
+}
