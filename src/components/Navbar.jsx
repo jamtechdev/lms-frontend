@@ -1,5 +1,5 @@
 import React from 'react'
-import userImage from '../assets/images/thumbs/user-img.png';
+import logo from '../assets/images/logo/logos.png';
 
 const Navbar = () => {
     return (
@@ -16,12 +16,12 @@ const Navbar = () => {
             <div className="flex-align gap-16">
                 <div className="flex-align gap-8">
                     <div className="dropdown">
-                        <button className="dropdown-btn shaking-animation text-gray-500 w-40 h-40 bg-main-50 hover-bg-main-100 transition-2 rounded-circle text-xl flex-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {/* <button className="dropdown-btn shaking-animation text-gray-500 w-40 h-40 bg-main-50 hover-bg-main-100 transition-2 rounded-circle text-xl flex-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <span className="position-relative">
                                 <i className="ph ph-bell"></i>
                                 <span className="alarm-notify position-absolute end-0"></span>
                             </span>
-                        </button>
+                        </button> */}
                         <div className="dropdown-menu dropdown-menu--lg border-0 bg-transparent p-0">
                             <div className="card border border-gray-100 rounded-12 box-shadow-custom p-0 overflow-hidden">
                                 <div className="card-body p-0">
@@ -100,9 +100,9 @@ const Navbar = () => {
                         </div>
                     </div>
                     <div className="dropdown">
-                        <button className="text-gray-500 w-40 h-40 bg-main-50 hover-bg-main-100 transition-2 rounded-circle text-xl flex-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {/* <button className="text-gray-500 w-40 h-40 bg-main-50 hover-bg-main-100 transition-2 rounded-circle text-xl flex-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="ph ph-globe"></i>
-                        </button>
+                        </button> */}
                         <div className="dropdown-menu dropdown-menu--md border-0 bg-transparent p-0">
                             <div className="card border border-gray-100 rounded-12 box-shadow-custom">
                                 <div className="card-body">
@@ -152,7 +152,7 @@ const Navbar = () => {
                 <div className="dropdown">
                     <button className="users arrow-down-icon border border-gray-200 rounded-pill p-4 d-inline-block pe-40 position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span className="position-relative">
-                            <img src={userImage} alt="Image" className="h-32 w-32 rounded-circle" />
+                            <img src={logo} alt="Image" className="h-32 w-32 rounded-circle" />
                             <span className="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0"></span>
                         </span>
                     </button>
@@ -160,7 +160,7 @@ const Navbar = () => {
                         <div className="card border border-gray-100 rounded-12 box-shadow-custom">
                             <div className="card-body">
                                 <div className="flex-align gap-8 mb-20 pb-20 border-bottom border-gray-100">
-                                    <img src={userImage} alt="" className="w-54 h-54 rounded-circle" />
+                                    <img src={logo} alt="" className="w-54 h-54 rounded-circle" />
                                     <div className="">
                                         <h4 className="mb-0">Michel John</h4>
                                         <p className="fw-medium text-13 text-gray-200">examplemail@mail.com</p>
