@@ -6,6 +6,7 @@ const initialState = {
     first_name: null,
     last_name: null,
     student_type: null,
+    selected_level: null,
 };
 
 const authSlice = createSlice({
@@ -25,15 +26,20 @@ const authSlice = createSlice({
             state.first_name = null;
             state.last_name = null;
             state.student_type = null;
+            state.selected_level = null;
+        },
+        setSelectedLevels: (state, action) => {
+            state.selected_level = action.payload;
         },
     },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, setSelectedLevels } = authSlice.actions;
 export const getIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const getToken = (state) => state.auth.token;
 export const getFirstName = (state) => state.auth.first_name;
 export const getLastName = (state) => state.auth.last_name;
 export const getLevelType = (state) => state.auth.student_type;
+export const getSelectedLevel = (state) => state.auth.selected_level;
 
 export default authSlice.reducer;
