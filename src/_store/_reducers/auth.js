@@ -34,6 +34,6 @@ export const getIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const getToken = (state) => state.auth.token;
 export const getFirstName = (state) => state.auth.first_name;
 export const getLastName = (state) => state.auth.last_name;
-export const getStudentType = (state) => state.auth.student_type;
+export const getLevelType = (state) => state.auth.student_type;
 
 export default authSlice.reducer;

@@ -1,23 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import graph from '../../assets/images/graph1.png';
 import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import course from '../../assets/images/course.png';
+import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+import userService from '../../_services/user.service';
+import { getLevelType } from '../../_store/_reducers/auth';
 
 const Questions = () => {
     const [selectedLevel, setSelectedLevel] = useState(null);
     const [selectedSubject, setSelectedSubject] = useState(null);
     const [selectedQuestionType, setSelectedQuestionType] = useState(null);
+    const [levels, setLevels] = useState([]);
+    const education = useSelector(getLevelType);
 
-    const levels = [
-        { level: 1, icon: 'ph ph-number-circle-one' },
-        { level: 2, icon: 'ph ph-number-circle-two' },
-        { level: 3, icon: 'ph ph-number-circle-three' },
-        { level: 4, icon: 'ph ph-number-circle-four' },
-        { level: 5, icon: 'ph ph-number-circle-five' },
-        { level: 6, icon: 'ph ph-number-circle-six' }
-    ];
+    const iconMap = {
+        1: 'ph ph-number-circle-one',
+        2: 'ph ph-number-circle-two',
+        3: 'ph ph-number-circle-three',
+        4: 'ph ph-number-circle-four',
+        5: 'ph ph-number-circle-five',
+        6: 'ph ph-number-circle-six',
+        7: 'ph ph-number-circle-seven',
+        8: 'ph ph-number-circle-eight',
+        9: 'ph ph-number-circle-nine',
+    };
     const subjects = [
         { name: 'Maths', icon: 'ph ph-math-operations' },
         { name: 'English', icon: 'ph ph-book-open' },
@@ -26,6 +35,21 @@ const Questions = () => {
     ];
     const questionTypes = ['MCQ', 'Fill in the blanks', 'True/False', 'Linking'];
 
+    const saveLevel = async () => {
+        try {
+            const response = await userService.getLevel(education);
+            const fetchedLevels = response?.data?.data || [];
+            setLevels(fetchedLevels);
+        } catch (err) {
+            console.log(err?.response?.data?.message || 'An error occurred');
+            toast.error(err?.response?.data?.message || 'Failed to load levels');
+        }
+    };
+    useEffect(() => {
+        if (education) {
+            saveLevel();
+        }
+    }, [education]);
     return (
         <>
             <div className="flex">
@@ -35,24 +59,26 @@ const Questions = () => {
                     <div className="dashboard-body">
                         {!selectedLevel && (
                             <div className="row gy-4 shadowBox">
-                                {levels.map(({ level, icon }) => (
-                                    <div className="col-sm-3" key={level}>
-                                        <div className="card" onClick={() => setSelectedLevel(level)} style={{ cursor: 'pointer' }}>
-                                            <div className="card-body">
-                                                <div className="flex-between gap-8 mb-24">
-                                                    <span className={`flex-shrink-0 w-48 h-48 flex-center rounded-circle ${level % 2 === 0 ? 'bg-main-two-600' : 'bg-main-600'} text-white text-2xl`}>
-                                                        <i className={icon}></i>
-                                                    </span>
-                                                    <img src={graph} className="rounded-circle" alt={`Level ${level}`} />
+                                {levels.map((item) => {
+                                    const iconClass = iconMap[item.id]
+                                    return (
+                                        <div className="col-sm-3" key={item.id}>
+                                            <div className="card" onClick={() => setSelectedLevel(item.id)} style={{ cursor: 'pointer' }}>
+                                                <div className="card-body">
+                                                    <div className="flex-between gap-8 mb-24">
+                                                        <span className={`flex-shrink-0 w-48 h-48 flex-center rounded-circle ${item.id % 2 === 0 ? 'bg-main-two-600' : 'bg-main-600'} text-white text-2xl`}>
+                                                            <i className={iconClass}></i>
+                                                        </span>
+                                                        <img src={graph} className="rounded-circle" alt={item.name} />
+                                                    </div>
+                                                    <h4 className="mb-2">{item.name}</h4>
                                                 </div>
-                                                <h4 className="mb-2">Level {level}</h4>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
-
                         {selectedLevel && !selectedSubject && (
                             <div className="row gy-4 shadowBox">
                                 {subjects.map((subject) => (

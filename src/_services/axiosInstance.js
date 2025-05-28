@@ -1,4 +1,4 @@
-// import { store } from "@/_store/page";
+import { store } from "../_store/index";
 import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -10,19 +10,19 @@ const axiosInstance = axios.create({
     },
 });
 
-// axiosInstance.interceptors.request.use(
-//     (config) => {
-//         const state = store.getState();
-//         const token = state.auth.token;
-//         if (token) {
-//             config.headers["Authorization"] = `Bearer ${token}`;
-//         }
-//         return config;
-//     },
-//     (error) => {
-//         return Promise.reject(error);
-//     }
-// );
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const state = store.getState();
+        const token = state.auth.token;
+        if (token) {
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
 
 export default axiosInstance;
