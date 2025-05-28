@@ -4,12 +4,13 @@ import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import course from '../../assets/images/course.png';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import userService from '../../_services/user.service';
-import { getLevelType } from '../../_store/_reducers/auth';
+import { getLevelType, setSelectedLevels } from '../../_store/_reducers/auth';
 
 const Questions = () => {
+    const dispatch = useDispatch();
     const [selectedLevel, setSelectedLevel] = useState(null);
     const [selectedSubject, setSelectedSubject] = useState(null);
     const [selectedQuestionType, setSelectedQuestionType] = useState(null);
@@ -63,7 +64,10 @@ const Questions = () => {
                                     const iconClass = iconMap[item.id]
                                     return (
                                         <div className="col-sm-3" key={item.id}>
-                                            <div className="card" onClick={() => setSelectedLevel(item.id)} style={{ cursor: 'pointer' }}>
+                                            <div className="card" onClick={() => {
+                                                setSelectedLevel(item.id);
+                                                dispatch(setSelectedLevels(item.id));
+                                            }} style={{ cursor: 'pointer' }}>
                                                 <div className="card-body">
                                                     <div className="flex-between gap-8 mb-24">
                                                         <span className={`flex-shrink-0 w-48 h-48 flex-center rounded-circle ${item.id % 2 === 0 ? 'bg-main-two-600' : 'bg-main-600'} text-white text-2xl`}>
@@ -96,7 +100,10 @@ const Questions = () => {
                                         </div>
                                     </div>
                                 ))}
-                                <button className="btn btn-secondary mt-3" onClick={() => setSelectedLevel(null)}>Back to Levels</button>
+                                <button className="btn btn-secondary mt-3" onClick={() => {
+                                    setSelectedLevel(null);
+                                    dispatch(setSelectedLevels(null));
+                                }}>Back to Levels</button>
                             </div>
                         )}
                         {selectedLevel && selectedSubject && !selectedQuestionType && (
