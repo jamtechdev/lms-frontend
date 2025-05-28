@@ -14,14 +14,14 @@ const Navbar = () => {
                 </form>
             </div>
             <div className="flex-align gap-16">
-                <div className="flex-align gap-8">
+                {/* <div className="flex-align gap-8">
                     <div className="dropdown">
-                        {/* <button className="dropdown-btn shaking-animation text-gray-500 w-40 h-40 bg-main-50 hover-bg-main-100 transition-2 rounded-circle text-xl flex-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button className="dropdown-btn shaking-animation text-gray-500 w-40 h-40 bg-main-50 hover-bg-main-100 transition-2 rounded-circle text-xl flex-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <span className="position-relative">
                                 <i className="ph ph-bell"></i>
                                 <span className="alarm-notify position-absolute end-0"></span>
                             </span>
-                        </button> */}
+                        </button>
                         <div className="dropdown-menu dropdown-menu--lg border-0 bg-transparent p-0">
                             <div className="card border border-gray-100 rounded-12 box-shadow-custom p-0 overflow-hidden">
                                 <div className="card-body p-0">
@@ -100,9 +100,9 @@ const Navbar = () => {
                         </div>
                     </div>
                     <div className="dropdown">
-                        {/* <button className="text-gray-500 w-40 h-40 bg-main-50 hover-bg-main-100 transition-2 rounded-circle text-xl flex-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button className="text-gray-500 w-40 h-40 bg-main-50 hover-bg-main-100 transition-2 rounded-circle text-xl flex-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="ph ph-globe"></i>
-                        </button> */}
+                        </button>
                         <div className="dropdown-menu dropdown-menu--md border-0 bg-transparent p-0">
                             <div className="card border border-gray-100 rounded-12 box-shadow-custom">
                                 <div className="card-body">
@@ -148,7 +148,7 @@ const Navbar = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="dropdown">
                     <button className="users arrow-down-icon border border-gray-200 rounded-pill p-4 d-inline-block pe-40 position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <span className="position-relative">
@@ -161,13 +161,13 @@ const Navbar = () => {
                             <div className="card-body">
                                 <div className="flex-align gap-8 mb-20 pb-20 border-bottom border-gray-100">
                                     <img src={logo} alt="" className="w-54 h-54 rounded-circle" />
-                                    <div className="">
+                                    {/* <div className="">
                                         <h4 className="mb-0">Michel John</h4>
                                         <p className="fw-medium text-13 text-gray-200">examplemail@mail.com</p>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <ul className="max-h-270 overflow-y-auto scroll-sm pe-4">
-                                    <li className="mb-4">
+                                    {/* <li className="mb-4">
                                         <a href="setting.html" className="py-12 text-15 px-20 hover-bg-gray-50 text-gray-300 rounded-8 flex-align gap-8 fw-medium text-15">
                                             <span className="text-2xl text-primary-600 d-flex"><i className="ph ph-gear"></i></span>
                                             <span className="text">Account Settings</span>
@@ -196,7 +196,7 @@ const Navbar = () => {
                                             <span className="text-2xl text-primary-600 d-flex"><i className="ph ph-envelope-simple"></i></span>
                                             <span className="text">Email</span>
                                         </a>
-                                    </li>
+                                    </li> */}
                                     <li className="pt-8 border-top border-gray-100">
                                         <a href="sign-in.html" className="py-12 text-15 px-20 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15">
                                             <span className="text-2xl text-danger-600 d-flex"><i className="ph ph-sign-out"></i></span>
