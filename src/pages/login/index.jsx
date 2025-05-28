@@ -37,6 +37,7 @@ const Login = () => {
         token: userData.token,
         first_name: userData.first_name,
         last_name: userData.last_name,
+        student_type: userData.student_type
       }));
       toast.success('Login successful!');
       navigate("dashboard");
@@ -53,6 +54,7 @@ const Login = () => {
         token: userData.token,
         first_name: userData.first_name,
         last_name: userData.last_name,
+        student_type: userData.student_type
       }));
       toast.success('Student login successful!');
       navigate("dashboard");
