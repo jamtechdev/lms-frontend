@@ -256,7 +256,7 @@
 .tab-btn {
     flex: 1;
     padding: 10px 20px;
-    background-color: #f3f3f3;
+    background-color: #e0e0e0;
     border: none;
     cursor: pointer;
     color: #333;
@@ -268,7 +268,25 @@
     background-color: #4285f4;
     color: #fff;
 }
-
 .tab-btn:not(.active):hover {
     background-color: #e0e0e0;
+}
+.dropdown-menu.show {
+    display: block;
+    position: absolute;
+    right: 0;
+}
+.Questions {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 15px;
+}
+.questionList {
+    cursor: pointer;
+}
+.trueFalse span {
+    font-weight: 500;
+}
+.subject_img{
+    width: 8.625rem !important;
 }

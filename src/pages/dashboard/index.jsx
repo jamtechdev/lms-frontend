@@ -1,5 +1,6 @@
 import React from 'react';
 import graph from '../../assets/images/graph1.png';
+import star from '../../assets/images/star-shape.png';
 import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -15,7 +16,88 @@ const Dashboard = () => {
             <div className="dashboard-main-wrapper">
                 <Navbar />
                 <div className="dashboard-body">
-                    <div className="row gy-4 shadowBox">
+
+                    <div class="row gy-4">
+                        <div class="col-xxl-8">
+                            <div class="card h-100">
+                                <div class="card-body grettings-box-two position-relative z-1 p-0">
+                                    <div class="row align-items-center h-100">
+                                        <div class="col-lg-6">
+                                            <div class="grettings-box-two__content">
+                                                <h2 class="fw-medium mb-0 flex-align gap-10">Hi, Mohib <img src="assets/images/icons/wave-hand.png" alt=""/> </h2>
+                                                <h2 class="fw-medium mb-16">What do you want to learn today with your partner?</h2>
+                                                <p class="text-15 text-gray-400">Discover courses, track progress, and achieve your learning goods seamlessly.</p>
+                                                <a href="student-courses.html" class="btn btn-main rounded-pill mt-32">Explore Courses</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 d-md-block d-none mt-auto">
+                                            <img src="assets/images/thumbs/gretting-thumb.png" alt="" />
+                                        </div>
+                                    </div>
+                                    <img src={star} class="position-absolute start-0 top-0 w-100 h-100 z-n1 object-fit-contain" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4">
+
+                            <div class="row gy-4">
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="flex-between gap-8 mb-24">
+                                                <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-main-600 text-white text-2xl"><i className="ph ph-graduation-cap"></i></span>
+                                                <img src={graph} className="rounded-circle" />
+                                            </div>
+                                            
+                                            <h4 class="mb-2">155+</h4>
+                                            <span class="text-gray-300">Completed Courses</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="flex-between gap-8 mb-24">
+                                                <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-main-two-600 text-white text-2xl"><i className="ph ph-certificate"></i></span>
+                                                <img src={graph} className="rounded-circle" />
+                                            </div>
+                                            
+                                            <h4 class="mb-2">39+</h4>
+                                            <span class="text-gray-300">Earned Certificate</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="flex-between gap-8 mb-24">
+                                                <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-purple-600 text-white text-2xl"><i className="ph ph-spinner"></i></span>
+                                                <img src={graph} className="rounded-circle" />
+                                            </div>
+                                            
+                                            <h4 class="mb-2">25+</h4>
+                                            <span class="text-gray-300">Course in Progress</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="flex-between gap-8 mb-24">
+                                                <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-warning-600 text-white text-2xl"><i className="ph ph-users-four"></i></span>
+                                                <img src={graph} className="rounded-circle" />
+                                            </div>
+                                            
+                                            <h4 class="mb-2">18k+</h4>
+                                            <span class="text-gray-300">Community Support</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* <div className="row gy-4 shadowBox">
                         <div className="col-xxl-12">
                             <div className="row gy-4">
                                 <div className="col-sm-3">
@@ -68,7 +150,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     {/* <div className="mt-24">
                         <div className="row gy-4">
                             <div className="col-xxl-3 col-sm-6">

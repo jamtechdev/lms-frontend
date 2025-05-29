@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import course from '../../assets/images/course.png';
+import maths from '../../assets/images/maths.png';
 import { useSelector } from 'react-redux';
 import { getStudentType } from '../../_store/_reducers/auth';
 
@@ -24,20 +24,38 @@ const Questions = () => {
                 <Sidebar />
                 <div className="dashboard-main-wrapper">
                     <Navbar />
+                    
                     <div className="dashboard-body">
+
+                        <div class="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
+
+                            <div class="breadcrumb mb-24">
+                                <ul class="flex-align gap-4">
+                                    <li><a href="#" onClick={() => setSelectedSubject(null)} class="text-gray-200 fw-normal text-15 hover-text-main-600">Back to Subjects</a></li>
+                                    <li> <span class="text-gray-500 fw-normal d-flex"><i class="ph ph-caret-right"></i></span> </li>
+                                    <li><span class="text-main-600 fw-normal text-15">Questions</span></li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+
                         {!selectedSubject && (
                             <div className="row gy-4 shadowBox">
                                 {subjects.map((subject) => (
                                     <div className="col-sm-3" key={subject.name}>
                                         <div className="card" onClick={() => setSelectedSubject(subject.name)} style={{ cursor: 'pointer' }}>
                                             <div className="card-body">
-                                                <div className="flex-between gap-8 mb-24">
-                                                    <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-main-600 text-white text-2xl">
+                                                <div className="flex-between gap-8 mb-10">
+                                                    <div className="mt-10">
+                                                        <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-main-600 text-white text-2xl">
                                                         <i className={subject.icon}></i>
-                                                    </span>
-                                                    <img src={course} className="w-72" />
+                                                        </span>
+                                                        <h4 className="mb-2 mt-20">{subject.name}</h4>
+                                                    </div>
+                                                    <img src={maths} className="subject_img" />
                                                 </div>
-                                                <h4 className="mb-2">{subject.name}</h4>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -46,6 +64,35 @@ const Questions = () => {
                         )}
 
                         {selectedSubject && !selectedQuestionType && (
+                        <div className="row gy-4 questionTypes">
+                            <div className="col-sm-12">
+                                <div className="card mt-24">
+                                    <div className="card-body">
+                                        <div className="mb-20 flex-between flex-wrap gap-8">
+                                            <h4 className="mb-0">Questions</h4>
+                                            <a href="#" class="text-13 fw-medium text-main-600 hover-text-decoration-underline">See All</a>
+                                        </div>
+                                        <div className="Questions">
+                                            {questionTypes.map((type) => (
+                                            <div className="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16 questionList" key={type}>
+                                                <div className="flex-align flex-wrap gap-8" onClick={() => setSelectedQuestionType(type)} style={{ cursor: 'pointer' }}>
+                                           
+                                                    <div>
+                                                        <h4 className="mb-0">{type}</h4>
+                                                        <span className="text-13 text-gray-400">Select Questions</span>
+                                                    </div>
+                                                </div>
+                                                <a href="assignment.html" className="text-gray-900 hover-text-main-600"><i className="ph ph-caret-right"></i></a>
+                                            </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        )}
+
+                        {/* {selectedSubject && !selectedQuestionType && (
                             <div className="row gy-4 shadowBox">
                                 {questionTypes.map((type) => (
                                     <div className="col-sm-3" key={type}>
@@ -58,7 +105,7 @@ const Questions = () => {
                                 ))}
                                 <button className="btn btn-secondary mt-3" onClick={() => setSelectedSubject(null)}>Back to Subjects</button>
                             </div>
-                        )}
+                        )} */}
 
                         {selectedSubject && selectedQuestionType && (
                             <div className="shadowBox">
@@ -140,26 +187,26 @@ const Questions = () => {
                                 )}
 
                                 {selectedQuestionType === 'True/False' && (
-                                    <div>
-                                        <h2>True or False</h2>
-                                        <p>1. Photosynthesis occurs only at night.</p>
-                                        <p>Options: A) True B) False</p>
+                                    <div className="trueFalse">
+
+                                        <h4>1. Photosynthesis occurs only at night.</h4>
+                                        <h5><span>Options:</span> &nbsp; A) True &nbsp; B) False</h5>
                                         <p><strong>Answer:</strong> False</p>
-
-                                        <p>2. Humans have four lungs.</p>
-                                        <p>Options: A) True B) False</p>
+                                        <br></br>
+                                        <h4>2. Humans have four lungs.</h4>
+                                        <h5><span>Options:</span> &nbsp; A) True &nbsp; B) False</h5>
                                         <p><strong>Answer:</strong> False</p>
-
-                                        <p>3. Water boils at 100°C.</p>
-                                        <p>Options: A) True B) False</p>
+                                        <br></br>
+                                        <h4>3. Water boils at 100°C.</h4>
+                                        <h5><span>Options:</span> &nbsp; A) True &nbsp; B) False</h5>
                                         <p><strong>Answer:</strong> True</p>
-
-                                        <p>4. Lightning is hotter than the surface of the sun.</p>
-                                        <p>Options: A) True B) False</p>
+                                        <br></br>
+                                        <h4>4. Lightning is hotter than the surface of the sun.</h4>
+                                        <h5><span>Options:</span> &nbsp; A) True &nbsp; B) False</h5>
                                         <p><strong>Answer:</strong> True</p>
-
-                                        <p>5. The human heart has three chambers.</p>
-                                        <p>Options: A) True B) False</p>
+                                        <br></br>
+                                        <h4>5. The human heart has three chambers.</h4>
+                                        <h5><span>Options:</span> &nbsp; A) True &nbsp; B) False</h5>
                                         <p><strong>Answer:</strong> False</p>
                                     </div>
                                 )}
@@ -184,7 +231,7 @@ const Questions = () => {
                                         </table>
                                     </div>
                                 )}
-
+                                <br></br>
                                 <button className="btn btn-secondary mt-3" onClick={() => setSelectedQuestionType(null)}>Back to Question Types</button>
                             </div>
                         )}

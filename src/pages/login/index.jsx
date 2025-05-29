@@ -71,9 +71,9 @@ const Login = () => {
         <div className="auth-left bg-main-50 flex-center p-24">
           <img src={loginImage} alt="login" />
         </div>
-        <div className="auth-right py-40 px-24 flex-center flex-column">
-          <div className="auth-right__inner mx-auto w-100">
-            <a href="/" className="auth-right__logo">
+        <div className="auth-right py-40 px-24 flex-start flex-column mt-5">
+          <div className="auth-right__inner mx-auto w-100 mt-5">
+            <a href="/" className="auth-right__logo mt-5">
               <img src={logo} alt="LMS" />
             </a>
             <h2 className="mb-8">Welcome Back! 👋</h2>
