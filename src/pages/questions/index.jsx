@@ -1,22 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import maths from '../../assets/images/maths.png';
 import { useSelector } from 'react-redux';
-import { getStudentType } from '../../_store/_reducers/auth';
+import { getLevel, getStudentType } from '../../_store/_reducers/auth';
+import userService from '../../_services/user.service';
 
 const Questions = () => {
     const [selectedSubject, setSelectedSubject] = useState(null);
     const [selectedQuestionType, setSelectedQuestionType] = useState(null);
- const education = useSelector(getStudentType);
-    const subjects = [
-        { name: 'Maths', icon: 'ph ph-math-operations' },
-        { name: 'English', icon: 'ph ph-book-open' },
-        { name: 'Chinese', icon: 'ph ph-translate' },
-        { name: 'Science', icon: 'ph ph-microscope' }
+    const [loading, setLoading] = useState(false);
+    const [subjects, setSubjects] = useState([]);
+    const education = useSelector(getStudentType);
+    const level = useSelector(getLevel);
+
+    const questionTypes = [
+        { key: 'mcq', label: 'MCQ' },
+        { key: 'fill_blank', label: 'Fill in the blanks' },
+        { key: 'true_false', label: 'True/False' },
+        { key: 'linking', label: 'Linking' },
+        { key: 'multi_part', label: 'Multi-Part' },
+        { key: 'rearranging', label: 'Rearranging' },
+        { key: 'comprehension', label: 'Comprehension' },
     ];
-    const questionTypes = ['MCQ', 'Fill in the blanks', 'True/False', 'Linking'];
+
+
+    useEffect(() => {
+        const fetchSubjects = async () => {
+            setLoading(true);
+            try {
+                const response = await userService.getSubject(level);
+                setSubjects(response.data.data);
+            } catch (err) {
+                console.log(err?.response?.data?.message || 'An error occurred');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (level) {
+            fetchSubjects();
+        }
+    }, [level]);
 
     return (
         <>
@@ -24,72 +50,84 @@ const Questions = () => {
                 <Sidebar />
                 <div className="dashboard-main-wrapper">
                     <Navbar />
-                    
                     <div className="dashboard-body">
-
-                        <div class="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
-
-                            <div class="breadcrumb mb-24">
-                                <ul class="flex-align gap-4">
-                                    <li><a href="#" onClick={() => setSelectedSubject(null)} class="text-gray-200 fw-normal text-15 hover-text-main-600">Back to Subjects</a></li>
-                                    <li> <span class="text-gray-500 fw-normal d-flex"><i class="ph ph-caret-right"></i></span> </li>
-                                    <li><span class="text-main-600 fw-normal text-15">Questions</span></li>
+                        <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
+                            <div className="breadcrumb mb-24">
+                                <ul className="flex-align gap-4">
+                                    <li>
+                                        <a href="#" onClick={() => setSelectedSubject(null)} className="text-gray-200 fw-normal text-15 hover-text-main-600">
+                                            Back to Subjects
+                                        </a>
+                                    </li>
+                                    <li><span className="text-gray-500 fw-normal d-flex"><i className="ph ph-caret-right"></i></span></li>
+                                    <li><span className="text-main-600 fw-normal text-15">Questions</span></li>
                                 </ul>
                             </div>
-
                         </div>
-
-
                         {!selectedSubject && (
                             <div className="row gy-4 shadowBox">
-                                {subjects.map((subject) => (
-                                    <div className="col-sm-3" key={subject.name}>
-                                        <div className="card" onClick={() => setSelectedSubject(subject.name)} style={{ cursor: 'pointer' }}>
-                                            <div className="card-body">
-                                                <div className="flex-between gap-8 mb-10">
-                                                    <div className="mt-10">
-                                                        <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-main-600 text-white text-2xl">
-                                                        <i className={subject.icon}></i>
-                                                        </span>
-                                                        <h4 className="mb-2 mt-20">{subject.name}</h4>
+                                {loading ? (
+                                    <div className="col-12 text-center">
+                                        <p>Loading subjects...</p>
+                                    </div>
+                                ) : subjects.length > 0 ? (
+                                    subjects.map((subject) => (
+                                        <div className="col-sm-3" key={subject.id}>
+                                            <div className="card" onClick={() => setSelectedSubject(subject.subject_name)} style={{ cursor: 'pointer' }}>
+                                                <div className="card-body">
+                                                    <div className="flex-between gap-8 mb-10">
+                                                        <div className="mt-10">
+                                                            <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-main-600 text-white text-2xl">
+                                                            </span>
+                                                            <h4 className="mb-2 mt-20">{subject.subject_name}</h4>
+                                                        </div>
+                                                        <img src={maths} className="subject_img" alt={subject.subject_name} />
                                                     </div>
-                                                    <img src={maths} className="subject_img" />
                                                 </div>
-                                                
                                             </div>
                                         </div>
+                                    ))
+                                ) : (
+                                    <div className="col-12 text-center">
+                                        <p>No subjects available.</p>
                                     </div>
-                                ))}
+                                )}
                             </div>
                         )}
 
                         {selectedSubject && !selectedQuestionType && (
-                        <div className="row gy-4 questionTypes">
-                            <div className="col-sm-12">
-                                <div className="card mt-24">
-                                    <div className="card-body">
-                                        <div className="mb-20 flex-between flex-wrap gap-8">
-                                            <h4 className="mb-0">Questions</h4>
-                                            <a href="#" class="text-13 fw-medium text-main-600 hover-text-decoration-underline">See All</a>
-                                        </div>
-                                        <div className="Questions">
-                                            {questionTypes.map((type) => (
-                                            <div className="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16 questionList" key={type}>
-                                                <div className="flex-align flex-wrap gap-8" onClick={() => setSelectedQuestionType(type)} style={{ cursor: 'pointer' }}>
-                                           
-                                                    <div>
-                                                        <h4 className="mb-0">{type}</h4>
-                                                        <span className="text-13 text-gray-400">Select Questions</span>
-                                                    </div>
-                                                </div>
-                                                <a href="assignment.html" className="text-gray-900 hover-text-main-600"><i className="ph ph-caret-right"></i></a>
+                            <div className="row gy-4 questionTypes">
+                                <div className="col-sm-12">
+                                    <div className="card mt-24">
+                                        <div className="card-body">
+                                            <div className="mb-20 flex-between flex-wrap gap-8">
+                                                <h4 className="mb-0">Questions</h4>
+                                                {/* <a href="#" className="text-13 fw-medium text-main-600 hover-text-decoration-underline">See All</a> */}
                                             </div>
-                                            ))}
+                                            <div className="Questions">
+                                                {questionTypes.map((type) => (
+                                                    <div className="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16 questionList" key={type.key}>
+                                                        <div
+                                                            className="flex-align flex-wrap gap-8"
+                                                            onClick={() => setSelectedQuestionType(type.key)}
+                                                            style={{ cursor: 'pointer' }}
+                                                        >
+                                                            <div>
+                                                                <h4 className="mb-0">{type.label}</h4>
+                                                                <span className="text-13 text-gray-400">Select Questions</span>
+                                                            </div>
+                                                        </div>
+                                                        <a href="assignment.html" className="text-gray-900 hover-text-main-600">
+                                                            <i className="ph ph-caret-right"></i>
+                                                        </a>
+                                                    </div>
+                                                ))}
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         )}
 
                         {/* {selectedSubject && !selectedQuestionType && (
@@ -109,9 +147,9 @@ const Questions = () => {
 
                         {selectedSubject && selectedQuestionType && (
                             <div className="shadowBox">
-                                <h2>{selectedQuestionType} for {selectedSubject}</h2>
+                                <h2>{selectedSubject}</h2>
 
-                                {selectedQuestionType === 'MCQ' && (
+                                {selectedQuestionType === 'mcq' && (
                                     <div>
                                         <h2>Multiple Choice Questions</h2>
                                         <p>1. What is the capital of France?</p>
@@ -161,7 +199,7 @@ const Questions = () => {
                                     </div>
                                 )}
 
-                                {selectedQuestionType === 'Fill in the blanks' && (
+                                {selectedQuestionType === 'fill_blank' && (
                                     <div>
                                         <h2>Fill in the Blanks</h2>
                                         <p>1. The capital of Japan is ________.</p>
@@ -186,7 +224,7 @@ const Questions = () => {
                                     </div>
                                 )}
 
-                                {selectedQuestionType === 'True/False' && (
+                                {selectedQuestionType === 'true_false' && (
                                     <div className="trueFalse">
 
                                         <h4>1. Photosynthesis occurs only at night.</h4>
@@ -211,7 +249,7 @@ const Questions = () => {
                                     </div>
                                 )}
 
-                                {selectedQuestionType === 'Linking' && (
+                                {selectedQuestionType === 'linking' && (
                                     <div>
                                         <h2>Match the Column</h2>
                                         <table>
