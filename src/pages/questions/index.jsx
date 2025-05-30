@@ -3,28 +3,29 @@ import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import maths from '../../assets/images/maths.png';
-import { useSelector } from 'react-redux';
-import { getLevel, getStudentType } from '../../_store/_reducers/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import { getLevel, getQuestion, getStudentType, getSubject, setQuestion, setSubject } from '../../_store/_reducers/auth';
 import userService from '../../_services/user.service';
 
 const Questions = () => {
+    const dispatch = useDispatch();
     const [selectedSubject, setSelectedSubject] = useState(null);
     const [selectedQuestionType, setSelectedQuestionType] = useState(null);
     const [loading, setLoading] = useState(false);
     const [subjects, setSubjects] = useState([]);
     const education = useSelector(getStudentType);
     const level = useSelector(getLevel);
+    const subject = useSelector(getSubject);
+    const question = useSelector(getQuestion);
 
     const questionTypes = [
         { key: 'mcq', label: 'MCQ' },
         { key: 'fill_blank', label: 'Fill in the blanks' },
         { key: 'true_false', label: 'True/False' },
         { key: 'linking', label: 'Linking' },
-        { key: 'multi_part', label: 'Multi-Part' },
         { key: 'rearranging', label: 'Rearranging' },
         { key: 'comprehension', label: 'Comprehension' },
     ];
-
 
     useEffect(() => {
         const fetchSubjects = async () => {
@@ -73,7 +74,11 @@ const Questions = () => {
                                 ) : subjects.length > 0 ? (
                                     subjects.map((subject) => (
                                         <div className="col-sm-3" key={subject.id}>
-                                            <div className="card" onClick={() => setSelectedSubject(subject.subject_name)} style={{ cursor: 'pointer' }}>
+                                            <div className="card" onClick={() => {
+                                                setSelectedSubject(subject.subject_name);
+                                                dispatch(setSubject(subject.subject_name));
+                                            }}
+                                                style={{ cursor: 'pointer' }}>
                                                 <div className="card-body">
                                                     <div className="flex-between gap-8 mb-10">
                                                         <div className="mt-10">
@@ -109,7 +114,10 @@ const Questions = () => {
                                                     <div className="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16 questionList" key={type.key}>
                                                         <div
                                                             className="flex-align flex-wrap gap-8"
-                                                            onClick={() => setSelectedQuestionType(type.key)}
+                                                            onClick={() => {
+                                                                setSelectedQuestionType(type.key);
+                                                                dispatch(setQuestion(type.key));
+                                                            }}
                                                             style={{ cursor: 'pointer' }}
                                                         >
                                                             <div>
@@ -122,14 +130,12 @@ const Questions = () => {
                                                         </a>
                                                     </div>
                                                 ))}
-
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         )}
-
                         {/* {selectedSubject && !selectedQuestionType && (
                             <div className="row gy-4 shadowBox">
                                 {questionTypes.map((type) => (
@@ -144,7 +150,6 @@ const Questions = () => {
                                 <button className="btn btn-secondary mt-3" onClick={() => setSelectedSubject(null)}>Back to Subjects</button>
                             </div>
                         )} */}
-
                         {selectedSubject && selectedQuestionType && (
                             <div className="shadowBox">
                                 <h2>{selectedSubject}</h2>
