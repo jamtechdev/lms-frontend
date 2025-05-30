@@ -45,22 +45,19 @@ const Questions = () => {
         }
     }, [level]);
 
-    const handleQuestion = async () => {
+    const handleQuestion = async (selectedType) => {
         try {
             const data = {
                 education_type: education,
                 level_id: level,
                 subject_id: subject,
-                type: question,
+                type: selectedType || question
             };
             const response = await userService.getAllQuestion(data);
-            console.log(response);
         } catch (err) {
             console.log(err?.response?.data?.message || 'Failed, please try again');
         }
     };
-
-console.log(question ,"updateing.........")
     return (
         <>
             <div className="flex">
@@ -133,7 +130,7 @@ console.log(question ,"updateing.........")
                                                             onClick={() => {
                                                                 setSelectedQuestionType(type.key);
                                                                 dispatch(setQuestion(type.key));
-                                                                handleQuestion();
+                                                                handleQuestion(type.key);
                                                             }}
                                                             style={{ cursor: 'pointer' }}
                                                         >
