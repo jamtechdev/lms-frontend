@@ -45,6 +45,22 @@ const Questions = () => {
         }
     }, [level]);
 
+    const handleQuestion = async () => {
+        try {
+            const data = {
+                education_type: education,
+                level_id: level,
+                subject_id: subject,
+                type: question,
+            };
+            const response = await userService.getAllQuestion(data);
+            console.log(response);
+        } catch (err) {
+            console.log(err?.response?.data?.message || 'Failed, please try again');
+        }
+    };
+
+console.log(question ,"updateing.........")
     return (
         <>
             <div className="flex">
@@ -75,8 +91,8 @@ const Questions = () => {
                                     subjects.map((subject) => (
                                         <div className="col-sm-3" key={subject.id}>
                                             <div className="card" onClick={() => {
-                                                setSelectedSubject(subject.subject_name);
-                                                dispatch(setSubject(subject.subject_name));
+                                                setSelectedSubject(subject.id);
+                                                dispatch(setSubject(subject.id));
                                             }}
                                                 style={{ cursor: 'pointer' }}>
                                                 <div className="card-body">
@@ -117,6 +133,7 @@ const Questions = () => {
                                                             onClick={() => {
                                                                 setSelectedQuestionType(type.key);
                                                                 dispatch(setQuestion(type.key));
+                                                                handleQuestion();
                                                             }}
                                                             style={{ cursor: 'pointer' }}
                                                         >
