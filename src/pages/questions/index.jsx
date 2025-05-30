@@ -178,267 +178,121 @@ const Questions = () => {
                                 </div>
                             </div>
                         )}
-
-                        {selectedQuestionType === 'mcq' && (
-                            <>
-                                <h1>MCQ</h1>
+                        {selectedQuestionType && (
+                            <div className="shadowBox">
+                                <h2 className="mb-3">{questionTypes.find(t => t.key === selectedQuestionType)?.label} Questions</h2>
                                 {fetchedQuestions.length === 0 ? (
-                                    <p>No MCQ questions found.</p>
+                                    <p>No questions found.</p>
                                 ) : (
-                                    fetchedQuestions.map((item, index) => {
-                                        const q = item.question;
-                                        return (
-                                            <div key={item.id} style={{ marginBottom: '20px' }}>
-                                                <p><strong>{index + 1}. {q.content}</strong></p>
-
-                                                {q.type === 'mcq' && q.options && (
-                                                    q.options.map((opt, idx) => (
-                                                        <div key={idx}>
-                                                            <label>
-                                                                <input
-                                                                    type="radio"
-                                                                    name={`question_${item.id}`}
-                                                                    value={opt.value}
-                                                                    checked={userAnswers[item.id] === opt.value}
-                                                                    onChange={() => handleSelectAnswer(item.id, null, opt.value)}
-                                                                    disabled={submitted}
-                                                                />
+                                    fetchedQuestions.map((item, index) => (
+                                        <div key={item.id} className="question-card">
+                                            <p className="question-text">{index + 1}. {item.question.content}</p>
+                                            {item.question.type === 'mcq' && (
+                                                <>
+                                                    {item.question.options?.map((opt, idx) => (
+                                                        <div key={idx} className="form-check option-item">
+                                                            <input
+                                                                className="form-check-input"
+                                                                type="radio"
+                                                                name={`question_${item.id}`}
+                                                                value={opt.value}
+                                                                checked={userAnswers[item.id] === opt.value}
+                                                                onChange={() => handleSelectAnswer(item.id, null, opt.value)}
+                                                                disabled={submitted}
+                                                            />
+                                                            <label className="form-check-label">
                                                                 {opt.value}
                                                             </label>
                                                         </div>
-                                                    ))
-                                                )}
-                                                {submitted && (
-                                                    <>
-                                                        <p><strong>Correct Answer:</strong> {q.answer?.answer}</p>
-                                                        <p style={{ color: userAnswers[item.id] === q.answer?.answer ? 'green' : 'red' }}>
-                                                            Your Answer: {userAnswers[item.id] || 'No answer selected'}
-                                                            {userAnswers[item.id] === q.answer?.answer ? ' ✔️' : ' ❌'}
-                                                        </p>
-                                                    </>
-                                                )}
-                                            </div>
-                                        );
-                                    })
-                                )}
-                                {!submitted && fetchedQuestions.length > 0 && (
-                                    <button className="btn btn-primary mt-3" onClick={handleSubmit}>
-                                        Submit Answers
-                                    </button>
-                                )}
-                            </>
-                        )}
-
-
-                        {selectedQuestionType === 'fill_blank' && (
-                            <>
-                                {fetchedQuestions.length === 0 ? (
-                                    <p>No fill-in-the-blank questions found.</p>
-                                ) : (
-                                    fetchedQuestions.map((item, index) => {
-                                        const q = item.question;
-                                        let filledContent = q.content;
-
-                                        if (submitted) {
-                                            q.blanks.forEach(blank => {
-                                                const userAnswer = userAnswers[item.id]?.[blank.blank_number];
-                                                const displayAnswer = userAnswer
-                                                    ? ` ${userAnswer}${userAnswer === blank.answer ? ' ✔️' : ' ❌'}`
-                                                    : `[No answer ❌]`;
-                                                filledContent = filledContent.replace('______________', displayAnswer);
-                                            });
-                                        }
-
-                                        return (
-                                            <div key={item.id} style={{ marginBottom: '20px' }}>
-                                                <p><strong>{index + 1}. {submitted ? filledContent : q.content}</strong></p>
-
-                                                {!submitted && q.type === 'fill_blank' && q.blanks && (
-                                                    q.blanks.map((blank) => (
-                                                        <div key={blank.blank_number} style={{ marginTop: '10px' }}>
-                                                            <p><strong>Blank {blank.blank_number}:</strong></p>
-                                                            {blank.options.map((opt, idx) => (
-                                                                <div key={idx}>
-                                                                    <label>
-                                                                        <input
-                                                                            type="radio"
-                                                                            name={`question_${item.id}_blank_${blank.blank_number}`}
-                                                                            value={opt}
-                                                                            checked={userAnswers[item.id]?.[blank.blank_number] === opt}
-                                                                            onChange={() =>
-                                                                                handleSelectAnswer(item.id, blank.blank_number, opt)
-                                                                            }
-                                                                            disabled={submitted}
-                                                                        />
-                                                                        {opt}
-                                                                    </label>
-                                                                </div>
-                                                            ))}
+                                                    ))}
+                                                    {submitted && (
+                                                        <div style={{ marginTop: '10px', fontWeight: 'bold', color: 'green' }}>
+                                                            Correct Answer: {item.question.answer.answer}
                                                         </div>
-                                                    ))
-                                                )}
+                                                    )}
+                                                </>
+                                            )}
 
-                                                {submitted && q.blanks.map(blank => (
-                                                    <div key={blank.blank_number}>
-                                                        <p>
-                                                            Correct Answer for Blank {blank.blank_number}: <strong>{blank.answer}</strong>
-                                                        </p>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        );
-                                    })
-                                )}
-                                {!submitted && fetchedQuestions.length > 0 && (
-                                    <button className="btn btn-primary mt-3" onClick={handleSubmit}>
-                                        Submit Answers
-                                    </button>
-                                )}
-                            </>
-                        )}
-
-
-                        {selectedQuestionType === 'true_false' && (
-                            <>
-                                {fetchedQuestions.length === 0 ? (
-                                    <p>No true/false questions found.</p>
-                                ) : (
-                                    fetchedQuestions.map((item, index) => {
-                                        const q = item.question;
-                                        return (
-                                            <div key={item.id} style={{ marginBottom: '20px' }}>
-                                                <p><strong>{index + 1}. {q.content}</strong></p>
-
-                                                {!submitted && (
-                                                    q.options.map((opt, idx) => (
-                                                        <div key={idx}>
-                                                            <label>
-                                                                <input
-                                                                    type="radio"
-                                                                    name={`question_${item.id}`}
-                                                                    value={opt.value}
-                                                                    checked={userAnswers[item.id] === opt.value}
-                                                                    onChange={() => handleSelectAnswer(item.id, null, opt.value)}
-                                                                    disabled={submitted}
-                                                                />
-                                                                {opt.value}
-                                                            </label>
-                                                        </div>
-                                                    ))
-                                                )}
-
-                                                {submitted && (
-                                                    <>
-                                                        <p><strong>Correct Answer:</strong> {q.answer.choice}</p>
-                                                        <p style={{
-                                                            color: userAnswers[item.id] === q.answer.choice ? 'green' : 'red'
-                                                        }}>
-                                                            Your Answer: {userAnswers[item.id] || 'No answer selected'}
-                                                            {userAnswers[item.id] === q.answer.choice ? ' ✔️' : ' ❌'}
-                                                        </p>
-                                                    </>
-                                                )}
-                                            </div>
-                                        );
-                                    })
-                                )}
-                                {!submitted && fetchedQuestions.length > 0 && (
-                                    <button className="btn btn-primary mt-3" onClick={handleSubmit}>
-                                        Submit Answers
-                                    </button>
-                                )}
-                            </>
-                        )}
-
-                        {selectedQuestionType === 'linking' && (
-                            <>
-                                {fetchedQuestions.length === 0 ? (
-                                    <p>No linking questions found.</p>
-                                ) : (
-                                    fetchedQuestions.map((item, index) => {
-                                        const q = item.question;
-
-                                        return (
-                                            <div key={item.id} style={{ marginBottom: '20px' }}>
-                                                <p><strong>{index + 1}. {q.content}</strong></p>
-
-                                                {q.type === 'linking' && q.answer && (
-                                                    q.answer.map((pair, leftIdx) => (
-                                                        <div key={leftIdx} style={{ marginBottom: '20px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                                                <strong>Left:</strong>
-                                                                {pair.left.match_type === 'text' ? (
-                                                                    <span>{pair.left.word}</span>
-                                                                ) : (
-                                                                    <img src={pair.left.image_uri} alt="left" style={{ width: '50px', height: '50px' }} />
-                                                                )}
-                                                            </div>
-                                                            {!submitted && (
-                                                                q.answer.map((option, rightIdx) => (
-                                                                    <div key={rightIdx} style={{ marginLeft: '20px' }}>
-                                                                        <label>
-                                                                            <input
-                                                                                type="radio"
-                                                                                name={`question_${item.id}_left_${leftIdx}`}
-                                                                                value={rightIdx}
-                                                                                checked={parseInt(userAnswers[item.id]?.[leftIdx]) === rightIdx}
-                                                                                onChange={() => handleSelectAnswer(item.id, leftIdx, rightIdx)}
-                                                                                disabled={submitted}
-                                                                            />
-                                                                            {option.right.match_type === 'text'
-                                                                                ? option.right.word
-                                                                                : <img src={option.right.image_uri} alt="right" style={{ width: '50px', height: '50px' }} />}
-                                                                        </label>
-                                                                    </div>
-                                                                ))
-                                                            )}
-
-                                                            {submitted && (
+                                            {item.question.type === 'fill_blank' && (
+                                                <div>
+                                                    {item.question.blanks?.map((blank, idx) => (
+                                                        <div key={idx} className="form-group">
+                                                            <label>Blank {idx + 1}:</label>
+                                                            {!submitted ? (
+                                                                <select
+                                                                    className="form-select"
+                                                                    value={userAnswers[item.id]?.[idx] || ''}
+                                                                    onChange={(e) => handleSelectAnswer(item.id, idx, e.target.value)}
+                                                                >
+                                                                    <option value="">Select</option>
+                                                                    {blank.options?.map((option, optionIdx) => (
+                                                                        <option key={optionIdx} value={option}>{option}</option>
+                                                                    ))}
+                                                                </select>
+                                                            ) : (
                                                                 <>
-                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '10px' }}>
-                                                                        <strong>Correct Match:</strong>
-                                                                        {pair.right.match_type === 'text' ? (
-                                                                            <span>{pair.right.word}</span>
-                                                                        ) : (
-                                                                            <img src={pair.right.image_uri} alt="right" style={{ width: '50px', height: '50px' }} />
-                                                                        )}
-                                                                    </div>
-
-                                                                    <div style={{
-                                                                        display: 'flex',
-                                                                        alignItems: 'center',
-                                                                        gap: '10px',
-                                                                        marginTop: '5px',
-                                                                        color: parseInt(userAnswers[item.id]?.[leftIdx]) === leftIdx ? 'green' : 'red'
-                                                                    }}>
-                                                                        <strong>Your Match:</strong>
-                                                                        {userAnswers[item.id]?.[leftIdx] !== undefined
-                                                                            ? (
-                                                                                q.answer[userAnswers[item.id][leftIdx]].right.match_type === 'text'
-                                                                                    ? <span>{q.answer[userAnswers[item.id][leftIdx]].right.word}</span>
-                                                                                    : <img src={q.answer[userAnswers[item.id][leftIdx]].right.image_uri} alt="your match" style={{ width: '50px', height: '50px' }} />
-                                                                            )
-                                                                            : 'No match'
-                                                                        }
-                                                                        {parseInt(userAnswers[item.id]?.[leftIdx]) === leftIdx ? ' ✔️' : ' ❌'}
-                                                                    </div>
+                                                                    <div>Your Answer: {userAnswers[item.id]?.[idx] || 'No Answer'}</div>
+                                                                    <div>Correct Answer: {blank.answer}</div>
                                                                 </>
                                                             )}
                                                         </div>
-                                                    ))
-                                                )}
-                                            </div>
-                                        );
-                                    })
+                                                    ))}
+                                                </div>
+                                            )}
+
+                                            {item.question.type === 'true_false' && (
+                                                <div>
+                                                    {['True', 'False'].map((val, idx) => (
+                                                        <div key={idx} className="form-check option-item">
+                                                            <input
+                                                                className="form-check-input"
+                                                                type="radio"
+                                                                name={`question_${item.id}`}
+                                                                value={val}
+                                                                checked={userAnswers[item.id] === val}
+                                                                onChange={() => handleSelectAnswer(item.id, null, val)}
+                                                                disabled={submitted}
+                                                            />
+                                                            <label className="form-check-label">{val}</label>
+                                                        </div>
+                                                    ))}
+                                                    {submitted && (
+                                                        <div className="correct-answer">
+                                                            <strong>Correct Answer:</strong> {item.question.answer.choice}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            {item.question.type === 'linking' && item.question.answer?.map((pair, leftIdx) => (
+                                                <div key={leftIdx} className="d-flex align-items-center gap-3 mb-2">
+                                                    <span>{pair.left.word || <img src={pair.left.image_uri} alt="left" style={{ width: '50px', height: '50px' }} />}</span>
+                                                    <span>=</span>
+                                                    {!submitted ? (
+                                                        <select
+                                                            className="form-select"
+                                                            value={userAnswers[item.id]?.[leftIdx] || ''}
+                                                            onChange={(e) => handleSelectAnswer(item.id, leftIdx, e.target.value)}
+                                                        >
+                                                            <option value="">Select</option>
+                                                            {pair.options?.map((opt, idx) => (
+                                                                <option key={idx} value={opt.right.word}>{opt.right.word}</option>
+                                                            ))}
+                                                        </select>
+                                                    ) : (
+                                                        <span>{pair.right.word}</span>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ))
                                 )}
                                 {!submitted && fetchedQuestions.length > 0 && (
-                                    <button className="btn btn-primary mt-3" onClick={handleSubmit}>
-                                        Submit Matches
-                                    </button>
+                                    <button className="btn btn-primary mt-3" onClick={handleSubmit}>Submit Answers</button>
                                 )}
-                            </>
+                                <br />
+                            </div>
                         )}
-
                     </div>
                     <Footer />
                 </div>
