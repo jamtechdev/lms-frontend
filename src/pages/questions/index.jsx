@@ -120,7 +120,6 @@ const Questions = () => {
                                         <div className="card-body">
                                             <div className="mb-20 flex-between flex-wrap gap-8">
                                                 <h4 className="mb-0">Questions</h4>
-                                                {/* <a href="#" className="text-13 fw-medium text-main-600 hover-text-decoration-underline">See All</a> */}
                                             </div>
                                             <div className="Questions">
                                                 {questionTypes.map((type) => (
@@ -150,20 +149,7 @@ const Questions = () => {
                                 </div>
                             </div>
                         )}
-                        {/* {selectedSubject && !selectedQuestionType && (
-                            <div className="row gy-4 shadowBox">
-                                {questionTypes.map((type) => (
-                                    <div className="col-sm-3" key={type}>
-                                        <div className="card" onClick={() => setSelectedQuestionType(type)} style={{ cursor: 'pointer' }}>
-                                            <div className="card-body">
-                                                <h4 className="mb-2">{type}</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                                <button className="btn btn-secondary mt-3" onClick={() => setSelectedSubject(null)}>Back to Subjects</button>
-                            </div>
-                        )} */}
+
                         {selectedSubject && selectedQuestionType && (
                             <div className="shadowBox">
                                 <h2>{selectedSubject}</h2>
