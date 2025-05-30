@@ -24,12 +24,19 @@
     width: 100%;
 }
 
+.questionGrid{
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 20px;
+}
+
 .question-card {
     margin-bottom: 30px;
     padding: 25px;
     border-radius: 12px;
     background-color: #f8f9fa;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #d8d8d8;
+    box-shadow: 1px 4px 10px rgb(89 119 244 / 41%);
 }
 
 .question-text {
@@ -290,3 +297,93 @@
 .subject_img{
     width: 8.625rem !important;
 }
+.mcq {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+/* Basic styling for column items */
+.column-item {
+    padding: 0.75rem 1rem;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0; /* Light border */
+    margin-bottom: 0.75rem; /* Space between items */
+    font-size: 1rem;
+}
+.question-item {
+    color: #1f2937; /* Darker text for questions */
+    font-weight: 500;
+}
+.answer-item {
+    color: #4b5563; /* Slightly lighter text for answers */
+}
+/* Custom adjustments for Bootstrap layout */
+.card {
+    border-radius: 0.75rem; /* Slightly more rounded corners for cards */
+}
+.card-body {
+    padding: 1.5rem; /* More padding inside cards */
+}
+.column-container {
+    background-color: #f8f9fa; /* Light background for columns */
+    border: 1px solid #e9ecef; /* Light border for columns */
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.moduleanswerchoices {
+    margin-left: 1.5em;
+    margin-bottom: 10px;
+    list-style-type: upper-alpha;
+}
+.trueFalse .mcq {
+    display: flex;
+    align-items: baseline;
+}
+.trueFalse .option-item {
+    background: transparent;
+}
+.trueFalse h5 span {
+    position: relative;
+    bottom: 4px;
+    margin-right: 13px;
+}
+.trueFalse .option-item:hover {
+    transform: translateY(0px);
+    box-shadow: none;
+}
+.trueFalse .form-check-label {
+    padding-left: 5px;
+}
+.Questions .questionList:first-child {
+    background: rgb(89 119 244 / 32%);
+}
+.Questions .questionList:nth-child(2) {
+    background: rgb(246 150 52 / 32%);
+}
+.Questions .questionList:nth-child(3) {
+    background: rgb(244 67 54 / 32%);
+}
+.Questions .questionList:nth-child(4) {
+    background: rgb(76 175 80 / 32%);
+}
+/* Matching */
+
+.match_1 {
+    border: 2px solid #5977f4;
+}
+.match_2 {
+    border: 2px solid #f69634;
+}
+.match_3 {
+    border: 2px solid #2e6eb6;
+}
+.match_4 {
+    border: 2px solid #F44336;
+}
+.match_5 {
+    border: 2px solid #795548;
+}
+
+/* End Matching */
