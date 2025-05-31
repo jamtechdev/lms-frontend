@@ -76,8 +76,8 @@
     background-color: #ffffff;
     /* border: 1px solid #ced4da; */
     border-radius: 10px;
-    padding: 15px 20px;
-    margin-bottom: 15px;
+    padding: 5px 20px;
+    margin-bottom: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;

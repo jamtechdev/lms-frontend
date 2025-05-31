@@ -7,12 +7,12 @@ const Navbar = () => {
         <div className="top-navbar flex-between gap-16">
              <div className="flex-align gap-16">
                 <button type="button" className="toggle-btn d-xl-none d-flex text-26 text-gray-500"><i className="ph ph-list"></i></button>
-                <form action="#" className="w-350 d-sm-block d-none">
+                {/* <form action="#" className="w-350 d-sm-block d-none">
                     <div className="position-relative searchBox">
                         <button type="submit" className="input-icon text-xl d-flex text-gray-100 pointer-event-none"><i className="ph ph-magnifying-glass"></i></button>
                         <input type="text" className="form-control ps-40 h-40 border-transparent focus-border-main-600 bg-main-50 rounded-pill placeholder-15" placeholder="Search..." />
                     </div>
-                </form>
+                </form> */}
             </div>
             <div className="flex-align gap-16">
                 <div className={`dropdown ${isDropdownOpen ? 'show' : ''}`}>
@@ -175,12 +175,12 @@ const Navbar = () => {
                                     </div>
                                 </div> */}
                                 <ul className="max-h-270 overflow-y-auto scroll-sm pe-4">
-                                    <li className="mb-4">
+                                    {/* <li className="mb-4">
                                         <a href="setting.html" className="py-12 text-15 px-10 hover-bg-gray-50 text-gray-300 rounded-8 flex-align gap-8 fw-medium text-15">
                                             <span className="text-2xl text-primary-600 d-flex"><i className="ph ph-gear"></i></span>
                                             <span className="text">Account Settings</span>
                                         </a>
-                                    </li>
+                                    </li> */}
                                     {/* <li className="mb-4">
                                         <a href="pricing-plan.html" className="py-12 text-15 px-20 hover-bg-gray-50 text-gray-300 rounded-8 flex-align gap-8 fw-medium text-15">
                                             <span className="text-2xl text-primary-600 d-flex"><i className="ph ph-chart-bar"></i></span>
@@ -206,7 +206,7 @@ const Navbar = () => {
                                         </a>
                                     </li> */}
                                     <li className="pt-8 border-top border-gray-100">
-                                        <a href="sign-in.html" className="py-12 text-15 px-10 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15">
+                                        <a href="/" className="py-12 text-15 px-10 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15">
                                             <span className="text-2xl text-danger-600 d-flex"><i className="ph ph-sign-out"></i></span>
                                             <span className="text">Log Out</span>
                                         </a>

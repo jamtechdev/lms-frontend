@@ -4,8 +4,11 @@ import star from '../../assets/images/star-shape.png';
 import Sidebar from '../../components/Sidebar';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
+import { getFirstName } from '../../_store/_reducers/auth';
+import { useSelector } from 'react-redux';
 
 const Dashboard = () => {
+    const name = useSelector(getFirstName);
     return <>
         <div className="preloader">
             <div className="loader"></div>
@@ -23,10 +26,9 @@ const Dashboard = () => {
                                     <div className="row align-items-center h-100">
                                         <div className="col-lg-6">
                                             <div className="grettings-box-two__content">
-                                                <h2 className="fw-medium mb-0 flex-align gap-10">Hi, Mohib <img src="assets/images/icons/wave-hand.png" alt="" /> </h2>
-                                                <h2 className="fw-medium mb-16">What do you want to learn today with your partner?</h2>
+                                                <h2 className="fw-medium mb-0 flex-align gap-10">Hi, {name} <img src="assets/images/icons/wave-hand.png" alt="" /> </h2>
+                                                <h2 className="fw-medium mb-16">What do you want to learn today ?</h2>
                                                 <p className="text-15 text-gray-400">Discover courses, track progress, and achieve your learning goods seamlessly.</p>
-                                                <a href="student-courses.html" className="btn btn-main rounded-pill mt-32">Explore Courses</a>
                                             </div>
                                         </div>
                                         <div className="col-lg-6 d-md-block d-none mt-auto">

@@ -125,6 +125,7 @@ const Questions = () => {
                                                     <div className="flex-between gap-8 mb-10">
                                                         <div className="mt-10">
                                                             <span className="flex-shrink-0 w-48 h-48 flex-center rounded-circle bg-main-600 text-white text-2xl">
+                                                                <i className="ph ph-graduation-cap"></i>
                                                             </span>
                                                             <h4 className="mb-2 mt-20">{subject.subject_name}</h4>
                                                         </div>
@@ -181,112 +182,162 @@ const Questions = () => {
                         {selectedQuestionType && (
                             <div className="shadowBox">
                                 <h2 className="mb-3">{questionTypes.find(t => t.key === selectedQuestionType)?.label} Questions</h2>
-                                {fetchedQuestions.length === 0 ? (
-                                    <p>No questions found.</p>
-                                ) : (
-                                    fetchedQuestions.map((item, index) => (
-                                        <div key={item.id} className="question-card">
-                                            <p className="question-text">{index + 1}. {item.question.content}</p>
-                                            {item.question.type === 'mcq' && (
-                                                <>
-                                                    {item.question.options?.map((opt, idx) => (
-                                                        <div key={idx} className="form-check option-item">
-                                                            <input
-                                                                className="form-check-input"
-                                                                type="radio"
-                                                                name={`question_${item.id}`}
-                                                                value={opt.value}
-                                                                checked={userAnswers[item.id] === opt.value}
-                                                                onChange={() => handleSelectAnswer(item.id, null, opt.value)}
-                                                                disabled={submitted}
-                                                            />
-                                                            <label className="form-check-label">
-                                                                {opt.value}
-                                                            </label>
-                                                        </div>
-                                                    ))}
-                                                    {submitted && (
-                                                        <div style={{ marginTop: '10px', fontWeight: 'bold', color: 'green' }}>
-                                                            Correct Answer: {item.question.answer.answer}
-                                                        </div>
-                                                    )}
-                                                </>
-                                            )}
+                                <div className="questionGrid">
+                                    {fetchedQuestions.length === 0 ? (
+                                        <p>No questions found.</p>
+                                    ) : (
+                                        fetchedQuestions.map((item, index) => (
+                                            <div key={item.id} className="question-card">
+                                                {/* <p className="question-text">{index + 1}. {item.question.content}</p> */}
+                                                {item.question.type !== 'linking' && (
+                                                    <p className="question-text">{index + 1}. {item.question.content}</p>
+                                                )}
+                                                {item.question.type === 'mcq' && (
+                                                    <>
+                                                        {item.question.options?.map((opt, idx) => (
+                                                            <div key={idx} className="form-check option-item">
+                                                                <input
+                                                                    className="form-check-input"
+                                                                    type="radio"
+                                                                    name={`question_${item.id}`}
+                                                                    value={opt.value}
+                                                                    checked={userAnswers[item.id] === opt.value}
+                                                                    onChange={() => handleSelectAnswer(item.id, null, opt.value)}
+                                                                    disabled={submitted}
+                                                                />
+                                                                <label className="form-check-label">
+                                                                    {opt.value}
+                                                                </label>
+                                                            </div>
+                                                        ))}
+                                                        {submitted && (
+                                                            <div style={{ marginTop: '10px', fontWeight: 'bold', color: 'green' }}>
+                                                                Correct Answer: {item.question.answer.answer}
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                )}
 
-                                            {item.question.type === 'fill_blank' && (
-                                                <div>
-                                                    {item.question.blanks?.map((blank, idx) => (
-                                                        <div key={idx} className="form-group">
-                                                            <label>Blank {idx + 1}:</label>
-                                                            {!submitted ? (
-                                                                <select
-                                                                    className="form-select"
-                                                                    value={userAnswers[item.id]?.[idx] || ''}
-                                                                    onChange={(e) => handleSelectAnswer(item.id, idx, e.target.value)}
-                                                                >
-                                                                    <option value="">Select</option>
-                                                                    {blank.options?.map((option, optionIdx) => (
-                                                                        <option key={optionIdx} value={option}>{option}</option>
-                                                                    ))}
-                                                                </select>
-                                                            ) : (
-                                                                <>
-                                                                    <div>Your Answer: {userAnswers[item.id]?.[idx] || 'No Answer'}</div>
-                                                                    <div>Correct Answer: {blank.answer}</div>
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
+                                                {item.question.type === 'fill_blank' && (
+                                                    <div>
+                                                        {item.question.blanks?.map((blank, idx) => (
+                                                            <div key={idx} className="form-group">
+                                                                <label>Blank {idx + 1}:</label>
+                                                                {blank.options?.map((val, optionIdx) => (
+                                                                    <div key={optionIdx} className="form-check option-item">
+                                                                        <input
+                                                                            className="form-check-input"
+                                                                            type="radio"
+                                                                            name={`question_${item.id}_blank_${idx}`}
+                                                                            value={val}
+                                                                            checked={userAnswers[item.id]?.[idx] === val}
+                                                                            onChange={() => handleSelectAnswer(item.id, idx, val)}
+                                                                            disabled={submitted}
+                                                                        />
+                                                                        <label className="form-check-label">{val}</label>
+                                                                    </div>
+                                                                ))}
+                                                                {submitted && (
+                                                                    <div>
+                                                                        <div>Your Answer: {userAnswers[item.id]?.[idx] || 'No Answer'}</div>
+                                                                        <div>Correct Answer: {blank.answer}</div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
 
-                                            {item.question.type === 'true_false' && (
-                                                <div>
-                                                    {['True', 'False'].map((val, idx) => (
-                                                        <div key={idx} className="form-check option-item">
-                                                            <input
-                                                                className="form-check-input"
-                                                                type="radio"
-                                                                name={`question_${item.id}`}
-                                                                value={val}
-                                                                checked={userAnswers[item.id] === val}
-                                                                onChange={() => handleSelectAnswer(item.id, null, val)}
-                                                                disabled={submitted}
-                                                            />
-                                                            <label className="form-check-label">{val}</label>
-                                                        </div>
-                                                    ))}
-                                                    {submitted && (
-                                                        <div className="correct-answer">
-                                                            <strong>Correct Answer:</strong> {item.question.answer.choice}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
 
-                                            {item.question.type === 'linking' && item.question.answer?.map((pair, leftIdx) => (
-                                                <div key={leftIdx} className="d-flex align-items-center gap-3 mb-2">
-                                                    <span>{pair.left.word || <img src={pair.left.image_uri} alt="left" style={{ width: '50px', height: '50px' }} />}</span>
-                                                    <span>=</span>
-                                                    {!submitted ? (
-                                                        <select
-                                                            className="form-select"
-                                                            value={userAnswers[item.id]?.[leftIdx] || ''}
-                                                            onChange={(e) => handleSelectAnswer(item.id, leftIdx, e.target.value)}
-                                                        >
-                                                            <option value="">Select</option>
-                                                            {pair.options?.map((opt, idx) => (
-                                                                <option key={idx} value={opt.right.word}>{opt.right.word}</option>
-                                                            ))}
-                                                        </select>
-                                                    ) : (
-                                                        <span>{pair.right.word}</span>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ))
-                                )}
+                                                {item.question.type === 'true_false' && (
+                                                    <div>
+                                                        {['True', 'False'].map((val, idx) => (
+                                                            <div key={idx} className="form-check option-item">
+                                                                <input
+                                                                    className="form-check-input"
+                                                                    type="radio"
+                                                                    name={`question_${item.id}`}
+                                                                    value={val}
+                                                                    checked={userAnswers[item.id] === val}
+                                                                    onChange={() => handleSelectAnswer(item.id, null, val)}
+                                                                    disabled={submitted}
+                                                                />
+                                                                <label className="form-check-label">{val}</label>
+                                                            </div>
+                                                        ))}
+                                                        {submitted && (
+                                                            <div className="correct-answer">
+                                                                <strong>Correct Answer:</strong> {item.question.answer.choice}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+
+                                                {/* {item.question.type === 'linking' && item.question.answer?.map((pair, leftIdx) => (
+                                                    <div key={leftIdx} className="d-flex align-items-center gap-3 mb-2">
+                                                        <span>{pair.left.word || <img src={pair.left.image_uri} alt="left" style={{ width: '50px', height: '50px' }} />}</span>
+                                                        <span>=</span>
+                                                        {!submitted ? (
+                                                            <select
+                                                                className="form-select"
+                                                                value={userAnswers[item.id]?.[leftIdx] || ''}
+                                                                onChange={(e) => handleSelectAnswer(item.id, leftIdx, e.target.value)}
+                                                            >
+                                                                <option value="">Select</option>
+                                                                {pair.options?.map((opt, idx) => (
+                                                                    <option key={idx} value={opt.right.word}>{opt.right.word}</option>
+                                                                ))}
+                                                            </select>
+                                                        ) : (
+                                                            <span>{pair.right.word}</span>
+                                                        )}
+                                                    </div>
+                                                ))} */}
+
+                                                {selectedQuestionType === 'linking' && (
+                                                    <div className="row gy-4 justify-content-center">
+                                                        <div className='col-sm-9'>
+                                                            <div class="card shadow-lg w-100">
+                                                                <div class="card-body">
+                                                                    <h1 class="card-title text-center mb-4 fs-2 fw-bold text-dark">Match the Column</h1>
+                                                                    <p class="card-text text-center mb-5 text-secondary">Review the terms on the left and their corresponding definitions on the right.</p>
+
+                                                                    <div id="game-container" class="row g-4 justify-content-center">
+                                                                        <div class="col-lg-6">
+                                                                            <div class="column-container">
+                                                                                <h2 class="text-center mb-4 fs-5 text-secondary">Terms</h2>
+                                                                                <div id="questions-column" class="d-grid gap-3">
+                                                                                    <div id="question-q1" class="column-item question-item match_1">Photosynthesis</div>
+                                                                                    <div id="question-q2" class="column-item question-item match_2">Democracy</div>
+                                                                                    <div id="question-q3" class="column-item question-item match_3">Pacific Ocean</div>
+                                                                                    <div id="question-q4" class="column-item question-item match_4">Isaac Newton</div>
+                                                                                    <div id="question-q5" class="column-item question-item match_5">Himalayas</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-lg-6">
+                                                                            <div class="column-container">
+                                                                                <h2 class="text-center mb-4 fs-5 text-secondary">Definitions</h2>
+                                                                                <div id="answers-column" class="d-grid gap-3">
+                                                                                    <div id="answer-q1" class="column-item answer-item match_2">The process by which plants make food</div>
+                                                                                    <div id="answer-q2" class="column-item answer-item match_1">A system of government by the whole population</div>
+                                                                                    <div id="answer-q3" class="column-item answer-item match_4">The largest and deepest of Earth's oceans</div>
+                                                                                    <div id="answer-q4" class="column-item answer-item match_5">Formulated the laws of motion and universal gravitation</div>
+                                                                                    <div id="answer-q5" class="column-item answer-item match_3">A mountain range in Asia separating the plains of the Indian subcontinent from the Tibetan Plateau</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
                                 {!submitted && fetchedQuestions.length > 0 && (
                                     <button className="btn btn-primary mt-3" onClick={handleSubmit}>Submit Answers</button>
                                 )}
