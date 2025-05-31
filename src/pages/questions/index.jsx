@@ -20,8 +20,16 @@ const Questions = () => {
     const [fetchedQuestions, setFetchedQuestions] = useState([]);
     const [userAnswers, setUserAnswers] = useState({});
     const [submitted, setSubmitted] = useState(false);
-
-
+    const [userMatches, setUserMatches] = useState({});
+    const handleLinkingDrop = (questionId, leftIdx, draggedMatch) => {
+        setUserMatches((prev) => ({
+            ...prev,
+            [questionId]: {
+                ...(prev[questionId] || {}),
+                [leftIdx]: draggedMatch,
+            }
+        }));
+    };
     const questionTypes = [
         { key: 'mcq', label: 'MCQ' },
         { key: 'fill_blank', label: 'Fill in the blanks' },
@@ -73,7 +81,12 @@ const Questions = () => {
         }));
     };
 
-
+    const shuffleArray = (array) => {
+        return array
+            .map(value => ({ value, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ value }) => value);
+    };
     const handleSubmit = () => {
         setSubmitted(true);
     };
@@ -238,16 +251,14 @@ const Questions = () => {
                                                                     </div>
                                                                 ))}
                                                                 {submitted && (
-                                                                    <div>
-                                                                        <div>Your Answer: {userAnswers[item.id]?.[idx] || 'No Answer'}</div>
-                                                                        <div>Correct Answer: {blank.answer}</div>
-                                                                    </div>
+
+                                                                    <div style={{ marginTop: '10px', fontWeight: 'bold', color: 'green' }}>Correct Answer: {blank.answer}</div>
+
                                                                 )}
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
-
 
                                                 {item.question.type === 'true_false' && (
                                                     <div>
@@ -266,8 +277,8 @@ const Questions = () => {
                                                             </div>
                                                         ))}
                                                         {submitted && (
-                                                            <div className="correct-answer">
-                                                                <strong>Correct Answer:</strong> {item.question.answer.choice}
+                                                            <div style={{ marginTop: '10px', fontWeight: 'bold', color: 'green' }}>
+                                                                Correct Answer:{item.question.answer.choice}
                                                             </div>
                                                         )}
                                                     </div>
@@ -294,7 +305,7 @@ const Questions = () => {
                                                     </div>
                                                 ))} */}
 
-                                                {selectedQuestionType === 'linking' && (
+                                                {/* {selectedQuestionType === 'linking' && (
                                                     <div className="row gy-4 justify-content-center">
                                                         <div className='col-sm-9'>
                                                             <div class="card shadow-lg w-100">
@@ -333,7 +344,79 @@ const Questions = () => {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                )} */}
+                                                {item.question.type === 'linking' && (
+                                                    <div className="row gy-4 justify-content-center">
+                                                        <div className='col-sm-9'>
+                                                            <div className="card shadow-lg w-100">
+                                                                <div className="card-body">
+                                                                    <h1 className="card-title text-center mb-4 fs-2 fw-bold text-dark">Match the Column</h1>
+                                                                    <p className="card-text text-center mb-5 text-secondary">
+                                                                        Review the terms on the left and their corresponding definitions on the right.
+                                                                    </p>
+
+                                                                    <div id="game-container" className="row g-4 justify-content-center">
+                                                                        <div className="col-lg-6">
+                                                                            <div className="column-container">
+                                                                                <h2 className="text-center mb-4 fs-5 text-secondary">Terms</h2>
+                                                                                <div id="questions-column" className="d-grid gap-3">
+                                                                                    {item.question.answer.map((pair, idx) => (
+                                                                                        <div
+                                                                                            key={idx}
+                                                                                            className={`column-item question-item match_${idx + 1}`}
+                                                                                            draggable
+                                                                                            onDragStart={(e) => e.dataTransfer.setData('text/plain', `match_${idx + 1}`)}
+                                                                                        >
+                                                                                            {pair.left.match_type === 'text' ? (
+                                                                                                pair.left.word
+                                                                                            ) : (
+                                                                                                <img src={pair.left.image_uri} alt={`left-${idx}`} style={{ width: '50px', height: '50px' }} />
+                                                                                            )}
+                                                                                        </div>
+                                                                                    ))}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div className="col-lg-6">
+                                                                            <div className="column-container">
+                                                                                <h2 className="text-center mb-4 fs-5 text-secondary">Definitions</h2>
+                                                                                <div id="answers-column" className="d-grid gap-3">
+                                                                                    {item.question.answer.map((pair, idx) => (
+                                                                                        <div
+                                                                                            key={idx}
+                                                                                            className={`column-item answer-item match_${idx + 1} ${submitted
+                                                                                                ? userMatches[item.id]?.[idx] === `match_${idx + 1}`
+                                                                                                    ? 'correct-match'
+                                                                                                    : 'incorrect-match'
+                                                                                                : ''
+                                                                                                }`}
+                                                                                            onDragOver={(e) => e.preventDefault()}
+                                                                                            onDrop={(e) => {
+                                                                                                e.preventDefault();
+                                                                                                const draggedMatch = e.dataTransfer.getData('text/plain');
+                                                                                                handleLinkingDrop(item.id, idx, draggedMatch);
+                                                                                            }}
+                                                                                        >
+                                                                                            {pair.right.match_type === 'text' ? (
+                                                                                                pair.right.word
+                                                                                            ) : (
+                                                                                                <img src={pair.right.image_uri} alt={`right-${idx}`} style={{ width: '50px', height: '50px' }} />
+                                                                                            )}
+                                                                                        </div>
+                                                                                    ))}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 )}
+
+
                                             </div>
                                         ))
                                     )}
