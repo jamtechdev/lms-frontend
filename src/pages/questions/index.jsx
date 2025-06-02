@@ -90,12 +90,6 @@ const Questions = () => {
     }));
   };
 
-  const shuffleArray = (array) => {
-    return array
-      .map((value) => ({ value, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ value }) => value);
-  };
   const handleSubmit = () => {
     setSubmitted(true);
   };
@@ -131,13 +125,47 @@ const Questions = () => {
                     </span>
                   </li>
                   <li>
-                    <span className="text-main-600 fw-normal text-15">
-                      Questions
+                    {selectedQuestionType ? (
+                      <a
+                        href="#"
+                        onClick={() => {
+                          setSelectedQuestionType(null);
+                          setFetchedQuestions([]);
+                          setSubmitted(false);
+                          setUserAnswers({});
+                        }}
+                        className="text-gray-200 fw-normal text-15 hover-text-main-600"
+                      >
+                        {questionTypes.find(
+                          (t) => t.key === selectedQuestionType
+                        )?.label || "Question Type"}
+                      </a>
+                    ) : (
+                      <span className="text-gray-500 fw-normal text-15">
+                        Question Type
+                      </span>
+                    )}
+                  </li>
+                  <li>
+                    <span className="text-gray-500 fw-normal d-flex">
+                      <i className="ph ph-caret-right"></i>
                     </span>
+                  </li>
+                  <li>
+                    {selectedQuestionType ? (
+                      <span className="text-main-600 fw-normal text-15">
+                        Questions
+                      </span>
+                    ) : (
+                      <span className="text-gray-500 fw-normal text-15">
+                        Questions
+                      </span>
+                    )}
                   </li>
                 </ul>
               </div>
             </div>
+
             {!selectedSubject && (
               <div className="row gy-4 shadowBox">
                 {loading ? (
