@@ -5,6 +5,7 @@ const userService = {
     loginStudent,
     getSubject,
     getAllQuestion,
+    logout,
 };
 async function login(data) {
     return await axiosInstance.post(`/api/v1/auth/login`, data);
@@ -17,5 +18,8 @@ async function getSubject(data) {
 }
 async function getAllQuestion(data) {
     return await axiosInstance.post(`/api/v1/questions/getTypeBasedQuestions`, data);
+}
+async function logout(data) {
+    return await axiosInstance.post(`/api/v1/logout`, data);
 }
 export default userService;
