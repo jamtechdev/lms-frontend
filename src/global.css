@@ -431,4 +431,41 @@
     background-color: #f8d7da;
 }
 
+.kbc-option-button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    background-color: #f0f0f0;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.kbc-option-button:hover {
+    background-color: #e0e0e0;
+}
+
+.kbc-option-button.selected {
+    background-color: #ffcc00;
+    /* Highlight selected option */
+    border-color: #ff9900;
+    color: #000;
+}
+
+.kbc-option-button.correct {
+    background-color: #4CAF50;
+    /* Green for correct */
+    color: white;
+}
+
+.kbc-option-button.incorrect {
+    background-color: #f44336;
+    /* Red for incorrect */
+    color: white;
+}
+
 /* End Matching */
