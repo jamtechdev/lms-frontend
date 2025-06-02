@@ -1,23 +1,48 @@
-import React, { useState } from 'react';
-import logo from '../assets/images/logo/logos.png';
+import React, { useState } from "react";
+import logo from "../assets/images/logo/logos.png";
+import userService from "../_services/user.service";
+import { useDispatch } from "react-redux";
+import { logout } from "../_store/_reducers/auth";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    return (
-        <div className="top-navbar flex-between gap-16">
-             <div className="flex-align gap-16">
-                <button type="button" className="toggle-btn d-xl-none d-flex text-26 text-gray-500"><i className="ph ph-list"></i></button>
-                {/* <form action="#" className="w-350 d-sm-block d-none">
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await userService.logout();
+      dispatch(logout());
+      toast.success("Logout successful!");
+      navigate("/");
+    } catch (err) {
+      toast.error(
+        err?.response?.data?.message || "Logout failed, please try again"
+      );
+    }
+  };
+
+  return (
+    <div className="top-navbar flex-between gap-16">
+      <div className="flex-align gap-16">
+        <button
+          type="button"
+          className="toggle-btn d-xl-none d-flex text-26 text-gray-500"
+        >
+          <i className="ph ph-list"></i>
+        </button>
+        {/* <form action="#" className="w-350 d-sm-block d-none">
                     <div className="position-relative searchBox">
                         <button type="submit" className="input-icon text-xl d-flex text-gray-100 pointer-event-none"><i className="ph ph-magnifying-glass"></i></button>
                         <input type="text" className="form-control ps-40 h-40 border-transparent focus-border-main-600 bg-main-50 rounded-pill placeholder-15" placeholder="Search..." />
                     </div>
                 </form> */}
-            </div>
-            <div className="flex-align gap-16">
-                <div className={`dropdown ${isDropdownOpen ? 'show' : ''}`}>
-
-                        {/* <div className="flex-align gap-8">
+      </div>
+      <div className="flex-align gap-16">
+        <div className={`dropdown ${isDropdownOpen ? "show" : ""}`}>
+          {/* <div className="flex-align gap-8">
                     <div className="dropdown">
                         <button className="dropdown-btn shaking-animation text-gray-500 w-40 h-40 bg-main-50 hover-bg-main-100 transition-2 rounded-circle text-xl flex-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <span className="position-relative">
@@ -152,36 +177,47 @@ const Navbar = () => {
                         </div>
                     </div>
                 </div> */}
-                 <div className="dropdown">
-
-                    <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className={`users arrow-down-icon border border-gray-200 rounded-pill p-4 d-inline-block pe-40 position-relative ${isDropdownOpen ? 'show' : ''}`}
-                        type="button"
-                        aria-expanded={isDropdownOpen} data-bs-toggle="dropdown">
-
-                        <span className="position-relative">
-                            <img src={logo} alt="Image" className="h-32 w-32 rounded-circle" />
-                            <span className="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0"></span>
-                        </span>
-                    </button>
-                    <div className={`dropdown-menu dropdown-menu--lg border-0 bg-transparent p-0 ${isDropdownOpen ? 'show' : ''}`}>
-                        <div className="card border border-gray-100 rounded-12 box-shadow-custom">
-                            <div className="card-body">
-                                {/* <div className="flex-align gap-8 mb-20 pb-20 border-bottom border-gray-100">
+          <div className="dropdown">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className={`users arrow-down-icon border border-gray-200 rounded-pill p-4 d-inline-block pe-40 position-relative ${
+                isDropdownOpen ? "show" : ""
+              }`}
+              type="button"
+              aria-expanded={isDropdownOpen}
+              data-bs-toggle="dropdown"
+            >
+              <span className="position-relative">
+                <img
+                  src={logo}
+                  alt="Image"
+                  className="h-32 w-32 rounded-circle"
+                />
+                <span className="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0"></span>
+              </span>
+            </button>
+            <div
+              className={`dropdown-menu dropdown-menu--lg border-0 bg-transparent p-0 ${
+                isDropdownOpen ? "show" : ""
+              }`}
+            >
+              <div className="card border border-gray-100 rounded-12 box-shadow-custom">
+                <div className="card-body">
+                  {/* <div className="flex-align gap-8 mb-20 pb-20 border-bottom border-gray-100">
                                     <img src={logo} alt="" className="w-36 h-36 rounded-circle" />
                                     <div className="">
                                         <h4 className="mb-0">Michel John</h4>
                                         <p className="fw-medium text-13 text-gray-200">examplemail@mail.com</p>
                                     </div>
                                 </div> */}
-                                <ul className="max-h-270 overflow-y-auto scroll-sm pe-4">
-                                    {/* <li className="mb-4">
+                  <ul className="max-h-270 overflow-y-auto scroll-sm pe-4">
+                    {/* <li className="mb-4">
                                         <a href="setting.html" className="py-12 text-15 px-10 hover-bg-gray-50 text-gray-300 rounded-8 flex-align gap-8 fw-medium text-15">
                                             <span className="text-2xl text-primary-600 d-flex"><i className="ph ph-gear"></i></span>
                                             <span className="text">Account Settings</span>
                                         </a>
                                     </li> */}
-                                    {/* <li className="mb-4">
+                    {/* <li className="mb-4">
                                         <a href="pricing-plan.html" className="py-12 text-15 px-20 hover-bg-gray-50 text-gray-300 rounded-8 flex-align gap-8 fw-medium text-15">
                                             <span className="text-2xl text-primary-600 d-flex"><i className="ph ph-chart-bar"></i></span>
                                             <span className="text">Upgrade Plan</span>
@@ -205,21 +241,26 @@ const Navbar = () => {
                                             <span className="text">Email</span>
                                         </a>
                                     </li> */}
-                                    <li className="pt-8 border-top border-gray-100">
-                                        <a href="/" className="py-12 text-15 px-10 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15">
-                                            <span className="text-2xl text-danger-600 d-flex"><i className="ph ph-sign-out"></i></span>
-                                            <span className="text">Log Out</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    <li className="pt-8 border-top border-gray-100">
+                      <button
+                        onClick={handleLogout}
+                        className="py-12 text-15 px-10 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15 w-full text-left"
+                      >
+                        <span className="text-2xl text-danger-600 d-flex">
+                          <i className="ph ph-sign-out"></i>
+                        </span>
+                        <span className="text">Log Out</span>
+                      </button>
+                    </li>
+                  </ul>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-        </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Navbar;
