@@ -6,6 +6,7 @@ import maths from '../../assets/images/maths.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLevel, getQuestion, getStudentType, getSubject, setQuestion, setSubject } from '../../_store/_reducers/auth';
 import userService from '../../_services/user.service';
+import parse from 'html-react-parser';
 
 const Questions = () => {
     const dispatch = useDispatch();
@@ -203,7 +204,9 @@ const Questions = () => {
                                             <div key={item.id} className="question-card">
                                                 {/* <p className="question-text">{index + 1}. {item.question.content}</p> */}
                                                 {item.question.type !== 'linking' && (
-                                                    <p className="question-text">{index + 1}. {item.question.content}</p>
+                                                    <p className="question-text">
+                                                        {index + 1}. {parse(item.question.content)}
+                                                    </p>
                                                 )}
                                                 {item.question.type === 'mcq' && (
                                                     <>
