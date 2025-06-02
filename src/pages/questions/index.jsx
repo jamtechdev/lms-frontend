@@ -167,26 +167,26 @@ const Questions = () => {
                                             </div>
                                             <div className="Questions">
                                                 {questionTypes.map((type) => (
-                                                    <div className="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16 questionList" key={type.key}>
-                                                        <div
-                                                            className="flex-align flex-wrap gap-8"
-                                                            onClick={() => {
-                                                                setSelectedQuestionType(type.key);
-                                                                dispatch(setQuestion(type.key));
-                                                                handleQuestion(type.key);
-                                                            }}
-                                                            style={{ cursor: 'pointer' }}
-                                                        >
+                                                    <div
+                                                        className="p-xl-4 py-16 px-12 flex-between gap-8 rounded-8 border border-gray-100 hover-border-gray-200 transition-1 mb-16 questionList"
+                                                        key={type.key}
+                                                        style={{ cursor: 'pointer' }}
+                                                        onClick={() => {
+                                                            setSelectedQuestionType(type.key);
+                                                            dispatch(setQuestion(type.key));
+                                                            handleQuestion(type.key);
+                                                        }}
+                                                    >
+                                                        <div className="flex-align flex-wrap gap-8">
                                                             <div>
                                                                 <h4 className="mb-0">{type.label}</h4>
                                                                 <span className="text-13 text-gray-400">Select Questions</span>
                                                             </div>
                                                         </div>
-                                                        <a href="assignment.html" className="text-gray-900 hover-text-main-600">
-                                                            <i className="ph ph-caret-right"></i>
-                                                        </a>
+                                                        <i className="ph ph-caret-right"></i>
                                                     </div>
                                                 ))}
+
                                             </div>
                                         </div>
                                     </div>
@@ -202,7 +202,6 @@ const Questions = () => {
                                     ) : (
                                         fetchedQuestions.map((item, index) => (
                                             <div key={item.id} className="question-card">
-                                                {/* <p className="question-text">{index + 1}. {item.question.content}</p> */}
                                                 {item.question.type !== 'linking' && (
                                                     <p className="question-text">
                                                         {index + 1}. {parse(item.question.content)}
@@ -286,68 +285,6 @@ const Questions = () => {
                                                         )}
                                                     </div>
                                                 )}
-
-                                                {/* {item.question.type === 'linking' && item.question.answer?.map((pair, leftIdx) => (
-                                                    <div key={leftIdx} className="d-flex align-items-center gap-3 mb-2">
-                                                        <span>{pair.left.word || <img src={pair.left.image_uri} alt="left" style={{ width: '50px', height: '50px' }} />}</span>
-                                                        <span>=</span>
-                                                        {!submitted ? (
-                                                            <select
-                                                                className="form-select"
-                                                                value={userAnswers[item.id]?.[leftIdx] || ''}
-                                                                onChange={(e) => handleSelectAnswer(item.id, leftIdx, e.target.value)}
-                                                            >
-                                                                <option value="">Select</option>
-                                                                {pair.options?.map((opt, idx) => (
-                                                                    <option key={idx} value={opt.right.word}>{opt.right.word}</option>
-                                                                ))}
-                                                            </select>
-                                                        ) : (
-                                                            <span>{pair.right.word}</span>
-                                                        )}
-                                                    </div>
-                                                ))} */}
-
-                                                {/* {selectedQuestionType === 'linking' && (
-                                                    <div className="row gy-4 justify-content-center">
-                                                        <div className='col-sm-9'>
-                                                            <div class="card shadow-lg w-100">
-                                                                <div class="card-body">
-                                                                    <h1 class="card-title text-center mb-4 fs-2 fw-bold text-dark">Match the Column</h1>
-                                                                    <p class="card-text text-center mb-5 text-secondary">Review the terms on the left and their corresponding definitions on the right.</p>
-
-                                                                    <div id="game-container" class="row g-4 justify-content-center">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="column-container">
-                                                                                <h2 class="text-center mb-4 fs-5 text-secondary">Terms</h2>
-                                                                                <div id="questions-column" class="d-grid gap-3">
-                                                                                    <div id="question-q1" class="column-item question-item match_1">Photosynthesis</div>
-                                                                                    <div id="question-q2" class="column-item question-item match_2">Democracy</div>
-                                                                                    <div id="question-q3" class="column-item question-item match_3">Pacific Ocean</div>
-                                                                                    <div id="question-q4" class="column-item question-item match_4">Isaac Newton</div>
-                                                                                    <div id="question-q5" class="column-item question-item match_5">Himalayas</div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="col-lg-6">
-                                                                            <div class="column-container">
-                                                                                <h2 class="text-center mb-4 fs-5 text-secondary">Definitions</h2>
-                                                                                <div id="answers-column" class="d-grid gap-3">
-                                                                                    <div id="answer-q1" class="column-item answer-item match_2">The process by which plants make food</div>
-                                                                                    <div id="answer-q2" class="column-item answer-item match_1">A system of government by the whole population</div>
-                                                                                    <div id="answer-q3" class="column-item answer-item match_4">The largest and deepest of Earth's oceans</div>
-                                                                                    <div id="answer-q4" class="column-item answer-item match_5">Formulated the laws of motion and universal gravitation</div>
-                                                                                    <div id="answer-q5" class="column-item answer-item match_3">A mountain range in Asia separating the plains of the Indian subcontinent from the Tibetan Plateau</div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )} */}
                                                 {item.question.type === 'linking' && (
                                                     <div className="row gy-4 justify-content-center">
                                                         <div className='col-sm-9'>
