@@ -86,7 +86,7 @@ function Landing() {
         </a>
       </section>
       <footer id="footer" className="landing-footer">
-        <p>© 2025 LMS Kids. All rights reserved.</p>
+        <p>© 2025 LMS. All rights reserved.</p>
       </footer>
     </div>
   );
