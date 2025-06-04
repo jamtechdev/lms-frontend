@@ -9,6 +9,7 @@ const initialState = {
     level: null,
     question: null,
     subject: null,
+    role: null,
 };
 
 const authSlice = createSlice({
@@ -22,6 +23,7 @@ const authSlice = createSlice({
             state.last_name = action.payload.last_name;
             state.student_type = action.payload.student_type;
             state.level = action.payload.level;
+            state.role = action.payload.role;
         },
         logout: (state) => {
             state.isAuthenticated = false;
@@ -32,6 +34,7 @@ const authSlice = createSlice({
             state.level = null;
             state.question = null;
             state.subject = null;
+            state.role = null;
         },
         setQuestion: (state, action) => {
             state.question = action.payload;
@@ -44,6 +47,7 @@ const authSlice = createSlice({
 
 export const { login, logout, setQuestion, setSubject } = authSlice.actions;
 export const getIsAuthenticated = (state) => state.auth.isAuthenticated;
+export const hasPermission = (state) => state.auth.role;
 export const getToken = (state) => state.auth.token;
 export const getFirstName = (state) => state.auth.first_name;
 export const getLastName = (state) => state.auth.last_name;

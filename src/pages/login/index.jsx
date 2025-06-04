@@ -44,10 +44,11 @@ const Login = () => {
           last_name: userData.last_name,
           student_type: userData.student_type,
           level: userData.level_id,
+          role: userData?.role,
         })
       );
       toast.success("Login successful!");
-      navigate("/dashboard");
+      navigate("/parent");
     } catch (err) {
       toast.error(
         err?.response?.data?.message || "Login failed, please try again"
@@ -66,10 +67,11 @@ const Login = () => {
           last_name: userData.last_name,
           student_type: userData.student_type,
           level: userData.level_id,
+          role: userData?.role,
         })
       );
       toast.success("Student login successful!");
-      navigate("/dashboard");
+      navigate("/student");
     } catch (err) {
       toast.error(
         err?.response?.data?.message || "Student login failed, please try again"

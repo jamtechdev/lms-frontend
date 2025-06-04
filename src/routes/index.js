@@ -1,6 +1,14 @@
 import React, { lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
+import ParentLayout from "../layouts/ParentLayout";
+import ParentDashboard from "../pages/parent";
+import ProtectedRoute from "../layouts/ProtectedRoute";
+import AccessDeniedPage from "../components/common/access-denied";
+import StudentLayout from "../layouts/StudentLayout";
+import StudentDashboard from "../pages/student";
+import StudentList from "../pages/parent/students";
+import CreateStudent from "../pages/parent/students/create";
 
 const Login = lazy(() => import("../pages/login/index"));
 const Landing = lazy(() => import("../pages/landing/index"));
@@ -18,11 +26,38 @@ const AppRouter = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route path="/not-access" element={<AccessDeniedPage />} />
         </Route>
 
-        <Route element={<AuthLayout isProtected={true} />}>
+        {/* <Route element={<AuthLayout isProtected={true} />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/questions" element={<Questions />} />
+        </Route> */}
+        {/* Parent Routes */}
+        <Route
+          path="/student/*"
+          element={
+            <ProtectedRoute allowedRoles={["child"]}>
+              <StudentLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<StudentDashboard />} />
+          <Route path="questions" element={<Questions />} />
+        </Route>
+
+        {/* Parent Routes */}
+        <Route
+          path="/parent/*"
+          element={
+            <ProtectedRoute allowedRoles={["parent"]}>
+              <ParentLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<ParentDashboard />} />
+          <Route path="students" element={<StudentList />} />
+          <Route path="students/create" element={<CreateStudent />} />
         </Route>
       </Routes>
     </BrowserRouter>
