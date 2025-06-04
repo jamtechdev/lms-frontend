@@ -36,7 +36,7 @@ const Login = () => {
   const handleParentSubmit = async (values) => {
     try {
       const response = await userService.login(values);
-      const userData = response.data.data;
+      const userData = response.data;
       dispatch(
         login({
           token: userData.token,
@@ -58,7 +58,7 @@ const Login = () => {
   const handleStudentSubmit = async (values) => {
     try {
       const response = await userService.loginStudent(values);
-      const userData = response.data.data;
+      const userData = response.data;
       dispatch(
         login({
           token: userData.token,

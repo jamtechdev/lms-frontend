@@ -52,7 +52,7 @@ const Questions = () => {
       setLoading(true);
       try {
         const response = await userService.getSubject(level);
-        setSubjects(response.data.data);
+        setSubjects(response.data);
       } catch (err) {
         console.log(err?.response?.data?.message || "An error occurred");
       } finally {
@@ -74,8 +74,8 @@ const Questions = () => {
         type: selectedType || question,
       };
       const response = await userService.getAllQuestion(data);
-      setFetchedQuestions(response.data.data.questions_array);
-      console.log(response.data.data.questions_array);
+      setFetchedQuestions(response.data.questions_array);
+      console.log(response.data.questions_array);
     } catch (err) {
       console.log(err?.response?.data?.message || "Failed, please try again");
     }
@@ -172,7 +172,7 @@ const Questions = () => {
                   <div className="col-12 text-center">
                     <p>Loading subjects...</p>
                   </div>
-                ) : subjects.length > 0 ? (
+                ) : Array.isArray(subjects) && subjects.length > 0 ? (
                   subjects.map((subject) => (
                     <div className="col-sm-3" key={subject.id}>
                       <div
