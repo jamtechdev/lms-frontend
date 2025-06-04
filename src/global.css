@@ -670,3 +670,39 @@
         font-size: 2rem;
     }
 }
+
+.word-bank,
+.constructed-sentence {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.kbc-option-button {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    background: #f4f4f4;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.kbc-option-button.used {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.kbc-option-button.selected {
+    background-color: #cce5ff;
+}
+.kbc-option-button.correct {
+  background-color: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+}
+
+.kbc-option-button.incorrect {
+  background-color: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+}

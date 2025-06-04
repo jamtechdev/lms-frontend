@@ -513,6 +513,106 @@ const Questions = () => {
                             </div>
                           </div>
                         )}
+                        {item.question.type === "rearranging" && (
+                          <div className="rearrange-question">
+                            <div className="word-bank">
+                              {item.question.options.map((wordObj, idx) => {
+                                const word = wordObj.value;
+                                const isUsed =
+                                  userAnswers[item.id]?.includes(word);
+                                return (
+                                  <button
+                                    key={idx}
+                                    className={`kbc-option-button ${
+                                      isUsed ? "used" : ""
+                                    }`}
+                                    onClick={() => {
+                                      if (!submitted && !isUsed) {
+                                        setUserAnswers((prev) => ({
+                                          ...prev,
+                                          [item.id]: [
+                                            ...(prev[item.id] || []),
+                                            word,
+                                          ],
+                                        }));
+                                      }
+                                    }}
+                                    disabled={submitted || isUsed}
+                                  >
+                                    {word}
+                                  </button>
+                                );
+                              })}
+                            </div>
+
+                            <div className="constructed-sentence">
+                              {(userAnswers[item.id] || []).map((word, idx) => {
+                                const correctAnswer =
+                                  item.question.answer.answer;
+                                const isCorrect =
+                                  submitted && word === correctAnswer[idx];
+                                const isIncorrect =
+                                  submitted && word !== correctAnswer[idx];
+
+                                return (
+                                  <button
+                                    key={idx}
+                                    className={`kbc-option-button selected ${
+                                      isCorrect ? "correct" : ""
+                                    } ${isIncorrect ? "incorrect" : ""}`}
+                                    onClick={() => {
+                                      if (!submitted) {
+                                        setUserAnswers((prev) => {
+                                          const updated = [...prev[item.id]];
+                                          updated.splice(idx, 1);
+                                          return {
+                                            ...prev,
+                                            [item.id]: updated,
+                                          };
+                                        });
+                                      }
+                                    }}
+                                  >
+                                    {word}
+                                  </button>
+                                );
+                              })}
+                            </div>
+
+                            {submitted && (
+                              <>
+                                <div className="correct-answer mt-2">
+                                  <strong>Correct Answer:</strong>{" "}
+                                  {item.question.answer.answer.join(" ")}
+                                </div>
+                                <div className="mt-1">
+                                  {JSON.stringify(userAnswers[item.id]) ===
+                                  JSON.stringify(
+                                    item.question.answer.answer
+                                  ) ? (
+                                    <span
+                                      style={{
+                                        color: "green",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      Correct!
+                                    </span>
+                                  ) : (
+                                    <span
+                                      style={{
+                                        color: "red",
+                                        fontWeight: "bold",
+                                      }}
+                                    >
+                                      Wrong!
+                                    </span>
+                                  )}
+                                </div>
+                              </>
+                            )}
+                          </div>
+                        )}
                       </div>
                     ))
                   )}
