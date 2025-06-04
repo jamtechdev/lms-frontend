@@ -1,3 +1,4 @@
+import { logout } from "../_store/_reducers/auth";
 import { store } from "../_store/index";
 import axios from "axios";
 
@@ -24,5 +25,14 @@ axiosInstance.interceptors.request.use(
     }
 );
 
+axiosInstance.interceptors.response.use(
+    (response) => response.data,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            store.dispatch(logout());
+        }
+        return Promise.reject(error);
+    }
+);
 
 export default axiosInstance;
