@@ -9,6 +9,7 @@ import StudentLayout from "../layouts/StudentLayout";
 import StudentDashboard from "../pages/student";
 import StudentList from "../pages/parent/students";
 import CreateStudent from "../pages/parent/students/create";
+import EditStudent from "../pages/parent/students/edit";
 
 const Login = lazy(() => import("../pages/login/index"));
 const Landing = lazy(() => import("../pages/landing/index"));
@@ -58,6 +59,7 @@ const AppRouter = () => {
           <Route index element={<ParentDashboard />} />
           <Route path="students" element={<StudentList />} />
           <Route path="students/create" element={<CreateStudent />} />
+          <Route path="students/:id" element={<EditStudent />} />
         </Route>
       </Routes>
     </BrowserRouter>
