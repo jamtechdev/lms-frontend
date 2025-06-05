@@ -66,21 +66,60 @@ const StudentList = () => {
     if (loading && !lockCodeUpdating) return <div>Loading........</div>
     return (
         <>
-            <div className="table-container">
-                <h3>Student List</h3>
-                <Link to={'/parent/students/create'}>Create</Link>
+            <div className="dashboard-body">
+
+                <div class="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
+
+                    <div class="breadcrumb mb-24 ps-0">
+                        <ul class="flex-align gap-4">
+                            <li><a href="index.html" class="text-gray-200 fw-normal text-15 hover-text-main-600">Home</a></li>
+                            <li> <span class="text-gray-500 fw-normal d-flex"><i class="ph ph-caret-right"></i></span> </li>
+                            <li><span class="text-main-600 fw-normal text-15">Childrens</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="flex-align gap-8 flex-wrap">
+                            <div class="position-relative text-gray-500 flex-align gap-4 text-13">
+                                <span class="text-inherit">Sort by: </span>
+                                <div class="flex-align text-gray-500 text-13 border border-gray-100 rounded-4 ps-20 focus-border-main-600 bg-white">
+                                    <span class="text-lg"><i class="ph ph-funnel-simple"></i></span>
+                                    <select class="form-control ps-8 pe-20 py-16 border-0 text-inherit rounded-4 text-center">
+                                        <option value="1" selected>Popular</option>
+                                        <option value="1">Latest</option>
+                                        <option value="1">Trending</option>
+                                        <option value="1">Matches</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex-align text-gray-500 text-13 border border-gray-100 rounded-4 ps-20 focus-border-main-600 bg-white">
+                                <span class="text-lg"><i class="ph ph-layout"></i></span>
+                                <select class="form-control ps-8 pe-20 py-16 border-0 text-inherit rounded-4 text-center" id="exportOptions">
+                                    <option value="" selected disabled>Export</option>
+                                    <option value="csv">CSV</option>
+                                    <option value="json">JSON</option>
+                                </select>
+                            </div>
+                    </div>
+
+                </div>
+
+                <div className="d-flex align-items-center justify-content-between mb-3">
+                    <h3>Student List</h3>
+                    <Link to={'/parent/students/create'} className="btn btn-primary text-sm btn-sm px-24 py-12 gap-8">Create</Link>
+                </div>
+                
                 <table className="student-table">
                     <thead>
                         <tr>
-                            <th>Avatar</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Student Type</th>
-                            <th>Student Level</th>
-                            <th>Address</th>
-                            <th>Lock Code</th>
-                            <th>Action</th>
+                            <th className="text-gray-300">Avatar</th>
+                            <th className="text-gray-300">Name</th>
+                            <th className="text-gray-300">Email</th>
+                            <th className="text-gray-300">Phone</th>
+                            <th className="text-gray-300">Student Type</th>
+                            <th className="text-gray-300">Student Level</th>
+                            <th className="text-gray-300">Address</th>
+                            <th className="text-gray-300">Lock Code</th>
+                            <th className="text-gray-300">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,7 +139,7 @@ const StudentList = () => {
                                 <td>{student?.student_level}</td>
                                 <td>{student?.address}</td>
                                 <td>{student?.lock_code}</td>
-                                <td>
+                                <td style={{textAlign: 'center'}}>
                                     <label className="switch">
                                         <input
                                             type="checkbox"

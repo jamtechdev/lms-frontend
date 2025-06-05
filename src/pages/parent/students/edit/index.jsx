@@ -64,7 +64,8 @@ const EditStudent = () => {
     if (loading) return <div>Loading student data...</div>;
     return (
         <>
-            <h3>Edit Student Form</h3>
+          <div className='p-3 editStudentForm'>
+            <h3 className='mb-4'>Edit Student Form</h3>
             <Formik
                 enableReinitialize
                 initialValues={student}
@@ -264,7 +265,7 @@ const EditStudent = () => {
                                         }
                                     }}
                                 />
-                                <label htmlFor="lock_code_enabled" className="form-check-label ms-2">
+                                <label htmlFor="lock_code_enabled" className="form-check-label ms-2 ps-0">
                                     Generate Lock Code
                                 </label>
                             </div>
@@ -311,7 +312,7 @@ const EditStudent = () => {
                         </div>
                         <button
                             type="submit"
-                            className="btn btn-main rounded-pill w-100"
+                            className="btn btn-primary rounded-pill"
                             disabled={updating}
                         >
                             Submit
@@ -320,6 +321,7 @@ const EditStudent = () => {
                 )}
 
             </Formik>
+          </div>  
         </>
     )
 }

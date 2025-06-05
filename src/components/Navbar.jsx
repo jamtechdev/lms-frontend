@@ -25,7 +25,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="top-navbar flex-between gap-16">
+    <div className="top-navbar flex-between gap-16 pt-0">
       <div className="flex-align gap-16">
         <button
           type="button"
@@ -180,7 +180,7 @@ const Navbar = () => {
           <div className="dropdown">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className={`users arrow-down-icon border border-gray-200 rounded-pill p-4 d-inline-block pe-40 position-relative ${
+              className={`users arrow-down-icon border border-gray-200 rounded-pill p-2 d-inline-block pe-40 position-relative ${
                 isDropdownOpen ? "show" : ""
               }`}
               type="button"

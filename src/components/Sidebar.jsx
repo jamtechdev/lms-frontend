@@ -11,7 +11,10 @@ const Sidebar = () => {
 
     const parentSidebar = [
         { route: "/parent", label: "Dashboard", iconClass: "ph ph-squares-four" },
-        { route: "/parent/students", label: "Students", iconClass: "ph ph-clipboard-text" },
+        { route: "/parent/students", label: "Children", iconClass: "ph ph-clipboard-text" },
+        { route: "/parent/assessment", label: "Assessment History", iconClass: "ph ph-clipboard-text" },
+        { route: "/parent/gems", label: "Gems", iconClass: "ph ph-clipboard-text" },
+        { route: "/parent/subscription", label: "Subscription", iconClass: "ph ph-clipboard-text" },
     ];
     const studentSidebar = [
         { route: "/student", label: "Dashboard", iconClass: "ph ph-squares-four" },
