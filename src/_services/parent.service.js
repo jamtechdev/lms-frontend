@@ -23,8 +23,8 @@ async function createStudent(data) {
         }
     );
 }
-async function getAllStudents() {
-    return await axiosInstance.get(`/api/v1/parent/student`);
+async function getAllStudents(page) {
+    return await axiosInstance.get(`/api/v1/parent/student?page=${page}`);
 }
 async function getStudentById(id) {
     return await axiosInstance.get(`/api/v1/parent/student/${id}`);
