@@ -64,6 +64,10 @@ const AppRouter = () => {
           <Route index element={<ParentDashboard />} />
           <Route path="students" element={<StudentList />} />
           <Route path="students/create" element={<CreateStudent />} />
+          <Route path="students/:id" element={<EditStudent />} />
+          <Route path="assessment" element={<AssessmentHistory />} />
+          <Route path="gems" element={<Gems />} />
+          <Route path="subscription" element={<Subscription />} />
         </Route>
       </Routes>
     </BrowserRouter>

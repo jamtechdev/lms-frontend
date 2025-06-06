@@ -8958,7 +8958,7 @@ button:focus {
 
 .sidebar-menu__item.activePage .sidebar-menu__link {
     background-color: hsl(var(--main));
-    color: hsl(var(--white));
+    color: var(--white);
 }
 
 .sidebar-menu__item.activePage .sidebar-menu__link::before {

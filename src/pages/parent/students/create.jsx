@@ -2,18 +2,19 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { createStudentSchema } from "../../../../components/parent/student-validation-schema";
-import parentService from "../../../../_services/parent.service";
+import { createStudentSchema } from "../../../components/parent/student-validation-schema";
+import parentService from "../../../_services/parent.service";
+import toast from "react-hot-toast";
 
 const CreateStudent = () => {
     const navigate = useNavigate();
     const [passwordShown, setPasswordShown] = useState(false);
+    const [creating, setCreating] = useState(false);
     const togglePasswordVisibility = () => setPasswordShown((prev) => !prev);
     const [studentLevel, setStudentLevel] = useState();
     useEffect(() => {
         const fetchStudentLevel = async () => {
             await parentService.getStudentLevel().then((data) => {
-                console.log(data, ">>>>>>>>>>>>")
                 setStudentLevel(data?.data)
             }).catch((error) => {
                 console.error("Error", error);
@@ -29,22 +30,25 @@ const CreateStudent = () => {
     }, [studentLevel]);
     const initialValues = { first_name: "", last_name: "", email: "", student_type: "", phone: "", address: "", student_level: null, avatar: null, lock_code: null, lock_code_enabled: false, password: "", password_confirmation: "", };
     const handleSubmit = async (values) => {
-        console.log(values, ">>>>>>>>>>>>>")
-        try {
-            const formData = new FormData();
-            for (let key in values) {
-                if (values[key] !== null) {
+        setCreating(true);
+        const formData = new FormData();
+        for (let key in values) {
+            if (values[key] !== null) {
+                if (key === "lock_code_enabled") {
+                    formData.append(key, values[key] ? 1 : 0);
+                } else {
                     formData.append(key, values[key]);
                 }
             }
-            console.log(formData, "form data")
-            // Call API (example with axios)
-            const res = await parentService.createStudent(formData);
-            console.log(res, "=============")
-            navigate("/parent/students");
-        } catch (error) {
-            console.error("Submit Error:", error);
         }
+        await parentService.createStudent(formData).then((data) => {
+            navigate("/parent/students");
+            toast.success("Created successful!");
+        }).catch((error) => {
+            console.error("Submit Error:", error);
+        }).finally(() => {
+            setCreating(false);
+        });
     }
     return (
         <>
@@ -56,7 +60,6 @@ const CreateStudent = () => {
             >
                 {({ values, setFieldValue, errors }) => (
                     <Form>
-                        {JSON.stringify(errors)}
                         <div className="mb-24">
                             <label htmlFor="first_name" className="form-label mb-8 h6">
                                 First Name
@@ -334,6 +337,7 @@ const CreateStudent = () => {
                         <button
                             type="submit"
                             className="btn btn-main rounded-pill w-100"
+                            disabled={creating}
                         >
                             Submit
                         </button>

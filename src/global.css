@@ -9,6 +9,11 @@
 @import url('./assets/css/jquery-jvectormap-2.0.5.css');
 @import url('./assets/css/main.css');
 @import url('./assets/css/styleIcon.css');
+@import url('./assets/css/style.css');
+@import url('./assets/css/owl.carousel.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css');
+/* @import url('./assets/css/all.min.css'); */
 
 .searchBox input {
     background: rgb(229 234 253) !important;
@@ -520,7 +525,7 @@
 
 .btn-primary {
     background: #4285f4;
-    color: white;
+    color: white!important;
 }
 
 .btn-primary:hover {
@@ -705,4 +710,130 @@
   background-color: #f8d7da;
   border-color: #dc3545;
   color: #721c24;
+}
+
+
+/* Student table CSS in parent dashboard */
+.table-container {
+  padding: 24px;
+  overflow-x: auto;
+}
+
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: sans-serif;
+}
+
+.student-table th,
+.student-table td {
+  border: 1px solid #ccc;
+  padding: 12px;
+  text-align: left;
+}
+
+.student-table th {
+  background-color: #f9f9f9;
+}
+
+.avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-top: 5px;
+}
+
+/* Toggle Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 34px;
+  transition: 0.4s;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #0d6efd;
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+i.ph-pencil-simple {
+    font-size: 21px;
+    position: relative;
+    top: 5px;
+    margin: 0px 7px;
+}
+i.ph-trash{
+    font-size: 21px;
+    position: relative;
+    top: 5px;
+}
+.editStudentForm input {
+    height: 44px;
+}
+.editStudentForm .avatar-img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    margin-top: 16px;
+}
+.editStudentForm label {
+    font-weight: 600;
+}
+.form-check .form-check-input:checked {
+    background-color: hsl(var(--main)) !important;
+    border-color: hsl(var(--main)) !important;
+    box-shadow: none;
+    color: #fff;
+    position: relative;
+    top: 2px;
+}
+.fontBold{
+    font-weight: 600;
+}
+table#assignmentTable td {
+    vertical-align: middle;
+}
+.student-table td {
+    border: 1px solid #ccc;
+    padding: 7px 10px;
+    text-align: left;
+    background: #fff;
+}
+.student-table td {
+    border: 1px solid #ccc;
+    padding: 7px 10px;
+    text-align: left;
+    background: #fff;
 }
