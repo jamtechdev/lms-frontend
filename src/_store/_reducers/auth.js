@@ -10,6 +10,7 @@ const initialState = {
     question: null,
     subject: null,
     role: null,
+    fetchedQuestion: [  ]
 };
 
 const authSlice = createSlice({
@@ -42,10 +43,13 @@ const authSlice = createSlice({
         setSubject: (state, action) => {
             state.subject = action.payload;
         },
+        setFetchedQuestionArray:(state, action) => {
+            state.fetchedQuestion = action.payload
+        }
     },
 });
 
-export const { login, logout, setQuestion, setSubject } = authSlice.actions;
+export const { login, logout, setQuestion, setSubject, setFetchedQuestionArray } = authSlice.actions;
 export const getIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const hasPermission = (state) => state.auth.role;
 export const getToken = (state) => state.auth.token;
@@ -55,5 +59,6 @@ export const getStudentType = (state) => state.auth.student_type;
 export const getLevel = (state) => state.auth.level;
 export const getQuestion = (state) => state.auth.question;
 export const getSubject = (state) => state.auth.subject;
+export const getQuestionsArray = (state) => state.auth.fetchedQuestion;
 
 export default authSlice.reducer;
