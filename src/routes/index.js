@@ -12,6 +12,10 @@ import CreateStudent from "../pages/parent/students/create";
 import Subjects from "../pages/questions/Subjects";
 import QuestionType from "../pages/questions/QuestionType";
 import AllQuestions from "../pages/questions/Questions";
+import EditStudent from "../pages/parent/students/edit";
+import AssessmentHistory from "../pages/parent/assessment-history";
+import Subscription from "../pages/parent/subscription";
+import Gems from "../pages/parent/gems";
 
 const Login = lazy(() => import("../pages/login/index"));
 const Landing = lazy(() => import("../pages/landing/index"));

@@ -74,22 +74,30 @@ const StudentList = () => {
         <>
             <div className="dashboard-body">
 
-                <div class="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
+                <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
 
-                    <div class="breadcrumb mb-24 ps-0">
-                        <ul class="flex-align gap-4">
-                            <li><a href="index.html" className="text-gray-200 fw-normal text-15 hover-text-main-600">Home</a></li>
-                            <li> <span class="text-gray-500 fw-normal d-flex"><i class="ph ph-caret-right"></i></span> </li>
-                            <li><span class="text-main-600 fw-normal text-15">Childrens</span></li>
+                    <div className="breadcrumb mb-24 ps-0">
+                        <ul className="flex-align gap-4">
+                            <li>
+                                <Link to="/" className="text-gray-200 fw-normal text-15 hover-text-main-600">Home</Link>
+                            </li>
+                            <li>
+                                <span className="text-gray-500 fw-normal d-flex">
+                                    <i className="ph ph-caret-right"></i>
+                                </span>
+                            </li>
+                            <li>
+                                <span className="text-main-600 fw-normal text-15">Childrens</span>
+                            </li>
                         </ul>
                     </div>
 
-                    <div class="flex-align gap-8 flex-wrap">
-                        <div class="position-relative text-gray-500 flex-align gap-4 text-13">
-                            <span class="text-inherit">Sort by: </span>
-                            <div class="flex-align text-gray-500 text-13 border border-gray-100 rounded-4 ps-20 focus-border-main-600 bg-white">
-                                <span class="text-lg"><i class="ph ph-funnel-simple"></i></span>
-                                <select class="form-control ps-8 pe-20 py-16 border-0 text-inherit rounded-4 text-center">
+                    <div className="flex-align gap-8 flex-wrap">
+                        <div className="position-relative text-gray-500 flex-align gap-4 text-13">
+                            <span className="text-inherit">Sort by: </span>
+                            <div className="flex-align text-gray-500 text-13 border border-gray-100 rounded-4 ps-20 focus-border-main-600 bg-white">
+                                <span className="text-lg"><i className="ph ph-funnel-simple"></i></span>
+                                <select className="form-control ps-8 pe-20 py-16 border-0 text-inherit rounded-4 text-center">
                                     <option value="1" selected>Popular</option>
                                     <option value="1">Latest</option>
                                     <option value="1">Trending</option>
@@ -97,9 +105,9 @@ const StudentList = () => {
                                 </select>
                             </div>
                         </div>
-                        <div class="flex-align text-gray-500 text-13 border border-gray-100 rounded-4 ps-20 focus-border-main-600 bg-white">
-                            <span class="text-lg"><i class="ph ph-layout"></i></span>
-                            <select class="form-control ps-8 pe-20 py-16 border-0 text-inherit rounded-4 text-center" id="exportOptions">
+                        <div className="flex-align text-gray-500 text-13 border border-gray-100 rounded-4 ps-20 focus-border-main-600 bg-white">
+                            <span className="text-lg"><i className="ph ph-layout"></i></span>
+                            <select className="form-control ps-8 pe-20 py-16 border-0 text-inherit rounded-4 text-center" id="exportOptions">
                                 <option value="" selected disabled>Export</option>
                                 <option value="csv">CSV</option>
                                 <option value="json">JSON</option>
