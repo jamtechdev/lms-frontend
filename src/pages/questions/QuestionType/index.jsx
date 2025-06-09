@@ -20,7 +20,7 @@ const QuestionType = () => {
   const level = useSelector(getLevel);
   const subject = useSelector(getSubject);
   const question = useSelector(getQuestion);
- 
+
   const questionTypes = [
     { key: "mcq", label: "MCQ" },
     { key: "fill_blank", label: "Fill in the blanks" },
@@ -45,10 +45,9 @@ const QuestionType = () => {
     }
   };
 
-
   useEffect(() => {
     dispatch(setFetchedQuestionArray([]));
-  }, [])
+  }, []);
   return (
     <>
       <div className="dashboard-body">
@@ -60,6 +59,7 @@ const QuestionType = () => {
                   href="#"
                   onClick={() => {
                     setSelectedQuestionType(null);
+                    navigate("/student/subjects");
                   }}
                   className="text-gray-200 fw-normal text-15 hover-text-main-600"
                 >

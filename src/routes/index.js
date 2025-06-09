@@ -53,7 +53,7 @@ const AppRouter = () => {
           <Route path="questions" element={<Questions />} />
           <Route path="subjects" element={<Subjects />} />
           <Route path="selectQuestionType" element={<QuestionType />} />
-          <Route path="allQuestions" element={<AllQuestions />} />          
+          <Route path="allQuestions" element={<AllQuestions />} />
         </Route>
 
         {/* Parent Routes */}

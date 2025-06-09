@@ -11,18 +11,30 @@ const Sidebar = () => {
 
   const parentSidebar = [
     { route: "/parent", label: "Dashboard", iconClass: "ph ph-squares-four" },
-    { route: "/parent/students", label: "Children", iconClass: "ph ph-clipboard-text" },
-    { route: "/parent/assessment", label: "Assessment History", iconClass: "ph ph-clipboard-text" },
+    {
+      route: "/parent/students",
+      label: "Children",
+      iconClass: "ph ph-clipboard-text",
+    },
+    {
+      route: "/parent/assessment",
+      label: "Assessment History",
+      iconClass: "ph ph-clipboard-text",
+    },
     { route: "/parent/gems", label: "Gems", iconClass: "ph ph-clipboard-text" },
-    { route: "/parent/subscription", label: "Subscription", iconClass: "ph ph-clipboard-text" },
+    {
+      route: "/parent/subscription",
+      label: "Subscription",
+      iconClass: "ph ph-clipboard-text",
+    },
   ];
   const studentSidebar = [
     { route: "/student", label: "Dashboard", iconClass: "ph ph-squares-four" },
-    {
-      route: "/student/questions",
-      label: "Questions",
-      iconClass: "ph ph-clipboard-text",
-    },
+    // {
+    //   route: "/student/questions",
+    //   label: "Questions",
+    //   iconClass: "ph ph-clipboard-text",
+    // },
     {
       route: "/student/subjects",
       label: "Practice",
@@ -50,8 +62,9 @@ const Sidebar = () => {
               {studentSidebar.map(({ route, label, iconClass }) => (
                 <li
                   key={route}
-                  className={`sidebar-menu__item ${path === route ? "activePage" : ""
-                    }`}
+                  className={`sidebar-menu__item ${
+                    path === route ? "activePage" : ""
+                  }`}
                 >
                   <Link to={route} className="sidebar-menu__link">
                     <span className="icon">
@@ -69,8 +82,9 @@ const Sidebar = () => {
               {parentSidebar.map(({ route, label, iconClass }) => (
                 <li
                   key={route}
-                  className={`sidebar-menu__item ${path === route ? "activePage" : ""
-                    }`}
+                  className={`sidebar-menu__item ${
+                    path === route ? "activePage" : ""
+                  }`}
                 >
                   <Link to={route} className="sidebar-menu__link">
                     <span className="icon">
