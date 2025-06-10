@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import maths from "../../../assets/images/maths.png";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   getLevel,
@@ -9,8 +9,8 @@ import {
   setFetchedQuestionArray,
   setQuestion,
   setSubject,
-} from "../../../_store/_reducers/auth";
-import userService from "../../../_services/user.service";
+} from "../../../../_store/_reducers/auth";
+import userService from "../../../../_services/user.service";
 import { useNavigate } from "react-router-dom";
 const QuestionType = () => {
   const dispatch = useDispatch();
@@ -23,11 +23,13 @@ const QuestionType = () => {
 
   const questionTypes = [
     { key: "mcq", label: "MCQ" },
-    { key: "fill_blank", label: "Fill in the blanks" },
     { key: "true_false", label: "True/False" },
     { key: "linking", label: "Linking" },
     { key: "rearranging", label: "Rearranging" },
+    { key: "grammar_cloze_with_options", label: "Grammar Cloze (With Options)" },
+    { key: "underlinecorrect", label: "Underline Correct" },
     { key: "comprehension", label: "Comprehension" },
+    { key: "editing", label: "Editing" },
   ];
 
   const handleQuestion = async (selectedType) => {

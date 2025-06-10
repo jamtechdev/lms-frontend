@@ -27,12 +27,15 @@ const AllQuestions = () => {
 
   const questionTypes = [
     { key: "mcq", label: "MCQ" },
-    { key: "fill_blank", label: "Fill in the blanks" },
     { key: "true_false", label: "True/False" },
     { key: "linking", label: "Linking" },
     { key: "rearranging", label: "Rearranging" },
+    { key: "grammar_cloze_with_options", label: "Grammar Cloze (With Options)" },
+    { key: "underlinecorrect", label: "Underline Correct" },
     { key: "comprehension", label: "Comprehension" },
+    { key: "editing", label: "Editing" },
   ];
+
 
   const handleSelectAnswer = (questionId, blankOrLeftIdx, selectedValue) => {
     setUserAnswers((prev) => ({
@@ -173,21 +176,18 @@ const AllQuestions = () => {
                             {blank.options?.map((val, optionIdx) => (
                               <button
                                 key={optionIdx}
-                                className={`kbc-option-button ${
-                                  userAnswers[item.id]?.[idx] === val
+                                className={`kbc-option-button ${userAnswers[item.id]?.[idx] === val
                                     ? "selected"
                                     : ""
-                                } ${
-                                  submitted && blank.answer === val
+                                  } ${submitted && blank.answer === val
                                     ? "correct"
                                     : ""
-                                } ${
-                                  submitted &&
-                                  userAnswers[item.id]?.[idx] === val &&
-                                  blank.answer !== val
+                                  } ${submitted &&
+                                    userAnswers[item.id]?.[idx] === val &&
+                                    blank.answer !== val
                                     ? "incorrect"
                                     : ""
-                                }`}
+                                  }`}
                                 onClick={() => {
                                   if (!submitted) {
                                     handleSelectAnswer(item.id, idx, val);
@@ -210,18 +210,16 @@ const AllQuestions = () => {
                             key={idx}
                             className={`kbc-option-button 
                             ${userAnswers[item.id] === val ? "selected" : ""} 
-                             ${
-                               submitted && item.question.answer.choice === val
-                                 ? "correct"
-                                 : ""
-                             } 
-                             ${
-                               submitted &&
-                               userAnswers[item.id] === val &&
-                               item.question.answer.choice !== val
-                                 ? "incorrect"
-                                 : ""
-                             }
+                             ${submitted && item.question.answer.choice === val
+                                ? "correct"
+                                : ""
+                              } 
+                             ${submitted &&
+                                userAnswers[item.id] === val &&
+                                item.question.answer.choice !== val
+                                ? "incorrect"
+                                : ""
+                              }
                           `}
                             onClick={() => {
                               if (!submitted) {
@@ -276,9 +274,8 @@ const AllQuestions = () => {
                                       {item.question.answer.map((pair, idx) => (
                                         <div
                                           key={idx}
-                                          className={`column-item question-item match_${
-                                            idx + 1
-                                          }`}
+                                          className={`column-item question-item match_${idx + 1
+                                            }`}
                                           draggable
                                           onDragStart={(e) =>
                                             e.dataTransfer.setData(
@@ -317,16 +314,14 @@ const AllQuestions = () => {
                                       {item.question.answer.map((pair, idx) => (
                                         <div
                                           key={idx}
-                                          className={`column-item answer-item match_${
-                                            idx + 1
-                                          } ${
-                                            submitted
+                                          className={`column-item answer-item match_${idx + 1
+                                            } ${submitted
                                               ? userMatches[item.id]?.[idx] ===
                                                 `match_${idx + 1}`
                                                 ? "correct-match"
                                                 : "incorrect-match"
                                               : ""
-                                          }`}
+                                            }`}
                                           onDragOver={(e) => e.preventDefault()}
                                           onDrop={(e) => {
                                             e.preventDefault();
@@ -373,9 +368,8 @@ const AllQuestions = () => {
                             return (
                               <button
                                 key={idx}
-                                className={`kbc-option-button ${
-                                  isUsed ? "used" : ""
-                                }`}
+                                className={`kbc-option-button ${isUsed ? "used" : ""
+                                  }`}
                                 onClick={() => {
                                   if (!submitted && !isUsed) {
                                     setUserAnswers((prev) => ({
@@ -406,9 +400,8 @@ const AllQuestions = () => {
                             return (
                               <button
                                 key={idx}
-                                className={`kbc-option-button selected ${
-                                  isCorrect ? "correct" : ""
-                                } ${isIncorrect ? "incorrect" : ""}`}
+                                className={`kbc-option-button selected ${isCorrect ? "correct" : ""
+                                  } ${isIncorrect ? "incorrect" : ""}`}
                                 onClick={() => {
                                   if (!submitted) {
                                     setUserAnswers((prev) => {
@@ -436,7 +429,7 @@ const AllQuestions = () => {
                             </div>
                             <div className="mt-1">
                               {JSON.stringify(userAnswers[item.id]) ===
-                              JSON.stringify(item.question.answer.answer) ? (
+                                JSON.stringify(item.question.answer.answer) ? (
                                 <span
                                   style={{
                                     color: "green",

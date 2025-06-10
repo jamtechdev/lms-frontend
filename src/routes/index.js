@@ -9,20 +9,22 @@ import StudentLayout from "../layouts/StudentLayout";
 import StudentDashboard from "../pages/student";
 import StudentList from "../pages/parent/students";
 import CreateStudent from "../pages/parent/students/create";
-import Subjects from "../pages/questions/Subjects";
-import QuestionType from "../pages/questions/QuestionType";
-import AllQuestions from "../pages/questions/Questions";
+
+import QuestionType from "../pages/student/questions/type";
+import AllQuestions from "../pages/student/questions";
 import EditStudent from "../pages/parent/students/edit";
 import AssessmentHistory from "../pages/parent/assessment-history";
 import Subscription from "../pages/parent/subscription";
 import Gems from "../pages/parent/gems";
+import Subject from "../pages/student/questions/Subjects";
+
 
 const Login = lazy(() => import("../pages/login/index"));
 const Landing = lazy(() => import("../pages/landing/index"));
 const Signup = lazy(() => import("../pages/signup/index"));
 const ForgotPassword = lazy(() => import("../pages/forgotpassword/index"));
 const Dashboard = lazy(() => import("../pages/dashboard/index"));
-const Questions = lazy(() => import("../pages/questions/index"));
+const Questions = lazy(() => import("../pages/student/questions/index"));
 
 const AppRouter = () => {
   return (
@@ -51,7 +53,7 @@ const AppRouter = () => {
         >
           <Route index element={<StudentDashboard />} />
           <Route path="questions" element={<Questions />} />
-          <Route path="subjects" element={<Subjects />} />
+          <Route path="subjects" element={<Subject />} />
           <Route path="select-question-type" element={<QuestionType />} />
           <Route path="all-questions" element={<AllQuestions />} />
         </Route>
