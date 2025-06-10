@@ -52,8 +52,8 @@ const AppRouter = () => {
           <Route index element={<StudentDashboard />} />
           <Route path="questions" element={<Questions />} />
           <Route path="subjects" element={<Subjects />} />
-          <Route path="selectQuestionType" element={<QuestionType />} />
-          <Route path="allQuestions" element={<AllQuestions />} />
+          <Route path="select-question-type" element={<QuestionType />} />
+          <Route path="all-questions" element={<AllQuestions />} />
         </Route>
 
         {/* Parent Routes */}

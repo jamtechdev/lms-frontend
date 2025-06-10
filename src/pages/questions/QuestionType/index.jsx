@@ -127,7 +127,7 @@ const QuestionType = () => {
                           setSelectedQuestionType(type.key);
                           dispatch(setQuestion(type.key));
                           handleQuestion(type.key);
-                          navigate("/student/allQuestions");
+                          navigate("/student/all-questions");
                         }}
                       >
                         <div className="flex-align flex-wrap gap-8">

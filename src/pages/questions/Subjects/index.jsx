@@ -123,7 +123,7 @@ const Subjects = () => {
                     onClick={() => {
                       setSelectedSubject(subject.id);
                       dispatch(setSubject(subject.id));
-                      navigate("/student/selectQuestionType");
+                      navigate("/student/select-question-type");
                     }}
                     style={{ cursor: "pointer" }}
                   >
