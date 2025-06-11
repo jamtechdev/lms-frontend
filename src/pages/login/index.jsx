@@ -91,9 +91,9 @@ const Login = () => {
         </div>
         <div className="auth-right py-40 px-24 flex-start flex-column mt-5">
           <div className="auth-right__inner mx-auto w-100 mt-5">
-            <a href="/" className="auth-right__logo mt-5">
+            <Link to="/" className="auth-right__logo mt-5">
               <img src={logo} alt="LMS" />
-            </a>
+            </Link>
             <h2 className="mb-8">Welcome Back! 👋</h2>
             <p className="text-gray-600 text-15 mb-32">
               Please sign in to your account and start the adventure
@@ -243,28 +243,28 @@ const Login = () => {
             </div>
             <ul className="flex-align gap-10 flex-wrap justify-content-center">
               <li>
-                <a
-                  href="https://www.facebook.com"
+                <Link
+                  to="https://www.facebook.com"
                   className="w-38 h-38 flex-center rounded-6 text-facebook-600 bg-facebook-50 hover-bg-facebook-600 hover-text-white text-lg"
                 >
                   <i className="ph ph-facebook-logo"></i>
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="https://www.twitter.com"
+                <Link
+                  to="https://www.twitter.com"
                   className="w-38 h-38 flex-center rounded-6 text-twitter-600 bg-twitter-50 hover-bg-twitter-600 hover-text-white text-lg"
                 >
                   <i className="ph ph-twitter-logo"></i>
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="https://www.google.com"
+                <Link
+                  to="https://www.google.com"
                   className="w-38 h-38 flex-center rounded-6 text-google-600 bg-google-50 hover-bg-google-600 hover-text-white text-lg"
                 >
                   <i className="ph ph-google-logo"></i>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
