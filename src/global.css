@@ -525,7 +525,7 @@
 
 .btn-primary {
     background: #4285f4;
-    color: white!important;
+    color: white !important;
 }
 
 .btn-primary:hover {
@@ -700,117 +700,124 @@
 .kbc-option-button.selected {
     background-color: #cce5ff;
 }
+
 .kbc-option-button.correct {
-  background-color: #d4edda;
-  border-color: #28a745;
-  color: #155724;
+    background-color: #d4edda;
+    border-color: #28a745;
+    color: #155724;
 }
 
 .kbc-option-button.incorrect {
-  background-color: #f8d7da;
-  border-color: #dc3545;
-  color: #721c24;
+    background-color: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
 }
 
 
 /* Student table CSS in parent dashboard */
 .table-container {
-  padding: 24px;
-  overflow-x: auto;
+    padding: 24px;
+    overflow-x: auto;
 }
 
 .student-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: sans-serif;
+    width: 100%;
+    border-collapse: collapse;
+    font-family: sans-serif;
 }
 
 .student-table th,
 .student-table td {
-  border: 1px solid #ccc;
-  padding: 12px;
-  text-align: left;
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: left;
 }
 
 .student-table th {
-  background-color: #f9f9f9;
+    background-color: #f9f9f9;
 }
 
 .avatar-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-top: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-top: 5px;
 }
 
 /* Toggle Switch */
 .switch {
-  position: relative;
-  display: inline-block;
-  width: 44px;
-  height: 24px;
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
 }
 
 .switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 .slider {
-  position: absolute;
-  cursor: pointer;
-  background-color: #ccc;
-  border-radius: 34px;
-  transition: 0.4s;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+    position: absolute;
+    cursor: pointer;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: 0.4s;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: 0.4s;
-  border-radius: 50%;
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
 }
 
-input:checked + .slider {
-  background-color: #0d6efd;
+input:checked+.slider {
+    background-color: #0d6efd;
 }
 
-input:checked + .slider:before {
-  transform: translateX(20px);
+input:checked+.slider:before {
+    transform: translateX(20px);
 }
+
 i.ph-pencil-simple {
     font-size: 21px;
     position: relative;
     top: 5px;
     margin: 0px 7px;
 }
-i.ph-trash{
+
+i.ph-trash {
     font-size: 21px;
     position: relative;
     top: 5px;
 }
+
 .editStudentForm input {
     height: 44px;
 }
+
 .editStudentForm .avatar-img {
     width: 64px;
     height: 64px;
     border-radius: 50%;
     margin-top: 16px;
 }
+
 .editStudentForm label {
     font-weight: 600;
 }
+
 .form-check .form-check-input:checked {
     background-color: hsl(var(--main)) !important;
     border-color: hsl(var(--main)) !important;
@@ -819,21 +826,72 @@ i.ph-trash{
     position: relative;
     top: 2px;
 }
-.fontBold{
+
+.fontBold {
     font-weight: 600;
 }
+
 table#assignmentTable td {
     vertical-align: middle;
 }
+
 .student-table td {
     border: 1px solid #ccc;
     padding: 7px 10px;
     text-align: left;
     background: #fff;
 }
+
 .student-table td {
     border: 1px solid #ccc;
     padding: 7px 10px;
     text-align: left;
     background: #fff;
+}
+
+/* Container for linking */
+.linking-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: 2rem;
+    position: relative;
+}
+
+/* Left and right sides */
+.left-side,
+.right-side {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    flex: 1;
+}
+
+/* Each item (left or right) */
+.link-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: #f9fafb;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    min-height: 48px;
+    font-size: 16px;
+    gap: 0.5rem;
+}
+
+.link-item img {
+    max-width: 100px;
+    height: auto;
+    object-fit: contain;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+input {
+    border-bottom: 2px solid #ccc;
+    margin: 0 5px;
+    padding: 2px 5px;
 }

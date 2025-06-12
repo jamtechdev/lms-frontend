@@ -26,8 +26,11 @@ const Subject = () => {
         { key: "true_false", label: "True/False" },
         { key: "linking", label: "Linking" },
         { key: "rearranging", label: "Rearranging" },
-        { key: "grammar_cloze_with_options", label: "Grammar Cloze (With Options)" },
-        { key: "underlinecorrect", label: "Underline Correct" },
+        { key: "open_cloze_with_options", label: "Open Close With Options" },
+        {
+            key: "open_cloze_with_dropdown_options",
+            label: "Open Close With Dropdown",
+        },
         { key: "comprehension", label: "Comprehension" },
         { key: "editing", label: "Editing" },
     ];
