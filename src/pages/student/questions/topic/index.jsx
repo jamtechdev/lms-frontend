@@ -85,7 +85,7 @@ const Topics = () => {
                                     className="card"
                                     onClick={() => {
                                         dispatch(setTopic(topic?.id));
-                                        navigate("/student/select-question-type");
+                                        navigate("/student/question-type");
                                     }}
                                     style={{ cursor: "pointer" }}
                                 >

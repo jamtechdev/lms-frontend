@@ -10,9 +10,9 @@ const AllQuestions = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const type = queryParams.get('type');
-  const navigate = useNavigate();
+
   const dispatch = useDispatch();
-  const selectedAnswers = useSelector((state) => state.question.attempts);
+  const answersStore = useSelector((state) => state.question.attempts);
   const [questions, setQuestions] = useState(null);
   const [selectedQuestionType, setSelectedQuestionType] = useState(null);
   const question = useSelector(getQuestion);
@@ -23,6 +23,7 @@ const AllQuestions = () => {
   const education = useSelector(getStudentType);
   const level = useSelector(getLevel);
   const subject = useSelector(getSubject);
+  // 
   const topic = useSelector(getTopic);
   const [page, setPage] = useState(1);
   const fetchQuestion = async () => {
@@ -44,73 +45,15 @@ const AllQuestions = () => {
     fetchQuestion();
   }, [page]);
 
-  const handleLinkingDrop = (questionId, leftIdx, draggedMatch) => {
-    setUserMatches((prev) => ({
-      ...prev,
-      [questionId]: {
-        ...(prev[questionId] || {}),
-        [leftIdx]: draggedMatch,
-      },
-    }));
-  };
-
-  const questionTypes = [
-    { key: "mcq", label: "MCQ" },
-    { key: "true_false", label: "True/False" },
-    { key: "linking", label: "Linking" },
-    { key: "rearranging", label: "Rearranging" },
-    { key: "grammar_cloze_with_options", label: "Grammar Cloze (With Options)" },
-    { key: "underlinecorrect", label: "Underline Correct" },
-    { key: "comprehension", label: "Comprehension" },
-    { key: "editing", label: "Editing" },
-  ];
-
-
-  const handleSelectAnswer = (questionId, blankOrLeftIdx, selectedValue) => {
-    setUserAnswers((prev) => ({
-      ...prev,
-      [questionId]:
-        blankOrLeftIdx !== null && blankOrLeftIdx !== undefined
-          ? { ...(prev[questionId] || {}), [blankOrLeftIdx]: selectedValue }
-          : selectedValue,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setPage(2)
-  };
-  const [selectedOption, setSelectedOption] = useState();
-  const handleOptionChange = (e) => {
-    const selectedOption = e?.target?.value;
-    setSelectedOption(selectedOption);
-    dispatch(setAttemptQuestions({
+  const handleOptionChange = (e, question) => {
+    let payload = {
       question_id: question?.id,
-      user_answer: selectedOption,
-      type,
-    }));
+      user_answer: e?.target?.value,
+      type: type
+    }
+    dispatch(setAttemptQuestions(payload));
   };
-  const handleNext = (e, question) => {
-    e.preventDefault();
-    // if (!selectedOption) return alert("Please select an option before proceeding.");
 
-    dispatch(setAttemptQuestions({
-      question_id: question?.id,
-      user_answer: selectedOption,
-      type,
-    }));
-    if ((questions?.pagination?.total != page)) {
-      setPage((prev) => prev + 1);
-    }
-    setSelectedOption('');
-  };
-  const handlePrevious = (e) => {
-    e.preventDefault();
-    if (page > 1) {
-      setPage((prev) => prev - 1);
-      setSelectedOption('');
-    }
-  };
   return (
     <>
       <div className="dashboard-body">
@@ -142,7 +85,7 @@ const AllQuestions = () => {
                 </span>
               </li>
               <li>
-                <Link to="/student/select-question-type"
+                <Link to="/student/question-type"
                   className="text-gray-200 fw-normal text-15 hover-text-main-600"
                 >
                   Question Type
@@ -161,65 +104,54 @@ const AllQuestions = () => {
             </ul>
           </div>
         </div>
-        {(questions && type == "mcq") && questions?.questions_array?.map((item, index) => (
+        {(questions && type == "mcq") && questions?.questions_array?.map((question, index) => (
           <div key={index}>
-            <form onSubmit={handleSubmit}>
+            <form >
               <h2 className="mb-3">Questions</h2>
               <div className="question-card">
-                <div className="question-text"> {page}. {parse(item?.question?.content)}</div>
+                <div className="question-text"> {page}. {parse(question?.question?.content)}</div>
 
                 <div className="mcq-options">
-                  {item.question.options?.map((opt, index) => {
-                    const selectedAnswer = selectedAnswers?.find(ans => ans.question_id === item.id);
-                    const isSelected = selectedAnswer?.user_answer === opt?.value;
-                    console.log(selectedAnswers?.find(ans => ans.question_id == item.id)?.user_answer == opt?.value, '====')
-                    const isCorrect = submitted && item.question.answer.answer === opt.value;
-                    const isIncorrect = submitted && isSelected && !isCorrect;
+                  {question?.question.options?.map((opt, index) => {
+                    const selectedAnswer = answersStore?.find(ans => ans.question_id === question.id);
+                    console.log(selectedAnswer, "============")
                     return (
-                      <div key={index}>
-                        <button
-                          key={opt.value}
-                          className={`kbc-option-button 
-                        ${isSelected ? "selected" : ""}
-                        ${isCorrect ? "correct" : ""}
-                        ${isIncorrect ? "incorrect" : ""}
-                    `}
-                          onClick={() =>
-                            !submitted &&
-                            handleSelectAnswer(item.id, null, opt.value)
-                          }
-                          disabled={submitted}
+                      <div key={index} className="">
+                        <label
+                          className={`kbc-option-label ${true ? "selected" : ""}`}
                         >
+                          <input
+                            type="radio"
+                            name={`question-${opt.value}`}
+                            value={opt.value}
+                            checked={selectedAnswer?.user_answer == opt?.value}
+                            onChange={(e) => handleOptionChange(e, question)}
+                          />
                           {opt.value}
-                        </button>
+                        </label>
                       </div>
                     );
                   })}
-                  {/* {submitted && (
-                    <div className="correct-answer">
-                      Correct Answer: {item.question.answer.answer}
-                    </div>
-                  )} */}
                 </div>
               </div>
-              <div className="flex justify-between">
-                <button
-                  className="btn btn-primary mt-3"
-                  onClick={(e) => handlePrevious(e)}
-                  disabled={(questions?.pagination?.current_page == 1)}
-                >
-                  Previous
-                </button>
-                <button
-                  className="btn btn-primary mt-3"
-                  onClick={(e) => handleNext(e, item)}
-                // disabled={(questions?.pagination?.total == page)}
-                >
-                  {(questions?.pagination?.total == page) ? "Submit" : "Next"}
-                </button>
-              </div>
-
             </form>
+            <div className="flex justify-between">
+              <button
+                className="btn btn-primary mt-3 mr-2"
+                onClick={(e) => setPage((prev) => prev - 1)}
+                disabled={(questions?.pagination?.current_page == 1)}
+              >
+                Previous
+              </button>
+              {(questions?.pagination?.total == page) ?
+                <button className="btn btn-primary mt-3 ml-2">
+                  Submit
+                </button>
+                : <button onClick={(e) => setPage((prev) => prev + 1)} className="btn btn-primary mt-3">
+                  Next
+                </button>
+              }
+            </div>
           </div>
         ))}
       </div>

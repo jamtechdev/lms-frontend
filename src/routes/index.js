@@ -56,7 +56,7 @@ const AppRouter = () => {
           <Route path="questions" element={<Questions />} />
           <Route path="subjects" element={<Subject />} />
           <Route path="topics" element={<Topics />} />
-          <Route path="select-question-type" element={<QuestionType />} />
+          <Route path="question-type" element={<QuestionType />} />
           <Route path="all-questions" element={<AllQuestions />} />
         </Route>
 
