@@ -17,8 +17,8 @@ async function loginStudent(data) {
 async function getSubject(data) {
     return await axiosInstance.get(`/api/v1/questions/subjects?level_id=${data}`)
 }
-async function getAllQuestion(data) {
-    return await axiosInstance.post(`/api/v1/questions/getTypeBasedQuestions`, data);
+async function getAllQuestion(page, data) {
+    return await axiosInstance.post(`/api/v1/questions/getTypeBasedQuestions?page=${page}&per_page=1`, data);
 }
 async function logout(data) {
     return await axiosInstance.post(`/api/v1/logout`, data);

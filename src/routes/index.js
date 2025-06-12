@@ -17,6 +17,7 @@ import AssessmentHistory from "../pages/parent/assessment-history";
 import Subscription from "../pages/parent/subscription";
 import Gems from "../pages/parent/gems";
 import Subject from "../pages/student/questions/Subjects";
+import Topics from "../pages/student/questions/topic";
 
 
 const Login = lazy(() => import("../pages/login/index"));
@@ -54,6 +55,7 @@ const AppRouter = () => {
           <Route index element={<StudentDashboard />} />
           <Route path="questions" element={<Questions />} />
           <Route path="subjects" element={<Subject />} />
+          <Route path="topics" element={<Topics />} />
           <Route path="select-question-type" element={<QuestionType />} />
           <Route path="all-questions" element={<AllQuestions />} />
         </Route>

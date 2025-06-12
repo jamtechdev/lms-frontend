@@ -76,6 +76,22 @@ const Subject = () => {
                             </li>
                             <li>
                                 {selectedQuestionType ? (
+                                    <span className="text-main-600 lfw-normal text-15">
+                                        Questions
+                                    </span>
+                                ) : (
+                                    <span className="text-gray-500 fw-normal text-15">
+                                        Topics
+                                    </span>
+                                )}
+                            </li>
+                            <li>
+                                <span className="text-gray-500 fw-normal d-flex">
+                                    <i className="ph ph-caret-right"></i>
+                                </span>
+                            </li>
+                            <li>
+                                {selectedQuestionType ? (
                                     <a
                                         href="#"
                                         onClick={() => {
@@ -98,15 +114,9 @@ const Subject = () => {
                                 </span>
                             </li>
                             <li>
-                                {selectedQuestionType ? (
-                                    <span className="text-main-600 lfw-normal text-15">
-                                        Questions
-                                    </span>
-                                ) : (
-                                    <span className="text-gray-500 fw-normal text-15">
-                                        Questions
-                                    </span>
-                                )}
+                                <span className="text-gray-500 fw-normal text-15">
+                                    Questions
+                                </span>
                             </li>
                         </ul>
                     </div>
@@ -126,7 +136,7 @@ const Subject = () => {
                                         onClick={() => {
                                             setSelectedSubject(subject.id);
                                             dispatch(setSubject(subject.id));
-                                            navigate("/student/select-question-type");
+                                            navigate("/student/topics");
                                         }}
                                         style={{ cursor: "pointer" }}
                                     >

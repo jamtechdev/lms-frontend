@@ -11,7 +11,7 @@ import {
   setSubject,
 } from "../../../../_store/_reducers/auth";
 import userService from "../../../../_services/user.service";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const QuestionType = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,18 +33,19 @@ const QuestionType = () => {
   ];
 
   const handleQuestion = async (selectedType) => {
-    try {
-      const data = {
-        education_type: education,
-        level_id: level,
-        subject_id: subject,
-        type: selectedType || question,
-      };
-      const response = await userService.getAllQuestion(data);
-      dispatch(setFetchedQuestionArray(response.data.questions_array));
-    } catch (err) {
-      console.log(err?.response?.data?.message || "Failed, please try again");
-    }
+    navigate(`/student/all-questions?type=${selectedType?.key}`);
+    // try {
+    //   const data = {
+    //     education_type: education,
+    //     level_id: level,
+    //     subject_id: subject,
+    //     type: selectedType?.key || question,
+    //   };
+    //   const response = await userService.getAllQuestion(data);
+    //   dispatch(setFetchedQuestionArray(response.data.questions_array));
+    // } catch (err) {
+    //   console.log(err?.response?.data?.message || "Failed, please try again");
+    // }
   };
 
   useEffect(() => {
@@ -57,16 +58,11 @@ const QuestionType = () => {
           <div className="breadcrumb mb-24">
             <ul className="flex-align gap-4">
               <li>
-                <a
-                  href="#"
-                  onClick={() => {
-                    setSelectedQuestionType(null);
-                    navigate("/student/subjects");
-                  }}
+                <Link to="/student/subjects"
                   className="text-gray-200 fw-normal text-15 hover-text-main-600"
                 >
                   Back to Subjects
-                </a>
+                </Link>
               </li>
               <li>
                 <span className="text-gray-500 fw-normal d-flex">
@@ -74,22 +70,11 @@ const QuestionType = () => {
                 </span>
               </li>
               <li>
-                {selectedQuestionType ? (
-                  <a
-                    href="#"
-                    onClick={() => {
-                      setSelectedQuestionType(null);
-                    }}
-                    className="text-gray-200 fw-normal text-15 hover-text-main-600"
-                  >
-                    {questionTypes.find((t) => t.key === selectedQuestionType)
-                      ?.label || "Question Type"}
-                  </a>
-                ) : (
-                  <span className="text-gray-500 fw-normal text-15">
-                    Question Type
-                  </span>
-                )}
+                <Link to="/student/topics"
+                  className="text-gray-200 fw-normal text-15 hover-text-main-600"
+                >
+                  Topics
+                </Link>
               </li>
               <li>
                 <span className="text-gray-500 fw-normal d-flex">
@@ -97,15 +82,19 @@ const QuestionType = () => {
                 </span>
               </li>
               <li>
-                {selectedQuestionType ? (
-                  <span className="text-main-600 fw-normal text-15">
-                    Questions
-                  </span>
-                ) : (
-                  <span className="text-gray-500 fw-normal text-15">
-                    Questions
-                  </span>
-                )}
+                <span className="text-main-600 fw-normal text-15">
+                  Question Type
+                </span>
+              </li>
+              <li>
+                <span className="text-gray-500 fw-normal d-flex">
+                  <i className="ph ph-caret-right"></i>
+                </span>
+              </li>
+              <li>
+                <span className="text-gray-500 fw-normal text-15">
+                  Questions
+                </span>
               </li>
             </ul>
           </div>
@@ -126,10 +115,7 @@ const QuestionType = () => {
                         key={type.key}
                         style={{ cursor: "pointer" }}
                         onClick={() => {
-                          setSelectedQuestionType(type.key);
-                          dispatch(setQuestion(type.key));
-                          handleQuestion(type.key);
-                          navigate("/student/all-questions");
+                          handleQuestion(type);
                         }}
                       >
                         <div className="flex-align flex-wrap gap-8">
