@@ -71,6 +71,7 @@ const CreateStudent = () => {
   };
   return (
     <>
+    <div className="p-3">
       <h3>Create Form</h3>
       <Formik
         initialValues={initialValues}
@@ -363,7 +364,7 @@ const CreateStudent = () => {
             </div>
             <button
               type="submit"
-              className="btn btn-main rounded-pill w-100"
+              className="btn btn-primary rounded-pill"
               disabled={creating}
             >
               Submit
@@ -371,6 +372,7 @@ const CreateStudent = () => {
           </Form>
         )}
       </Formik>
+      </div>
     </>
   );
 };

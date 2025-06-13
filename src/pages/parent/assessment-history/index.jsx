@@ -4,9 +4,10 @@ const AssessmentHistory = () => {
   return (
     <>
       <div className="dashboard-body">
+
         <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
-          <div className="breadcrumb mb-24 ps-0">
-            <ul className="flex-align gap-4">
+          <div className="breadcrumb mb-24">
+            <ul className="flex-align gap-4 mb-0">
               <li>
                 <Link
                   to="/"

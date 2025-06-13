@@ -8,7 +8,7 @@ export default function ParentDashboard() {
         <div className="row gy-4">
           <div className="col-xxl-8">
             <div className="card h-100">
-              <div className="card-body grettings-box-two position-relative z-1 p-0">
+              <div className="card-body grettings-box-two position-relative z-1 p-0 px-4">
                 <div className="row align-items-center h-100">
                   <div className="col-lg-6">
                     <div className="grettings-box-two__content">

@@ -182,7 +182,7 @@ const Login = () => {
                   </div>
                   <button
                     type="submit"
-                    className="btn btn-main rounded-pill w-100"
+                    className="btn btn-primary rounded-pill w-100"
                   >
                     Sign In
                   </button>
@@ -219,7 +219,7 @@ const Login = () => {
                   </div>
                   <button
                     type="submit"
-                    className="btn btn-main rounded-pill w-100"
+                    className="btn btn-primary rounded-pill w-100"
                   >
                     Sign In
                   </button>
@@ -269,7 +269,7 @@ const Login = () => {
             </ul>
           </div>
         </div>
-      </section>
+      </section> 
     </>
   );
 };

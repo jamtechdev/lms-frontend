@@ -5,7 +5,7 @@ const Subscription = () => {
     <>
       <div className="dashboard-body">
         <div className="breadcrumb mb-24">
-          <ul className="flex-align gap-4">
+          <ul className="flex-align gap-4 mb-0">
             <li>
               <Link
                 to="/"

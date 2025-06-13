@@ -1,10 +1,12 @@
-
+import loader from "../../../assets/images/loader.gif";
 
 const Gems = () => {
 
     return (
         <>
-            Gems apge here
+           <div className="text-center mt-3">
+             <img src={loader} width={100}/>
+           </div>
         </>
     )
 }

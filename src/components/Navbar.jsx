@@ -202,7 +202,7 @@ const Navbar = () => {
               }`}
             >
               <div className="card border border-gray-100 rounded-12 box-shadow-custom">
-                <div className="card-body">
+                <div className="card-body py-1 px-3">
                   {/* <div className="flex-align gap-8 mb-20 pb-20 border-bottom border-gray-100">
                                     <img src={logo} alt="" className="w-36 h-36 rounded-circle" />
                                     <div className="">
@@ -241,7 +241,7 @@ const Navbar = () => {
                                             <span className="text">Email</span>
                                         </a>
                                     </li> */}
-                    <li className="pt-8 border-top border-gray-100">
+                    <li className="pt-8">
                       <button
                         onClick={handleLogout}
                         className="py-12 text-15 px-10 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15 w-full text-left"

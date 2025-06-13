@@ -4,7 +4,7 @@ import parentService from "../../../_services/parent.service";
 import swal from "sweetalert";
 import ResponsivePagination from "react-responsive-pagination";
 import "react-responsive-pagination/themes/classic-light-dark.css";
-
+import loader from "../../../assets/images/loader.gif";
 const StudentList = () => {
   const [students, setStudents] = useState();
   const [loading, setLoading] = useState(true);
@@ -82,13 +82,13 @@ const StudentList = () => {
         console.error("Error", error);
       });
   };
-  if (loading && !lockCodeUpdating) return <div>Loading........</div>;
+  if (loading && !lockCodeUpdating) return <div className="text-center mt-5"><img src={loader} width={100}/></div>;
   return (
     <>
       <div className="dashboard-body">
         <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
-          <div className="breadcrumb mb-24 ps-0">
-            <ul className="flex-align gap-4">
+          <div className="breadcrumb mb-24">
+            <ul className="flex-align gap-4 mb-0">
               <li>
                 <Link
                   to="/"
@@ -207,13 +207,14 @@ const StudentList = () => {
               ))}
           </tbody>
         </table>
+        {/* Pagination Controls */}
+        <ResponsivePagination
+          current={students?.pagination?.current_page}
+          total={students?.pagination?.total_pages}
+          onPageChange={handlePage}
+        />
       </div>
-      {/* Pagination Controls */}
-      <ResponsivePagination
-        current={students?.pagination?.current_page}
-        total={students?.pagination?.total_pages}
-        onPageChange={handlePage}
-      />
+      
     </>
   );
 };
