@@ -10,6 +10,8 @@ import ReArrangeList from "../../../components/students/re-arrange";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Xarrow from "react-xarrows";
+import McqQuestions from "../../../components/students/mcq-questions";
+import TrueFalseQuestions from "../../../components/students/true-false";
 const ItemTypes = {
   LEFT_ITEM: "LEFT_ITEM",
 };
@@ -125,15 +127,7 @@ const AllQuestions = () => {
     }
   }, []);
 
-  const handleOptionChange = (e, question) => {
-    let payload = {
-      question_id: question?.id,
-      answer: type == "mcq" ? question?.question?.answer?.answer : question?.question?.answer?.choice,
-      user_answer: e?.target?.value,
-      type: type
-    }
-    dispatch(setAttemptQuestions(payload));
-  };
+  
   const handleReorder = (questionId, newOrder) => {
     setReorderState((prev) =>
       prev.map((q) =>
@@ -145,6 +139,18 @@ const AllQuestions = () => {
     const savedAnswer = answersStore.find((answer) => answer.question_id === questionId);
     return savedAnswer ? savedAnswer.user_answer.split(" ") : null;
   };
+  // relaod 
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      const confirmationMessage = "Are you sure you want to reload the page?";
+      event.returnValue = confirmationMessage;
+      return confirmationMessage;
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   return (
     <>
@@ -196,101 +202,13 @@ const AllQuestions = () => {
             </ul>
           </div>
         </div>
-        {(questions && type == "mcq" && !result) && questions?.questions_array?.map((question, index) => (
-          <div key={index}>
-            <form >
-              <h2 className="mb-3">Questions</h2>
-              <div className="question-card">
-                <div className="question-text"> {page}. {parse(question?.question?.content)}</div>
-                <div className="mcq-options">
-                  {question?.question.options?.map((opt, index) => {
-                    const selectedAnswer = answersStore?.find(ans => ans.question_id === question.id);
-                    return (
-                      <div key={index} className="">
-                        <label
-                          className={`kbc-option-label`}
-                        >
-                          <input
-                            type="radio"
-                            name={`question-${opt.value}`}
-                            value={opt.value}
-                            checked={selectedAnswer?.user_answer == opt?.value}
-                            onChange={(e) => handleOptionChange(e, question)}
-                          />
-                          {opt.value}
-                        </label>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </form>
-            <div className="flex justify-between">
-              <button
-                className="btn btn-primary mt-3 mr-2"
-                onClick={(e) => setPage((prev) => prev - 1)}
-                disabled={(questions?.pagination?.current_page == 1)}
-              >
-                Previous
-              </button>
-              {(questions?.pagination?.total == page) ?
-                <button onClick={() => setResult(true)} className="btn btn-primary mt-3 ml-2">
-                  Submit
-                </button>
-                : <button onClick={(e) => setPage((prev) => prev + 1)} className="btn btn-primary mt-3">
-                  Next
-                </button>
-              }
-            </div>
-          </div>
-        ))}
-        {(questions && type == "true_false" && !result) && questions?.questions_array?.map((question, index) => (
-          <div key={index}>
-            <h2 className="mb-3">Questions</h2>
-            <div className="question-card">
-              <div className="question-text flex"> {page}. {parse(question?.question?.content)}</div>
-              <div className="mcq-options">
-                {question?.question?.options?.map((opt, index) => {
-                  const selectedAnswer = answersStore?.find(ans => ans.question_id === question.id);
-                  return (
-                    <div key={index}>
-                      <label
-                        className={`kbc-option-label ${true ? "selected" : ""}`}
-                      >
-                        <input
-                          type="radio"
-                          name={`question-${opt.value}`}
-                          value={opt.value}
-                          checked={selectedAnswer?.user_answer == opt?.value}
-                          onChange={(e) => handleOptionChange(e, question)}
-                        />
-                        {opt.value}
-                      </label>
-                    </div>
-                  )
-                }
-                )}
-              </div>
-            </div>
-            <div className="flex justify-between">
-              <button
-                className="btn btn-primary mt-3 mr-2"
-                onClick={(e) => setPage((prev) => prev - 1)}
-                disabled={(questions?.pagination?.current_page == 1)}
-              >
-                Previous
-              </button>
-              {(questions?.pagination?.total == page) ?
-                <button onClick={() => setResult(true)} className="btn btn-primary mt-3 ml-2">
-                  Submit
-                </button>
-                : <button onClick={(e) => setPage((prev) => prev + 1)} className="btn btn-primary mt-3">
-                  Next
-                </button>
-              }
-            </div>
-          </div>
-        ))}
+        {(questions && type == "mcq") && (
+          <McqQuestions questions={questions} page={page} setPage={setPage} type={type} />
+        )}
+        {(questions && type == "true_false") && (
+          <TrueFalseQuestions questions={questions} page={page} setPage={setPage} type={type} />
+        )}
+        
         {/* Linking Questions */}
         {(questions && type === "linking") &&
           questions.questions_array.map((question, index) => (
