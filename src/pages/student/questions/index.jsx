@@ -12,6 +12,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import Xarrow from "react-xarrows";
 import McqQuestions from "../../../components/students/mcq-questions";
 import TrueFalseQuestions from "../../../components/students/true-false";
+import OpenClozeWithOptions from "../../../components/students/open-close-with-options";
+import LinkingQuestions from "../../../components/students/linking-questions";
 const ItemTypes = {
   LEFT_ITEM: "LEFT_ITEM",
 };
@@ -127,7 +129,7 @@ const AllQuestions = () => {
     }
   }, []);
 
-  
+
   const handleReorder = (questionId, newOrder) => {
     setReorderState((prev) =>
       prev.map((q) =>
@@ -208,84 +210,17 @@ const AllQuestions = () => {
         {(questions && type == "true_false") && (
           <TrueFalseQuestions questions={questions} page={page} setPage={setPage} type={type} />
         )}
-        
-        {/* Linking Questions */}
-        {(questions && type === "linking") &&
-          questions.questions_array.map((question, index) => (
-            <div key={index}>
-              <DndProvider backend={HTML5Backend}>
-                <div className="question-card">
-                  <h2 className="question-text">
-                    {page}. {parse(question?.question?.content)}
-                  </h2>
-
-                  <div className="linking-container">
-                    {/* Left Side */}
-                    <div className="left-side">
-                      {question?.question?.answer?.map((pair, i) => (
-                        <div className="link-item" key={i} id={`left-${i}`}>
-                          <DraggableLeft item={pair.left} index={i} />
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Right Side */}
-                    <div className="right-side">
-                      {shuffledRight.map((item, i) => (
-                        <div className="link-item" key={i} id={`right-${i}`}>
-                          <DroppableRight
-                            item={item}
-                            index={i}
-                            onDrop={(leftIndex, rightIndex) =>
-                              setUserMatches((prev) => ({
-                                ...prev,
-                                [leftIndex]: rightIndex,
-                              }))
-                            }
-                          />
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Arrows */}
-                    {Object.entries(userMatches).map(
-                      ([leftIndex, rightIndex], i) => (
-                        <Xarrow
-                          key={i}
-                          start={`left-${leftIndex}`}
-                          end={`right-${rightIndex}`}
-                          strokeWidth={2}
-                          path="smooth"
-                          headSize={0}
-                          color="#2563eb"
-                        />
-                      )
-                    )}
-                  </div>
-                </div>
-              </DndProvider>
-              <div className="flex justify-between">
-                <button
-                  className="btn btn-primary mt-3 mr-2"
-                  onClick={() => setPage((prev) => prev - 1)}
-                  disabled={questions?.pagination?.current_page === 1}
-                >
-                  Previous
-                </button>
-                {questions?.pagination?.total === page ? (
-                  <button className="btn btn-primary mt-3 ml-2">Submit</button>
-                ) : (
-                  <button
-                    onClick={() => setPage((prev) => prev + 1)}
-                    className="btn btn-primary mt-3"
-                  >
-                    Next
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-
+        {(questions && type === "linking") && (
+          <LinkingQuestions
+            questions={questions} page={page}
+            setPage={setPage} type={type}
+            shuffledRight={shuffledRight}
+            setShuffledRight={setShuffledRight}
+            userMatches={userMatches}
+            setUserMatches={setUserMatches}
+          />
+        )}
+     
         {(questions && type == "rearranging" && !result) && questions?.questions_array?.map((q) => {
           const currentWords = reorderState.find((r) => r.id === q.id)?.words || [];
           return (
@@ -301,109 +236,11 @@ const AllQuestions = () => {
             />
           )
         })}
-        {(questions && type === "open_cloze_with_options") &&
-          questions.questions_array.map((qObj, index) => {
-            const questionData = qObj.question;
-            const paragraph = questionData.paragraph;
-            const blanks = questionData.questions;
-            const options = questionData.question_group.shared_options.map(
-              (opt) => opt.toLowerCase()
-            );
 
-            const handleChange = (e, id) => {
-              const value = e.target.value.trim();
+        {(questions && type == "open_cloze_with_options") && (
+          <OpenClozeWithOptions questions={questions} page={page} setPage={setPage} type={type} />
+        )}
 
-              setInputs((prev) => ({ ...prev, [id]: value }));
-
-              if (value === "" || options.includes(value.toLowerCase())) {
-                // valid input → clear error and dispatch
-                setInputErrors((prev) => ({ ...prev, [id]: false }));
-
-                dispatch(
-                  setAttemptQuestions({
-                    question_id: id,
-                    user_answer: value,
-                    type: type,
-                  })
-                );
-              } else {
-                // invalid → show error but don't dispatch
-                setInputErrors((prev) => ({ ...prev, [id]: true }));
-              }
-            };
-
-            const renderedParagraph = paragraph
-              .split(/(\(\d+\)_____)/g)
-              .map((part, i) => {
-                const match = part.match(/\((\d+)\)_____/);
-                if (match) {
-                  const blankNumber = parseInt(match[1]);
-                  const question = blanks.find(
-                    (q) => q.blank_number === blankNumber
-                  );
-                  const inputValue = inputs[question.id] || "";
-                  const hasError = inputErrors[question.id];
-
-                  return (
-                    <input
-                      key={i}
-                      type="text"
-                      placeholder="_____"
-                      value={inputs[question.id] || ""}
-                      onChange={(e) => handleChange(e, question.id)}
-                      style={{
-                        width: "60px",
-                        margin: "0 5px",
-                        border: inputErrors[question.id]
-                          ? "2px solid red"
-                          : "1px solid #999",
-                        textAlign: "center",
-                      }}
-                    />
-                  );
-                } else {
-                  return <span key={i}>{part}</span>;
-                }
-              });
-
-            return (
-              <div key={index} style={{ marginBottom: "30px" }}>
-                <div
-                  style={{
-                    marginTop: "15px",
-                    padding: "10px",
-                    border: "1px solid #ccc",
-                    background: "#f9f9f9",
-                  }}
-                >
-                  <strong>Options:</strong> {options.join(", ")}
-                </div>
-
-                <div>
-                  <strong>{page}.</strong> {renderedParagraph}
-                </div>
-                <div className="flex justify-between">
-                  <button
-                    className="btn btn-primary mt-3 mr-2"
-                    onClick={() => setPage((prev) => prev - 1)}
-                    disabled={questions?.pagination?.current_page === 1}
-                  >
-                    Previous
-                  </button>
-                  {questions?.pagination?.total === page ? (
-                    <button className="btn btn-primary mt-3 ml-2">Submit</button>
-                  ) : (
-                    <button
-                      onClick={() => setPage((prev) => prev + 1)}
-                      className="btn btn-primary mt-3"
-                    >
-                      Next
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
         {(questions && type === "open_cloze_with_dropdown_options") &&
           questions.questions_array.map((qObj, index) => {
             const questionData = qObj.question;
