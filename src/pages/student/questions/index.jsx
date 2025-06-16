@@ -14,6 +14,8 @@ import McqQuestions from "../../../components/students/mcq-questions";
 import TrueFalseQuestions from "../../../components/students/true-false";
 import OpenClozeWithOptions from "../../../components/students/open-close-with-options";
 import LinkingQuestions from "../../../components/students/linking-questions";
+import OpenClozeWithDropdown from "../../../components/students/open-close-with-dropdown";
+import EditingQuesions from "../../../components/students/editing-questions";
 const ItemTypes = {
   LEFT_ITEM: "LEFT_ITEM",
 };
@@ -220,7 +222,7 @@ const AllQuestions = () => {
             setUserMatches={setUserMatches}
           />
         )}
-     
+
         {(questions && type == "rearranging" && !result) && questions?.questions_array?.map((q) => {
           const currentWords = reorderState.find((r) => r.id === q.id)?.words || [];
           return (
@@ -240,103 +242,10 @@ const AllQuestions = () => {
         {(questions && type == "open_cloze_with_options") && (
           <OpenClozeWithOptions questions={questions} page={page} setPage={setPage} type={type} />
         )}
+        {(questions && type == "open_cloze_with_dropdown_options") && (
+          <OpenClozeWithDropdown questions={questions} page={page} setPage={setPage} type={type} />
+        )}
 
-        {(questions && type === "open_cloze_with_dropdown_options") &&
-          questions.questions_array.map((qObj, index) => {
-            const questionData = qObj.question;
-            const paragraph = questionData.paragraph.replace(/<[^>]+>/g, "");
-            const blanks = questionData.questions;
-
-            const handleOptionClick = (questionId, selectedOption) => {
-              setInputs((prev) => ({ ...prev, [questionId]: selectedOption }));
-
-              dispatch(
-                setAttemptQuestions({
-                  question_id: questionId,
-                  user_answer: selectedOption,
-                  type: type,
-                })
-              );
-            };
-
-            const renderedParagraph = paragraph
-              .split(/(\(\d+\)\[[^\]]+\])/g)
-              .map((part, i) => {
-                const match = part.match(/\((\d+)\)\[([^\]]+)\]/);
-                if (match) {
-                  const blankNumber = parseInt(match[1]);
-                  const optionsText = match[2];
-                  const question = blanks.find(
-                    (q) => q.blank_number === blankNumber
-                  );
-                  const selectedAnswer = inputs[question.id];
-                  const options = optionsText.split("/").map((opt) => opt.trim());
-
-                  return (
-                    <span key={i} style={{ margin: "0 5px" }}>
-                      [
-                      {options.map((opt, idx) => {
-                        const isSelected = selectedAnswer === opt;
-                        return (
-                          <span
-                            key={idx}
-                            onClick={() => handleOptionClick(question.id, opt)}
-                            style={{
-                              cursor: "pointer",
-                              margin: "0 5px",
-                              textDecoration: isSelected ? "underline" : "none",
-                            }}
-                          >
-                            {opt}
-                          </span>
-                        );
-                      })}
-                      ]
-                    </span>
-                  );
-                } else {
-                  return <span key={i}>{part}</span>;
-                }
-              });
-
-            return (
-              <div key={index} style={{ marginBottom: "30px" }}>
-                <div
-                  style={{
-                    marginTop: "15px",
-                    padding: "10px",
-                    border: "1px solid #ccc",
-                    background: "#f9f9f9",
-                  }}
-                >
-                  <strong>Instruction:</strong> {questionData.instruction}
-                </div>
-
-                <div style={{ marginTop: "10px", lineHeight: "1.8" }}>
-                  <strong>{index + 1}.</strong> {renderedParagraph}
-                </div>
-                <div className="flex justify-between">
-                  <button
-                    className="btn btn-primary mt-3 mr-2"
-                    onClick={() => setPage((prev) => prev - 1)}
-                    disabled={questions?.pagination?.current_page === 1}
-                  >
-                    Previous
-                  </button>
-                  {questions?.pagination?.total === page ? (
-                    <button className="btn btn-primary mt-3 ml-2">Submit</button>
-                  ) : (
-                    <button
-                      onClick={() => setPage((prev) => prev + 1)}
-                      className="btn btn-primary mt-3"
-                    >
-                      Next
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
         {(questions && type === "comprehension") &&
           questions.questions_array.map((qObj, index) => {
             const questionData = qObj.question;
@@ -413,123 +322,10 @@ const AllQuestions = () => {
               </div>
             );
           })}
-        {questions &&
-          type === "editing" &&
-          questions.questions_array.map((qObj, index) => {
-            const questionData = qObj.question;
-            const paragraph = questionData.paragraph;
-            const boxes = questionData.questions;
-
-            const handleInputChange = (e, boxNumber) => {
-              const value = e.target.value;
-              setInputs((prev) => ({ ...prev, [boxNumber]: value }));
-
-              dispatch(
-                setAttemptQuestions({
-                  question_id: `${qObj.id}-${boxNumber}`,
-                  user_answer: value,
-                  type: "editing",
-                })
-              );
-            };
-
-            const renderedParagraph = paragraph
-              .split(/(\(\d+\))/g)
-              .map((part, i) => {
-                const match = part.match(/\((\d+)\)/);
-                if (match) {
-                  const boxNumber = parseInt(match[1]);
-                  const inputVal = inputs[boxNumber] || "";
-
-                  return (
-                    <input
-                      key={i}
-                      type="text"
-                      value={inputVal}
-                      placeholder={`Word ${boxNumber}`}
-                      onChange={(e) => handleInputChange(e, boxNumber)}
-                      style={{
-                        display: "inline-block",
-                        verticalAlign: "middle",
-                        width: "110px",
-                        margin: "0 4px",
-                        padding: "5px 8px",
-                        fontSize: "15px",
-                        border: "1px solid #cbd5e1",
-                        borderRadius: "6px",
-                        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.04)",
-                        outlineColor: "#2563eb",
-                      }}
-                    />
-                  );
-                } else {
-                  return (
-                    <span
-                      key={i}
-                      style={{
-                        display: "inline", // critical to prevent wrapping
-                        whiteSpace: "pre-wrap",
-                      }}
-                    >
-                      {parse(part)}
-                    </span>
-                  );
-                }
-              });
-
-            return (
-              <div key={index} className="question-card">
-                <div
-                  style={{
-                    padding: "15px 20px",
-                    border: "1px solid #e2e8f0",
-                    borderRadius: "8px",
-                    backgroundColor: "#f8fafc",
-                    marginBottom: "25px",
-                  }}
-                >
-                  <h3 style={{ marginBottom: "12px", fontWeight: "600" }}>
-                    {page}. {questionData.instruction}
-                  </h3>
-
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      lineHeight: "1.8",
-                      backgroundColor: "#fff",
-                      padding: "16px",
-                      borderRadius: "8px",
-                      border: "1px solid #e2e8f0",
-                      display: "block",
-                      whiteSpace: "normal",
-                      wordBreak: "break-word",
-                    }}
-                  >
-                    {renderedParagraph}
-                  </div>
-                </div>
-                <div className="flex justify-between">
-                  <button
-                    className="btn btn-primary mt-3 mr-2"
-                    onClick={() => setPage((prev) => prev - 1)}
-                    disabled={questions?.pagination?.current_page === 1}
-                  >
-                    Previous
-                  </button>
-                  {questions?.pagination?.total === page ? (
-                    <button className="btn btn-primary mt-3 ml-2">Submit</button>
-                  ) : (
-                    <button
-                      onClick={() => setPage((prev) => prev + 1)}
-                      className="btn btn-primary mt-3"
-                    >
-                      Next
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+        {(questions && type == "editing") && (
+          <EditingQuesions questions={questions} page={page} setPage={setPage} type={type}/>
+        )}  
+        
       </div>
       {result && <div>
         <button onClick={() => setResult(false)} className="btn ml-2">
