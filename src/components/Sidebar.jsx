@@ -55,7 +55,7 @@ const Sidebar = () => {
       >
         <img src={logo} alt="LMS" />
       </Link>
-      <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm">
+      <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm pt-3">
         <div className="p-20 pt-10">
           {permission === "child" && (
             <ul className="sidebar-menu">

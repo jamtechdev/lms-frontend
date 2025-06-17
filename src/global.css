@@ -48,8 +48,10 @@
     font-size: 1.35rem;
     font-weight: 600;
     color: #343a40;
-    margin-bottom: 25px;
+    margin-bottom: 0px;
     line-height: 1.5;
+    display: flex;
+    column-gap: 10px;
 }
 
 .blank-item {
@@ -404,7 +406,21 @@
 .Questions .questionList:nth-child(4) {
     background: rgb(76 175 80 / 32%);
 }
-
+.Questions .questionList:nth-child(5) {
+    background: rgb(158 158 158 / 32%);
+}
+.Questions .questionList:nth-child(6) {
+    background: rgb(103 58 183 / 32%);
+}
+.Questions .questionList:nth-child(7) {
+    background: rgb(33 150 243 / 32%);
+}
+.Questions .questionList:nth-child(8) {
+    background: rgb(0 150 136 / 32%);
+}
+.top-navbar {
+    background: #fff;
+}
 /* my css */
 /* Matching */
 
@@ -922,4 +938,8 @@ ul.pagination li a {
 }
 ul.pagination li.disabled span{
     background: transparent!important;
+}
+.mcq-options label {
+    text-transform: capitalize;
+    font-weight: 600;
 }
