@@ -2,6 +2,7 @@ import parse from "html-react-parser";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
+import userService from "../../_services/user.service";
 
 const McqQuestions = (props) => {
     const { questions, type, page, setPage } = props;
@@ -16,14 +17,19 @@ const McqQuestions = (props) => {
         }
         dispatch(setAttemptQuestions(payload));
     };
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         let payload = answersStore?.map(item => {
             const newItem = { ...item };
             delete newItem?.answer;
             return newItem;
         });
+        await userService.answer(payload).then((data) => {
+            console.log(data);
+        }).catch((error) => {
+            console.error("Error", error);
+        })
         console.log(payload, 'Final Submit');
-        alert("Workng on it ");
+        // alert("Workng on it ");
     }
 
     return (
