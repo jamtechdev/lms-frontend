@@ -1,80 +1,122 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
-import { useSelector } from "react-redux";
-
+import parse from "html-react-parser";
 
 const FillInTheBlank = (props) => {
-    const { questions, type, page, setPage } = props;
-    const dispatch = useDispatch();
-    const answersStore = useSelector((state) => state.question.attempts);
-    console.log(answersStore, '>>>>>>>', questions)
-    const [inputs, setInputs] = useState({});
-    const [inputErrors, setInputErrors] = useState({});
-    const [userAnswerJSON, setUserAnswerJSON] = useState([]);
-    useEffect(() => { setInputs({}) }, [page]);
-    const handlePaperSubmit = () => {
-        let payload = answersStore;
-        console.log(payload, 'Final Submit')
+  const { questions, type, page, setPage } = props;
+  const dispatch = useDispatch();
+  const answersStore = useSelector((state) => state.question.attempts);
+  const [inputs, setInputs] = useState({});
+
+  useEffect(() => {
+    const currentQuestionId = questions?.questions_array?.[0]?.id;
+    const prev = answersStore.find((a) => a.question_id === currentQuestionId);
+    if (prev) {
+      setInputs(JSON.parse(prev.user_answer));
+    } else {
+      setInputs({});
     }
-    function removeHtmlTags(inputString) {
-        let tempDiv = document.createElement('div');
-        tempDiv.innerHTML = inputString;
-        return tempDiv.textContent || tempDiv.innerText || '';
+  }, [page, questions, answersStore]);
+
+  const getCorrectAnswerMap = (blanks = []) =>
+    blanks.reduce((acc, b) => {
+      acc[b.blank_number] = b.correct_answer;
+      return acc;
+    }, {});
+
+  const handleStoreData = (question, currentInputs = inputs) => {
+    const payload = {
+      question_id: question?.id,
+      type: type,
+      user_answer: JSON.stringify(currentInputs),
+      answer: JSON.stringify(getCorrectAnswerMap(question?.question?.blanks)),
+    };
+    dispatch(setAttemptQuestions(payload));
+    if (questions?.pagination?.total === page) {
+      const updatedAnswers = [
+        ...answersStore.filter((a) => a.question_id !== question?.id),
+        payload,
+      ];
+      console.log(updatedAnswers, "Final Payload");
+      alert("Working on it (API)");
     }
+  };
 
+  const handleChange = (index, value) => {
+    setInputs((prev) => ({ ...prev, [index]: value }));
+  };
 
-    return (
-        <>
-            {questions?.questions_array?.map((qObj, index) => {
-                function createDynamicInputFields(questionText) {
-                    const regex = /\(\d+\)_____/g;
-                    let updatedText = questionText.replace(regex, (match) => {
-                        const number = match.match(/\d+/)[0];
-                        return `<input type="text" id="input${number}" placeholder="Enter answer for (${number})">`;
-                    });
-                    return updatedText;
-                }
+  const renderParsedQuestion = (questionText) => {
+    const htmlWithInputs = questionText.replace(/\(\d+\)_____/g, (match) => {
+      const number = match.match(/\d+/)[0];
+      return `<input data-index="${number}" />`;
+    });
 
-                return (
-                    <div key={index} style={{ marginBottom: "30px" }}>
-                        <div
-                            style={{
-                                marginTop: "15px",
-                                padding: "10px",
-                                border: "1px solid #ccc",
-                                background: "#f9f9f9",
-                            }}
-                        >
-                            {/* <strong>Options:</strong> {options.join(", ")} */}
-                        </div>
+    return parse(htmlWithInputs, {
+      replace: (domNode) => {
+        if (domNode.name === "input" && domNode.attribs?.["data-index"]) {
+          const index = domNode.attribs["data-index"];
+          return (
+            <input
+              key={index}
+              type="text"
+              placeholder={`(${index})`}
+              value={inputs[index] || ""}
+              onChange={(e) => handleChange(index, e.target.value)}
+              style={{
+                margin: "0 4px",
+                padding: "4px",
+                width: "100px",
+              }}
+            />
+          );
+        }
+      },
+    });
+  };
 
-                        <div>
-                            {removeHtmlTags(qObj?.question?.question_text)}
-                        </div>
-                        <div className="flex justify-between">
-                            <button
-                                className="btn btn-primary mt-3 mr-2"
-                                onClick={() => setPage((prev) => prev - 1)}
-                                disabled={questions?.pagination?.current_page === 1}
-                            >
-                                Previous
-                            </button>
-                            {questions?.pagination?.total === page ? (
-                                <button onClick={() => handlePaperSubmit()} className="btn btn-primary mt-3 ml-2">Submit</button>
-                            ) : (
-                                <button
-                                    onClick={() => setPage((prev) => prev + 1)}
-                                    className="btn btn-primary mt-3"
-                                >
-                                    Next
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                );
-            })}
-        </>
-    )
-}
+  return (
+    <>
+      {questions?.questions_array?.map((qObj, index) => (
+        <div key={index}>
+          <div className="question-text">
+            {page}. {parse(qObj?.question?.instruction)}
+          </div>
+          <div>{renderParsedQuestion(qObj?.question?.question_text ?? "")}</div>
+
+          <div className="flex justify-between">
+            <button
+              className="btn btn-primary mt-3 mr-2"
+              onClick={() => setPage((prev) => prev - 1)}
+              disabled={questions?.pagination?.current_page === 1}
+            >
+              Previous
+            </button>
+
+            {questions?.pagination?.total === page ? (
+              <button
+                onClick={() => handleStoreData(qObj)}
+                className="btn btn-primary mt-3 ml-2"
+              >
+                Submit
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  handleStoreData(qObj);
+                  setPage((prev) => prev + 1);
+                }}
+                className="btn btn-primary mt-3"
+              >
+                Next
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
+    </>
+  );
+};
+
 export default FillInTheBlank;
