@@ -16,6 +16,8 @@ import OpenClozeWithOptions from "../../../components/students/open-close-with-o
 import LinkingQuestions from "../../../components/students/linking-questions";
 import OpenClozeWithDropdown from "../../../components/students/open-close-with-dropdown";
 import EditingQuesions from "../../../components/students/editing-questions";
+import FillInTheBlank from "../../../components/students/fill-in-the-blank";
+import Comprehension from "../../../components/students/comprehension";
 const ItemTypes = {
   LEFT_ITEM: "LEFT_ITEM",
 };
@@ -206,6 +208,7 @@ const AllQuestions = () => {
             </ul>
           </div>
         </div>
+        {(questions && questions?.questions_array?.length == 0) && (<p>No Questions found</p>)}
         {(questions && type == "mcq") && (
           <McqQuestions questions={questions} page={page} setPage={setPage} type={type} />
         )}
@@ -245,87 +248,18 @@ const AllQuestions = () => {
         {(questions && type == "open_cloze_with_dropdown_options") && (
           <OpenClozeWithDropdown questions={questions} page={page} setPage={setPage} type={type} />
         )}
+        {(questions && type == "comprehension") && (
+          <Comprehension questions={questions} page={page} setPage={setPage} type={type}/>
+        )}
 
-        {(questions && type === "comprehension") &&
-          questions.questions_array.map((qObj, index) => {
-            const questionData = qObj.question;
-            const passage = questionData.passage;
-            const subquestions = questionData.subquestions;
-
-            return (
-              <div key={index} className="question-card">
-                <div
-                  style={{
-                    padding: "15px",
-                    marginBottom: "20px",
-                    background: "#f1f5f9",
-                    borderLeft: "5px solid #2563eb",
-                  }}
-                >
-                  <h3>Passage:</h3>
-                  <div>{parse(passage)}</div>
-                </div>
-
-                {subquestions.map((subq, subIndex) => {
-                  const questionId = `${qObj.id}-${subIndex}`;
-                  const selectedAnswer = answersStore?.find(
-                    (ans) => ans.question_id === questionId
-                  );
-
-                  return (
-                    <div key={subIndex} className="comprehension-subq">
-                      <div style={{ marginBottom: "10px" }}>
-                        <strong>Q{subIndex + 1}.</strong> {subq.question}
-                      </div>
-                      <textarea
-                        rows={3}
-                        style={{
-                          width: "100%",
-                          borderColor: "#ccc",
-                          padding: "8px",
-                          borderRadius: "4px",
-                        }}
-                        value={selectedAnswer?.user_answer || ""}
-                        onChange={(e) =>
-                          dispatch(
-                            setAttemptQuestions({
-                              question_id: questionId,
-                              user_answer: e.target.value,
-                              type: "comprehension",
-                            })
-                          )
-                        }
-                        placeholder="Type your answer here..."
-                      />
-                    </div>
-                  );
-                })}
-                <div className="flex justify-between">
-                  <button
-                    className="btn btn-primary mt-3 mr-2"
-                    onClick={() => setPage((prev) => prev - 1)}
-                    disabled={questions?.pagination?.current_page === 1}
-                  >
-                    Previous
-                  </button>
-                  {questions?.pagination?.total === page ? (
-                    <button className="btn btn-primary mt-3 ml-2">Submit</button>
-                  ) : (
-                    <button
-                      onClick={() => setPage((prev) => prev + 1)}
-                      className="btn btn-primary mt-3"
-                    >
-                      Next
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        {(questions && type == "editing") && (
-          <EditingQuesions questions={questions} page={page} setPage={setPage} type={type}/>
-        )}  
         
+        {(questions && type == "editing") && (
+          <EditingQuesions questions={questions} page={page} setPage={setPage} type={type} />
+        )}
+        {(questions && type == "fill_in_the_blank") && (
+          <FillInTheBlank questions={questions} page={page} setPage={setPage} type={type} />
+        )}
+
       </div>
       {result && <div>
         <button onClick={() => setResult(false)} className="btn ml-2">

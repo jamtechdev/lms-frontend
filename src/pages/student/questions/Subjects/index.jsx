@@ -33,6 +33,7 @@ const Subject = () => {
         },
         { key: "comprehension", label: "Comprehension" },
         { key: "editing", label: "Editing" },
+        { key: "fill_in_the_blank", label: "Fill in the blank" },
     ];
 
 
