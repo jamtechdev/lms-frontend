@@ -73,7 +73,7 @@ const EditingQuesions = (props) => {
                             const boxNumber = parseInt(match[1]);
                             const inputVal = inputs[boxNumber] || "";
 
-                            return (
+                            return <>
                                 <input
                                     key={i}
                                     type="text"
@@ -93,12 +93,14 @@ const EditingQuesions = (props) => {
                                         outlineColor: "#2563eb",
                                     }}
                                 />
-                            );
+                                <br></br>
+                            </>;
                         } else {
                             return (
                                 <span
                                     key={i}
                                     style={{ // critical to prevent wrapping
+                                        display: "inline-flex",
                                         whiteSpace: "pre-wrap",
                                     }}
                                 >
