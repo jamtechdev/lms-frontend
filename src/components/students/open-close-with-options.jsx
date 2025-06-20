@@ -2,20 +2,34 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
 import { useSelector } from "react-redux";
+import userService from "../../_services/user.service";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 
 const OpenClozeWithOptions = (props) => {
     const { questions, type, page, setPage } = props;
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const answersStore = useSelector((state) => state.question.attempts);
-    console.log(answersStore, '>>>>>>>')
     const [inputs, setInputs] = useState({});
     const [inputErrors, setInputErrors] = useState({});
     const [userAnswerJSON, setUserAnswerJSON] = useState([]);
     useEffect(() => { setInputs({}) }, [page]);
-    const handlePaperSubmit = () => {
-        let payload = answersStore;
-        console.log(payload, 'Final Submit')
+    const handlePaperSubmit = async() => {
+        let payload = {
+            answers: answersStore?.map(item => ({
+                question_id: item.question_id,
+                answer: item.user_answer,
+                type: item?.type,
+            }))
+        };
+        await userService.answer(payload).then((data) => {
+            toast.success("Answer submitted successfully.");
+            navigate("/student/question-type");
+        }).catch((error) => {
+            console.error("Error", error);
+        });
     }
 
     return (

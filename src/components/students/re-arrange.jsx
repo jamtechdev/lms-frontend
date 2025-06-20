@@ -1,10 +1,15 @@
 import React, { useRef, useLayoutEffect } from "react";
 import parse from "html-react-parser";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
+import userService from "../../_services/user.service";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ReArrangeList = ({ question, words, onReorder, setPage, isFirst, isLast, setResult }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const answersStore = useSelector((state) => state.question.attempts);
     const containerRefs = useRef({});
     const positionsRef = useRef({});
 
@@ -54,7 +59,7 @@ const ReArrangeList = ({ question, words, onReorder, setPage, isFirst, isLast, s
         newItems.splice(dropIndex, 0, dragged);
         onReorder(newItems);
     };
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         let payload = {
             question_id: question?.id,
             answer: question?.question?.answer?.answer?.join(' '),
@@ -62,6 +67,23 @@ const ReArrangeList = ({ question, words, onReorder, setPage, isFirst, isLast, s
             type: question?.question?.type,
         }
         dispatch(setAttemptQuestions(payload));
+        if (isLast) {
+            const updatedAnswers = [...answersStore, payload];
+            let finalPayload = {
+                answers: updatedAnswers?.map(item => ({
+                    question_id: item.question_id,
+                    answer: item.user_answer,
+                    type: item?.type,
+                }))
+            };
+            await userService.answer(finalPayload).then((data) => {
+                console.log(data);
+                toast.success("Answer submitted successfully.");
+                navigate("/student/question-type");
+            }).catch((error) => {
+                console.error("Error", error);
+            });
+        }
     }
 
     return (
@@ -109,7 +131,6 @@ const ReArrangeList = ({ question, words, onReorder, setPage, isFirst, isLast, s
                     handleSubmit()
                 }} className="btn btn-primary">Next</button>
                 : <button onClick={() => {
-                    setResult(true);
                     handleSubmit()
                 }} className="btn btn-primary">Submit</button>
             }
