@@ -2,9 +2,12 @@ import parse from "html-react-parser";
 import { useEffect, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Xarrow from "react-xarrows";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
+import { userService } from "../../_services";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ItemTypes = {
   LEFT_ITEM: "LEFT_ITEM",
@@ -57,15 +60,22 @@ const DroppableRight = ({ item, index, onDrop }) => {
 };
 
 const LinkingQuestions = (props) => {
-  const { questions, type, page, setPage, shuffledRight, userMatches, setUserMatches } = props;
+  const {
+    questions,
+    type,
+    page,
+    setPage,
+    shuffledRight,
+    userMatches,
+    setUserMatches,
+  } = props;
   const [matchMap, setMatchMap] = useState({});
   const dispatch = useDispatch();
-
-  const currentQuestion = questions?.questions_array?.[0]; // Single paginated question
+  const navigate = useNavigate();
+  const answersStore = useSelector((state) => state.question.attempts);
+  const currentQuestion = questions?.questions_array?.[0];
 
   const handleDrop = (leftIndex, rightIndex, q) => {
-    console.log(q, '<<< question received in drop');
-
     const leftItem = q?.question?.answer[leftIndex]?.left?.word;
     const rightItem = shuffledRight[rightIndex]?.word;
 
@@ -82,20 +92,41 @@ const LinkingQuestions = (props) => {
     }
   };
 
-  const handleStoreQuestion = (question) => {
+  const handleStoreQuestion = async () => {
+    if (!currentQuestion) return;
+
     const payload = {
-      question_id: question?.id,
+      question_id: currentQuestion.id,
       type,
       user_answer: JSON.stringify(matchMap),
     };
 
+    const updatedAnswers = [...answersStore, payload];
     dispatch(setAttemptQuestions(payload));
-    setUserMatches({});
+
+    if (questions?.pagination?.total === page) {
+      const finalPayload = {
+        answers: updatedAnswers.map((a) => ({
+          question_id: a.question_id,
+          answer: a.user_answer,
+          type: a.type,
+        })),
+      };
+
+      try {
+        await userService.answer(finalPayload);
+        toast.success("Answer submitted successfully.");
+        navigate("/student/question-type");
+      } catch (err) {
+        console.error(err);
+        toast.error("Something went wrong while submitting.");
+      }
+    }
     setMatchMap({});
+    setUserMatches({});
   };
 
   if (!currentQuestion) return null;
-
 
   return (
     <>
