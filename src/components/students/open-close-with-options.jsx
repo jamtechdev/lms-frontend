@@ -80,7 +80,8 @@ const OpenClozeWithOptions = (props) => {
                         }
                         return (
                             <>
-                                <span style={{ fontSize: 'larger', color: 'black', margin: '1px' }}>({question?.blank_number})</span>
+
+                                <span style={{ fontSize: 'larger', color: 'black', margin: '1px', marginLeft: '7px'}}>({question?.blank_number})</span>
                                 <input
                                     key={i}
                                     type="text"
@@ -90,12 +91,15 @@ const OpenClozeWithOptions = (props) => {
                                     style={{
                                         width: "60px",
                                         margin: "0 5px",
-                                        border: inputErrors[question.id]
+                                        border: "none",
+                                        background: "transparent",
+                                        borderBottom: inputErrors[question.id]
                                             ? "2px solid red"
-                                            : "1px solid #999",
+                                            : "none",
                                         textAlign: "center",
                                     }}
                                 />
+                             
                             </>
                         );
                     } else {
@@ -115,7 +119,7 @@ const OpenClozeWithOptions = (props) => {
                             <strong>Options:</strong> {options.join(", ")}
                         </div>
 
-                        <div>
+                        <div className="px-0 py-3 options">
                             <strong>{page}.</strong> {renderedParagraph}
                         </div>
                         <div className="flex justify-between">

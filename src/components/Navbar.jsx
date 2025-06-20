@@ -25,7 +25,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="top-navbar flex-between gap-16 pt-0">
+    <div className="top-navbar flex-between gap-16 p-2">
       <div className="flex-align gap-16">
         <button
           type="button"

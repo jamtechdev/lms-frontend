@@ -9255,6 +9255,7 @@ button:focus {
     padding-block-start: 24px;
     padding-block-end: 24px;
     background: rgb(89 119 244 / 6%);
+    height: calc(100vh - 151px);
 }
 
 .top-navbar,

@@ -81,8 +81,7 @@ const EditingQuesions = (props) => {
                             return (
                                 <span
                                     key={i}
-                                    style={{
-                                        display: "inline", // critical to prevent wrapping
+                                    style={{ // critical to prevent wrapping
                                         whiteSpace: "pre-wrap",
                                     }}
                                 >
@@ -103,9 +102,9 @@ const EditingQuesions = (props) => {
                                 marginBottom: "25px",
                             }}
                         >
-                            <h3 style={{ marginBottom: "12px", fontWeight: "600" }}>
+                            <h5 style={{ marginBottom: "12px", fontWeight: "600" }}>
                                 {page}. {questionData.instruction}
-                            </h3>
+                            </h5>
 
                             <div
                                 style={{

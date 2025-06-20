@@ -44,14 +44,28 @@
     box-shadow: 1px 4px 10px rgb(89 119 244 / 41%);
 }
 
+.max50{
+    max-width: 50%;
+}
+
+.max75{
+    max-height: 75%;
+    overflow: auto;
+}
+
 .question-text {
-    font-size: 1.35rem;
-    font-weight: 600;
+    font-size: 1.3rem;
+    font-weight: 600!important;
     color: #343a40;
     margin-bottom: 0px;
     line-height: 1.5;
     display: flex;
     column-gap: 10px;
+    margin-bottom: 15px;
+}
+
+.question-text p {
+    font-weight: 600;
 }
 
 .blank-item {
@@ -421,6 +435,10 @@
 
 .Questions .questionList:nth-child(8) {
     background: rgb(0 150 136 / 32%);
+}
+
+.Questions .questionList:nth-child(9) {
+    background: rgb(233 30 99 / 32%);
 }
 
 .top-navbar {
@@ -877,7 +895,7 @@ table#assignmentTable td {
     display: flex;
     justify-content: space-between;
     gap: 3rem;
-    padding: 2rem;
+    padding: 0rem;
     position: relative;
 }
 
@@ -896,9 +914,9 @@ table#assignmentTable td {
     align-items: center;
     padding: 8px 12px;
     background-color: #f9fafb;
-    border: 1px solid #ddd;
+    border: 1px solid rgb(75 87 230 / 65%);
     border-radius: 8px;
-    min-height: 48px;
+    /* min-height: 48px; */
     font-size: 16px;
     gap: 0.5rem;
 }
@@ -960,4 +978,54 @@ ul.pagination li.disabled span {
     margin: 0px 2px;
     border: 1px solid gray;
     padding: 5px;
+}
+
+.linking-container .link-item div{
+    border: none !important;
+}
+
+.rearrangeBox div {
+    width: 49%;
+    background: rgb(90 126 239 / 84%) !important;
+    color: #fff !important;
+}
+
+.rearrangeBox {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 20px;
+}
+
+.options{
+    line-height: 28px;
+}
+
+.options input:focus{
+    outline: none;
+}
+
+.ques p{
+    font-weight: 500 !important;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    font-family: "Jost", sans-serif;
+    line-height: 1.2;
+    color: #120F2D;
+}
+
+label.kbc-option-label input[type="radio"] {
+    width: 17px;
+    height: 17px;
+    margin-right: 10px;
+    position: relative;
+    top: 3px;
+}
+
+@media screen and (max-width: 767px){
+    .Questions {
+        display: grid;
+        grid-template-columns: auto;
+        column-gap: 15px;
+    }
 }

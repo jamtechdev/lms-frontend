@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 
 export default function StudentLayout() {
   return (
-    <div className="p-4">
+    <div className="p-0">
       <div className="preloader">
         <div className="loader"></div>
       </div>

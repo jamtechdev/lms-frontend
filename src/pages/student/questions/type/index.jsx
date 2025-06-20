@@ -106,8 +106,8 @@ const QuestionType = () => {
 
         {subject && !selectedQuestionType && (
           <div className="row gy-4 questionTypes">
-            <div className="col-sm-12">
-              <div className="card mt-24">
+            <div className="col-sm-12 mt-0">
+              <div className="card mt-0">
                 <div className="card-body">
                   <div className="mb-20 flex-between flex-wrap gap-8">
                     <h4 className="mb-0">Questions</h4>

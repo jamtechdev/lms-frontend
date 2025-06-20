@@ -2,9 +2,9 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="dashboard-footer">
+    <div className="dashboard-footer py-2 mt-4">
       <div className="flex-between flex-wrap gap-16">
-        <p className="text-gray-300 text-13 fw-normal">
+        <p className="text-gray-300 text-13 fw-normal mb-0">
           {" "}
           &copy; Copyright LMS 2025, All Right Reserverd
         </p>

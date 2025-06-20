@@ -66,8 +66,8 @@ const ReArrangeList = ({ question, words, onReorder, setPage, isFirst, isLast, s
 
     return (
         <div className="mt-4">
-            <div>{parse(question?.question?.content)}</div>
-            <div >
+            <div className="ques">{parse(question?.question?.content)}</div>
+            <div className="rearrangeBox">
                 {words?.map((word, index) => {
                     const key = `${word}-${index}`;
                     return (
@@ -94,10 +94,11 @@ const ReArrangeList = ({ question, words, onReorder, setPage, isFirst, isLast, s
                     );
                 })}
             </div>
-            <p className="mt-2">Your Answer: {words?.join(" ")}</p>
+            <p className="mt-2">Your Answer: <strong>{words?.join(" ")}</strong></p>
+            <div className="flex justify-between mt-3">
             <button
                 onClick={() => setPage((prev) => prev - 1)}
-                className="btn btn-primary"
+                className="btn btn-primary mr-2"
                 disabled={isFirst}
             >
                 Prev
@@ -113,6 +114,7 @@ const ReArrangeList = ({ question, words, onReorder, setPage, isFirst, isLast, s
                     handleSubmit()
                 }} className="btn btn-primary">Submit</button>
             }
+        </div>
         </div>
     );
 };

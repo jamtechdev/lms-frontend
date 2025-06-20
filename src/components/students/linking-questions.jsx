@@ -23,12 +23,12 @@ const DraggableLeft = ({ item, index }) => {
     <div
       ref={dragRef}
       id={`left-${index}`}
-      className="link-item"
+      className="link-item ps-0"
       style={{ opacity: isDragging ? 0.5 : 1 }}
     >
       <div className="selector-circle"></div>
       {item.match_type === "text" ? (
-        <div>{item.word}</div>
+        <strong>{item.word}</strong>
       ) : (
         <img src={item.image_uri} alt="left" style={{ width: "100px" }} />
       )}
@@ -101,7 +101,7 @@ const LinkingQuestions = (props) => {
     <>
       <div key={currentQuestion.id}>
         <DndProvider backend={HTML5Backend}>
-          <div className="question-card">
+          <div className="question-card mb-0">
             <h2 className="question-text">
               {page}. {parse(currentQuestion?.question?.content)}
             </h2>
@@ -146,7 +146,7 @@ const LinkingQuestions = (props) => {
           </div>
         </DndProvider>
 
-        <div className="flex justify-between">
+        <div className="flex justify-between mt-3">
           <button
             className="btn btn-primary mt-3 mr-2"
             onClick={() => setPage((prev) => prev - 1)}

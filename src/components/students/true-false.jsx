@@ -31,7 +31,7 @@ const TrueFalseQuestions = (props) => {
             {questions?.questions_array?.map((question, index) => (
                 <div key={index}>
                     <h2 className="mb-3">Questions</h2>
-                    <div className="question-card">
+                    <div className="question-card max50 mb-0">
                         <div className="question-text">{page}. {parse(question?.question?.content)}</div>
                         {question?.question.options?.map((opt, index) => {
                             const selectedAnswer = answersStore?.find(ans => ans.question_id === question.id);
@@ -53,7 +53,7 @@ const TrueFalseQuestions = (props) => {
                             )
                         })}
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between mt-3">
                         <button
                             className="btn btn-primary mt-3 mr-2"
                             onClick={(e) => setPage((prev) => prev - 1)}

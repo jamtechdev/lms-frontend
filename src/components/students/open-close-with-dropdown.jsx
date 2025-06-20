@@ -71,6 +71,7 @@ const OpenClozeWithDropdown = (props) => {
                                                 style={{
                                                     cursor: "pointer",
                                                     margin: "0 5px",
+                                                    fontWeight: "bold",
                                                     textDecoration: isSelected ? "underline" : "none",
                                                 }}
                                             >
@@ -99,10 +100,10 @@ const OpenClozeWithDropdown = (props) => {
                             <strong>Instruction:</strong> {questionData.instruction}
                         </div>
 
-                        <div style={{ marginTop: "10px", lineHeight: "1.8" }}>
+                        <div style={{ marginTop: "20px",marginBottom: "20px", lineHeight: "1.8" }}>
                             <strong>{index + 1}.</strong> {renderedParagraph}
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between mt-4">
                             <button
                                 className="btn btn-primary mt-3 mr-2"
                                 onClick={() => setPage((prev) => prev - 1)}

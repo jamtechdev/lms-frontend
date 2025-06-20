@@ -52,7 +52,7 @@ const Comprehension = (props) => {
                 }
 
                 return (
-                    <div key={index} className="question-card">
+                    <div key={index} className="question-card max75">
                         <div
                             style={{
                                 padding: "15px",
@@ -61,7 +61,7 @@ const Comprehension = (props) => {
                                 borderLeft: "5px solid #2563eb",
                             }}
                         >
-                            <h3>Passage:</h3>
+                            <h4>Passage:</h4>
                             <div>{parse(passage)}</div>
                         </div>
 
