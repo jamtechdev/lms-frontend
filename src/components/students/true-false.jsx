@@ -2,9 +2,13 @@ import parse from "html-react-parser";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
+import userService from "../../_services/user.service";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const TrueFalseQuestions = (props) => {
     const { questions, page, setPage, type } = props;
+    const navigate = useNavigate();
     const answersStore = useSelector((state) => state.question.attempts);
     const dispatch = useDispatch();
     const handleOptionChange = (e, question) => {
@@ -16,14 +20,20 @@ const TrueFalseQuestions = (props) => {
         }
         dispatch(setAttemptQuestions(payload));
     };
-    const handleSubmit = () => {
-        let payload = answersStore?.map(item => {
-            const newItem = { ...item };
-            delete newItem?.answer;
-            return newItem;
+    const handleSubmit = async() => {
+        let payload = {
+            answers: answersStore?.map(item => ({
+                question_id: item.question_id,
+                answer:  item.user_answer,
+                type: item?.type,
+            }))
+        };
+        await userService.answer(payload).then((data) => {
+            toast.success("Answer submitted successfully.");
+            navigate("/student/question-type");
+        }).catch((error) => {
+            console.error("Error", error);
         });
-        console.log(payload, 'Final Submit');
-        alert("Workng on it ");
     }
 
     return (

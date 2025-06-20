@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
 import parse from "html-react-parser";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { userService } from "../../_services";
 
 const FillInTheBlank = (props) => {
   const { questions, type, page, setPage } = props;
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const answersStore = useSelector((state) => state.question.attempts);
   const [inputs, setInputs] = useState({});
@@ -25,21 +29,41 @@ const FillInTheBlank = (props) => {
       return acc;
     }, {});
 
-  const handleStoreData = (question, currentInputs = inputs) => {
+  const handleStoreData = async (question, currentInputs = inputs) => {
     const payload = {
       question_id: question?.id,
       type: type,
       user_answer: JSON.stringify(currentInputs),
       answer: JSON.stringify(getCorrectAnswerMap(question?.question?.blanks)),
     };
+
     dispatch(setAttemptQuestions(payload));
+
+    const updatedAnswers = [
+      ...answersStore.filter((a) => a.question_id !== question?.id),
+      payload,
+    ];
+
     if (questions?.pagination?.total === page) {
-      const updatedAnswers = [
-        ...answersStore.filter((a) => a.question_id !== question?.id),
-        payload,
-      ];
-      console.log(updatedAnswers, "Final Payload");
-      alert("Working on it (API)");
+      const finalpayload = {
+        answers: updatedAnswers.map((item) => ({
+          question_id: item.question_id,
+          answer: item.user_answer,
+          type: item?.type,
+        })),
+      };
+
+      await userService
+        .answer(finalpayload)
+        .then((data) => {
+          console.log(data);
+          toast.success("Answer submitted successfully.");
+          navigate("/student/question-type");
+        })
+        .catch((error) => {
+          console.error("Error", error);
+          toast.error("Something went wrong while submitting.");
+        });
     }
   };
 

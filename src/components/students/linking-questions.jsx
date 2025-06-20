@@ -2,9 +2,12 @@ import parse from "html-react-parser";
 import { useEffect, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Xarrow from "react-xarrows";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
+import { userService } from "../../_services";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ItemTypes = {
   LEFT_ITEM: "LEFT_ITEM",
@@ -57,45 +60,76 @@ const DroppableRight = ({ item, index, onDrop }) => {
 };
 
 const LinkingQuestions = (props) => {
-  const { questions, type, page, setPage, shuffledRight, userMatches, setUserMatches } = props;
-  const [matchMap, setMatchMap] = useState({});
+  const { questions, type, page, setPage, shuffledRight } = props;
+
+  const [matchesByQuestion, setMatchesByQuestion] = useState({});
   const dispatch = useDispatch();
-
-  const currentQuestion = questions?.questions_array?.[0]; // Single paginated question
-
-  const handleDrop = (leftIndex, rightIndex, q) => {
-    console.log(q, '<<< question received in drop');
-
-    const leftItem = q?.question?.answer[leftIndex]?.left?.word;
-    const rightItem = shuffledRight[rightIndex]?.word;
-
-    setUserMatches((prev) => ({
-      ...prev,
-      [leftIndex]: rightIndex,
-    }));
-
-    if (leftItem && rightItem) {
-      setMatchMap((prev) => ({
-        ...prev,
-        [leftItem]: rightItem,
-      }));
-    }
-  };
-
-  const handleStoreQuestion = (question) => {
-    const payload = {
-      question_id: question?.id,
-      type,
-      user_answer: JSON.stringify(matchMap),
-    };
-
-    dispatch(setAttemptQuestions(payload));
-    setUserMatches({});
-    setMatchMap({});
-  };
+  const navigate = useNavigate();
+  const answersStore = useSelector((state) => state.question.attempts);
+  const currentQuestion = questions?.questions_array?.[0];
 
   if (!currentQuestion) return null;
 
+  const currentQuestionId = currentQuestion.id;
+  const currentMatches = matchesByQuestion[currentQuestionId] ?? {};
+
+  const handleDrop = (leftIndex, rightIndex) => {
+    setMatchesByQuestion((prev) => {
+      const prevForQ = prev[currentQuestionId] ?? {};
+      return {
+        ...prev,
+        [currentQuestionId]: {
+          ...prevForQ,
+          [leftIndex]: rightIndex,
+        },
+      };
+    });
+  };
+
+  const handleStoreQuestion = async () => {
+    if (!currentQuestion) return;
+
+    const currentMatchMap = matchesByQuestion[currentQuestionId] ?? {};
+    const leftItems = currentQuestion?.question?.answer ?? [];
+    const rightItems = shuffledRight;
+
+    const userAnswerTextMap = {};
+    for (const [leftIndex, rightIndex] of Object.entries(currentMatchMap)) {
+      const leftItem = leftItems[leftIndex]?.left?.word;
+      const rightItem = rightItems[rightIndex]?.word;
+      if (leftItem && rightItem) {
+        userAnswerTextMap[leftItem] = rightItem;
+      }
+    }
+
+    const payload = {
+      question_id: currentQuestion.id,
+      type,
+      user_answer: JSON.stringify(userAnswerTextMap),
+    };
+
+    const updatedAnswers = [...answersStore, payload];
+    dispatch(setAttemptQuestions(payload));
+
+    if (questions?.pagination?.total === page) {
+      const finalPayload = {
+        answers: updatedAnswers.map((a) => ({
+          question_id: a.question_id,
+          answer: a.user_answer,
+          type: a.type,
+        })),
+      };
+
+      try {
+        await userService.answer(finalPayload);
+        toast.success("Answer submitted successfully.");
+        navigate("/student/question-type");
+      } catch (err) {
+        console.error(err);
+        toast.error("Something went wrong while submitting.");
+      }
+    }
+  };
 
   return (
     <>
@@ -118,30 +152,26 @@ const LinkingQuestions = (props) => {
               <div className="right-side">
                 {shuffledRight.map((item, i) => (
                   <div className="link-item" key={i} id={`right-${i}`}>
-                    <DroppableRight
-                      item={item}
-                      index={i}
-                      onDrop={(leftIndex, rightIndex) =>
-                        handleDrop(leftIndex, rightIndex, currentQuestion)
-                      }
-                    />
+                    <DroppableRight item={item} index={i} onDrop={handleDrop} />
                   </div>
                 ))}
               </div>
 
-              {Object.entries(userMatches).map(([leftIndex, rightIndex], i) => (
-                <Xarrow
-                  key={i}
-                  start={`left-${leftIndex}`}
-                  end={`right-${rightIndex}`}
-                  startAnchor="right"
-                  endAnchor="left"
-                  strokeWidth={2}
-                  curveness={0.4 + i * 0.1}
-                  headSize={0}
-                  color="#2563eb"
-                />
-              ))}
+              {Object.entries(currentMatches).map(
+                ([leftIndex, rightIndex], i) => (
+                  <Xarrow
+                    key={i}
+                    start={`left-${leftIndex}`}
+                    end={`right-${rightIndex}`}
+                    startAnchor="right"
+                    endAnchor="left"
+                    strokeWidth={2}
+                    curveness={0.4 + i * 0.1}
+                    headSize={0}
+                    color="#2563eb"
+                  />
+                )
+              )}
             </div>
           </div>
         </DndProvider>
@@ -157,7 +187,7 @@ const LinkingQuestions = (props) => {
 
           {questions?.pagination?.total === page ? (
             <button
-              onClick={() => handleStoreQuestion(currentQuestion)}
+              onClick={() => handleStoreQuestion()}
               className="btn btn-primary mt-3 ml-2"
             >
               Submit
@@ -165,7 +195,7 @@ const LinkingQuestions = (props) => {
           ) : (
             <button
               onClick={() => {
-                handleStoreQuestion(currentQuestion);
+                handleStoreQuestion();
                 setPage((prev) => prev + 1);
               }}
               className="btn btn-primary mt-3"

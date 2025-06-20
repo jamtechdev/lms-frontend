@@ -2,18 +2,22 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
 import { useSelector } from "react-redux";
+import userService from "../../_services/user.service";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 
 const OpenClozeWithDropdown = (props) => {
     const { questions, type, page, setPage } = props;
     const dispatch = useDispatch();
     const answersStore = useSelector((state) => state.question.attempts);
-
+    const navigate = useNavigate();
     const [inputs, setInputs] = useState({});
     const [inputErrors, setInputErrors] = useState({});
     const [userAnswerJSON, setUserAnswerJSON] = useState([]);
     useEffect(() => { setInputs({}) }, [page]);
-    const handleStoreData = (question) => {
+
+    const handleStoreData = async (question) => {
         let payload = {
             question_id: question?.id,
             type: type,
@@ -22,8 +26,20 @@ const OpenClozeWithDropdown = (props) => {
         dispatch(setAttemptQuestions(payload));
         if (questions?.pagination?.total === page) {
             const updatedAnswers = [...answersStore, payload];
-            console.log(updatedAnswers, 'final Payload');
-            alert("Working on it (API)")
+            let finalPayload = {
+                answers: updatedAnswers?.map(item => ({
+                    question_id: item.question_id,
+                    answer: item.user_answer,
+                    type: item?.type,
+                }))
+            };
+            await userService.answer(finalPayload).then((data) => {
+                console.log(data);
+                toast.success("Answer submitted successfully.");
+                navigate("/student/question-type");
+            }).catch((error) => {
+                console.error("Error", error);
+            });
         }
     }
 
