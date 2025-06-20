@@ -60,45 +60,52 @@ const DroppableRight = ({ item, index, onDrop }) => {
 };
 
 const LinkingQuestions = (props) => {
-  const {
-    questions,
-    type,
-    page,
-    setPage,
-    shuffledRight,
-    userMatches,
-    setUserMatches,
-  } = props;
-  const [matchMap, setMatchMap] = useState({});
+  const { questions, type, page, setPage, shuffledRight } = props;
+
+  const [matchesByQuestion, setMatchesByQuestion] = useState({});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const answersStore = useSelector((state) => state.question.attempts);
   const currentQuestion = questions?.questions_array?.[0];
 
-  const handleDrop = (leftIndex, rightIndex, q) => {
-    const leftItem = q?.question?.answer[leftIndex]?.left?.word;
-    const rightItem = shuffledRight[rightIndex]?.word;
+  if (!currentQuestion) return null;
 
-    setUserMatches((prev) => ({
-      ...prev,
-      [leftIndex]: rightIndex,
-    }));
+  const currentQuestionId = currentQuestion.id;
+  const currentMatches = matchesByQuestion[currentQuestionId] ?? {};
 
-    if (leftItem && rightItem) {
-      setMatchMap((prev) => ({
+  const handleDrop = (leftIndex, rightIndex) => {
+    setMatchesByQuestion((prev) => {
+      const prevForQ = prev[currentQuestionId] ?? {};
+      return {
         ...prev,
-        [leftItem]: rightItem,
-      }));
-    }
+        [currentQuestionId]: {
+          ...prevForQ,
+          [leftIndex]: rightIndex,
+        },
+      };
+    });
   };
 
   const handleStoreQuestion = async () => {
     if (!currentQuestion) return;
 
+    const currentMatchMap = matchesByQuestion[currentQuestionId] ?? {};
+    const leftItems = currentQuestion?.question?.answer ?? [];
+    const rightItems = shuffledRight;
+
+    const userAnswerTextMap = {};
+    for (const [leftIndex, rightIndex] of Object.entries(currentMatchMap)) {
+      const leftItem = leftItems[leftIndex]?.left?.word;
+      const rightItem = rightItems[rightIndex]?.word;
+      if (leftItem && rightItem) {
+        userAnswerTextMap[leftItem] = rightItem;
+      }
+    }
+
     const payload = {
       question_id: currentQuestion.id,
       type,
-      user_answer: JSON.stringify(matchMap),
+      user_answer: JSON.stringify(userAnswerTextMap),
     };
 
     const updatedAnswers = [...answersStore, payload];
@@ -122,11 +129,7 @@ const LinkingQuestions = (props) => {
         toast.error("Something went wrong while submitting.");
       }
     }
-    setMatchMap({});
-    setUserMatches({});
   };
-
-  if (!currentQuestion) return null;
 
   return (
     <>
@@ -149,30 +152,26 @@ const LinkingQuestions = (props) => {
               <div className="right-side">
                 {shuffledRight.map((item, i) => (
                   <div className="link-item" key={i} id={`right-${i}`}>
-                    <DroppableRight
-                      item={item}
-                      index={i}
-                      onDrop={(leftIndex, rightIndex) =>
-                        handleDrop(leftIndex, rightIndex, currentQuestion)
-                      }
-                    />
+                    <DroppableRight item={item} index={i} onDrop={handleDrop} />
                   </div>
                 ))}
               </div>
 
-              {Object.entries(userMatches).map(([leftIndex, rightIndex], i) => (
-                <Xarrow
-                  key={i}
-                  start={`left-${leftIndex}`}
-                  end={`right-${rightIndex}`}
-                  startAnchor="right"
-                  endAnchor="left"
-                  strokeWidth={2}
-                  curveness={0.4 + i * 0.1}
-                  headSize={0}
-                  color="#2563eb"
-                />
-              ))}
+              {Object.entries(currentMatches).map(
+                ([leftIndex, rightIndex], i) => (
+                  <Xarrow
+                    key={i}
+                    start={`left-${leftIndex}`}
+                    end={`right-${rightIndex}`}
+                    startAnchor="right"
+                    endAnchor="left"
+                    strokeWidth={2}
+                    curveness={0.4 + i * 0.1}
+                    headSize={0}
+                    color="#2563eb"
+                  />
+                )
+              )}
             </div>
           </div>
         </DndProvider>
@@ -188,7 +187,7 @@ const LinkingQuestions = (props) => {
 
           {questions?.pagination?.total === page ? (
             <button
-              onClick={() => handleStoreQuestion(currentQuestion)}
+              onClick={() => handleStoreQuestion()}
               className="btn btn-primary mt-3 ml-2"
             >
               Submit
@@ -196,7 +195,7 @@ const LinkingQuestions = (props) => {
           ) : (
             <button
               onClick={() => {
-                handleStoreQuestion(currentQuestion);
+                handleStoreQuestion();
                 setPage((prev) => prev + 1);
               }}
               className="btn btn-primary mt-3"
