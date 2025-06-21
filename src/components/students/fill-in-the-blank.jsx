@@ -92,6 +92,8 @@ const FillInTheBlank = (props) => {
                 margin: "0 4px",
                 padding: "4px",
                 width: "100px",
+                border: "none",
+                borderBottom: "1px solid #ccc",
               }}
             />
           );
