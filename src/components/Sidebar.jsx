@@ -11,6 +11,7 @@ const Sidebar = () => {
 
   const parentSidebar = [
     { route: "/parent", label: "Dashboard", iconClass: "ph ph-squares-four" },
+    { route: "/parent/new-parent-dashboard", label: "New Dashboard", iconClass: "ph ph-squares-four" },
     {
       route: "/parent/students",
       label: "Children",
@@ -30,6 +31,7 @@ const Sidebar = () => {
   ];
   const studentSidebar = [
     { route: "/student", label: "Dashboard", iconClass: "ph ph-squares-four" },
+    { route: "/student/new-student-dashboard", label: "New Dashboard", iconClass: "ph ph-squares-four" },
     // {
     //   route: "/student/questions",
     //   label: "Questions",
