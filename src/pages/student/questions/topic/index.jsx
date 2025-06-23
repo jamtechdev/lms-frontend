@@ -80,7 +80,7 @@ const Topics = () => {
                         </div>
                     ) : Array.isArray(topics) && topics.length > 0 ? (
                         topics.map((topic, index) => (
-                            <div className="col-sm-3" key={index}>
+                            <div className="col-sm-3 col-lg-3 col-md-6" key={index}> 
                                 <div
                                     className="card"
                                     onClick={() => {

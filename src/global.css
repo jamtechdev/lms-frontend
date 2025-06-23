@@ -756,10 +756,6 @@
 
 
 /* Student table CSS in parent dashboard */
-.table-container {
-    padding: 24px;
-    overflow-x: auto;
-}
 
 .student-table {
     width: 100%;
@@ -940,7 +936,7 @@ input {
 ul.pagination {
     align-items: center;
     margin-top: 18px;
-    justify-content: flex-end !important;
+    justify-content: center !important;
 }
 
 ul.pagination li.active a {
@@ -964,8 +960,10 @@ ul.pagination li a {
     border-radius: 0.5rem !important;
 }
 
-ul.pagination li.disabled span {
+ul.pagination li.disabled span{
     background: transparent !important;
+    color: #767676;
+    font-size: 22px;
 }
 
 .mcq-options label {
@@ -1022,10 +1020,84 @@ label.kbc-option-label input[type="radio"] {
     top: 3px;
 }
 
+/* Student list custom table css */
+
+.table-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    overflow-x: auto; /* Ensures responsiveness for wide tables */
+}
+.table {
+    border-radius: 10px; /* Apply rounded corners to the table itself */
+    overflow: hidden; /* Ensures the border-radius is visible */
+    width: 100%; /* Make table take full width of its container */
+    border-collapse: separate; /* Required for rounded corners on cells */
+    border-spacing: 0; /* Remove space between cells */
+}
+.table thead th {
+    background-color: #5977f4; /* A nice purple-blue */
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px;
+    border: none; /* Remove default borders */
+}
+.table tbody tr {
+    transition: background-color 0.3s ease;
+}
+.table tbody tr:nth-child(even) {
+    background-color: #f8f9fa; /* Light grey for even rows */
+}
+.table tbody tr:hover {
+    background-color: #e2e6ea; /* Lighter grey on hover */
+}
+.table tbody td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6; /* Light border between rows */
+    text-align: center;
+    border-left: none; /* Remove left border */
+    border-right: none; /* Remove right border */
+}
+
+/* Specific rounded corners for the table header */
+.table thead th:first-child {
+    border-top-left-radius: 10px;
+}
+.table thead th:last-child {
+    border-top-right-radius: 10px;
+}
+
+/* Specific rounded corners for the table body (bottom rows) */
+.table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+.table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+/* Ensure all table cells have rounded corners if the table itself has them */
+.table th, .table td {
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+li.page-item.active{
+    margin: 0px 7px;
+}
+/* End Css */
+
 @media screen and (max-width: 767px){
     .Questions {
         display: grid;
         grid-template-columns: auto;
         column-gap: 15px;
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1025px){
+    .shadowBox .col-sm-3 {
+        min-width: 50%;
     }
 }

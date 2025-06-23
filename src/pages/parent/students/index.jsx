@@ -143,19 +143,19 @@ const StudentList = () => {
             Create
           </Link>
         </div>
-
-        <table className="student-table">
+        <div class="table-container">
+          <table className="student-table table table-bordered table-hover">
           <thead>
             <tr>
-              <th className="text-gray-300">Avatar</th>
-              <th className="text-gray-300">Name</th>
-              <th className="text-gray-300">Email</th>
-              <th className="text-gray-300">Phone</th>
-              <th className="text-gray-300">Student Type</th>
-              <th className="text-gray-300">Student Level</th>
-              <th className="text-gray-300">Address</th>
-              <th className="text-gray-300">Lock Code</th>
-              <th className="text-gray-300">Action</th>
+              <th className="text-white-300">Avatar</th>
+              <th className="text-white-300">Name</th>
+              <th className="text-white-300">Email</th>
+              <th className="text-white-300">Phone</th>
+              <th className="text-white-300">Student Type</th>
+              <th className="text-white-300">Student Level</th>
+              <th className="text-white-300">Address</th>
+              <th className="text-white-300">Lock Code</th>
+              <th className="text-white-300">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -206,14 +206,18 @@ const StudentList = () => {
                 </tr>
               ))}
           </tbody>
-        </table>
+          </table>
+        </div>
         {/* Pagination Controls */}
         <ResponsivePagination
           current={students?.pagination?.current_page}
           total={students?.pagination?.total_pages}
           onPageChange={handlePage}
         />
+
       </div>
+
+      
       
     </>
   );

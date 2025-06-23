@@ -1,6 +1,6 @@
 import React from "react";
-import about from "../../assets/images/about.jpg";
-import feature from "../../assets/images/feature.jpg";
+import kids from "../../assets/images/kids.png";
+import study from "../../assets/images/study.png";
 import animated2 from "../../assets/images/animated2.gif";
 import { Link } from "react-router-dom";
 
@@ -87,7 +87,7 @@ function Landing() {
 
       <div
         className="jumbotron jumbotron-fluid position-relative overlay-bottom"
-        style={{ minHeight: "649px" }}
+        style={{ minHeight: "820px" }}
       >
         <div className="container text-center my-5 py-5">
           <h1 className="text-white display-1 mb-5">Learn from Home</h1>
@@ -103,7 +103,7 @@ function Landing() {
           <div className="row">
             <div className="col-lg-5 mb-5 mb-lg-0" style={{ height: "500px" }}>
               <div className="position-relative h-100">
-                <img className="position-absolute w-100 h-100" src={about} />
+                <img className="position-absolute w-100 h-100 object-fit-contain" src={kids} />
               </div>
             </div>
             <div className="col-lg-7">
@@ -253,8 +253,8 @@ function Landing() {
             <div className="col-lg-5" style={{ height: "500px" }}>
               <div className="position-relative h-100">
                 <img
-                  className="position-absolute w-100 h-100 coverImage"
-                  src={feature}
+                  className="position-absolute w-100 h-100 object-fit-contain"
+                  src={study}
                 />
               </div>
             </div>

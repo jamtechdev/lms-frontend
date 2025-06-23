@@ -42,7 +42,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className="top-navbar flex-between gap-16 p-2">
+    <div className="top-navbar flex-between gap-16 p-2 px-5">
+
       <div className="flex-align gap-16">
         <button
           type="button"
@@ -51,6 +52,7 @@ const Navbar = () => {
           <i className="ph ph-list"></i>
         </button>
       </div>
+
       <div className="flex-align gap-16" ref={dropdownRef}>
         <div className={`dropdown ${isDropdownOpen ? "show" : ""}`}>
           <div className="dropdown">
@@ -79,7 +81,7 @@ const Navbar = () => {
             >
               <div className="card border border-gray-100 rounded-12 box-shadow-custom">
                 <div className="card-body py-1 px-3">
-                  <ul className="max-h-270 overflow-y-auto scroll-sm pe-4">
+                  <ul className="max-h-270 overflow-y-auto scroll-sm pe-4 mb-2">
                     <li className="pt-8">
                       <button
                         onClick={handleLogout}
