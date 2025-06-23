@@ -44,18 +44,18 @@
     box-shadow: 1px 4px 10px rgb(89 119 244 / 41%);
 }
 
-.max50{
+.max50 {
     max-width: 50%;
 }
 
-.max75{
+.max75 {
     max-height: 75%;
     overflow: auto;
 }
 
 .question-text {
     font-size: 1.3rem;
-    font-weight: 600!important;
+    font-weight: 600 !important;
     color: #343a40;
     margin-bottom: 0px;
     line-height: 1.5;
@@ -980,7 +980,7 @@ ul.pagination li.disabled span {
     padding: 5px;
 }
 
-.linking-container .link-item div{
+.linking-container .link-item div {
     border: none !important;
 }
 
@@ -997,15 +997,15 @@ ul.pagination li.disabled span {
     column-gap: 20px;
 }
 
-.options{
+.options {
     line-height: 28px;
 }
 
-.options input:focus{
+.options input:focus {
     outline: none;
 }
 
-.ques p{
+.ques p {
     font-weight: 500 !important;
     font-size: 1rem;
     margin-bottom: 0.5rem;
@@ -1022,7 +1022,7 @@ label.kbc-option-label input[type="radio"] {
     top: 3px;
 }
 
-@media screen and (max-width: 767px){
+@media screen and (max-width: 767px) {
     .Questions {
         display: grid;
         grid-template-columns: auto;

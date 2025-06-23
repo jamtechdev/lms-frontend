@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Card, Button, ProgressBar, Table, Alert } from 'react-bootstrap';
+import { Container, ContainerFluid, Row, Col, Card, Button, ProgressBar, Table, Alert } from 'react-bootstrap';
 
 const NewStudentDashboard = () => {
   return (
