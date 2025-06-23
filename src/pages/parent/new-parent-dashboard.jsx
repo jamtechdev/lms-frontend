@@ -18,7 +18,7 @@ const NewParentDashboard = () => {
             <Col className="text-center fw-bold">📈 Weekly Marks Overview (Assignment)</Col>
             <Col xs="auto">Next Week <Button variant="light">→</Button></Col>
           </Row>
-          <img src="https://via.placeholder.com/800x300?text=Line+Chart+Placeholder" className="w-100 rounded" alt="Chart" />
+          {/* <img src="https://via.placeholder.com/800x300?text=Line+Chart+Placeholder" className="w-100 rounded" alt="Chart" /> */}
         </Card.Body>
       </Card>
 

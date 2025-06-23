@@ -134,7 +134,7 @@ const Subject = () => {
                             </div>
                         ) : Array.isArray(subjects) && subjects.length > 0 ? (
                             subjects.map((subject) => (
-                                <div className="col-sm-3" key={subject.id}>
+                                <div className="col-sm-3 col-lg-3 col-md-6" key={subject.id}>
                                     <div
                                         className="card"
                                         onClick={() => {

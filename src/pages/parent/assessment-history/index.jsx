@@ -69,12 +69,12 @@ const AssessmentHistory = () => {
             <table id="assignmentTable" className="table table-striped">
               <thead>
                 <tr>
-                  <th className="h6 text-gray-300">Students</th>
-                  <th className="h6 text-gray-300">Lesson</th>
-                  <th className="h6 text-gray-300">Deadline</th>
-                  <th className="h6 text-gray-300">Sent</th>
-                  <th className="h6 text-gray-300">Status</th>
-                  <th className="h6 text-gray-300">Actions</th>
+                  <th className="h6 text-white-300">Students</th>
+                  <th className="h6 text-white-300">Lesson</th>
+                  <th className="h6 text-white-300">Deadline</th>
+                  <th className="h6 text-white-300">Sent</th>
+                  <th className="h6 text-white-300">Status</th>
+                  <th className="h6 text-white-300">Actions</th>
                 </tr>
               </thead>
               <tbody>

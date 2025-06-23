@@ -3,7 +3,7 @@ import { Container, ContainerFluid, Row, Col, Card, Button, ProgressBar, Table, 
 
 const NewStudentDashboard = () => {
   return (
-    <Container className="my-4">
+    <Container className="my-4" fluid>
       <Row className="mb-4">
         <Col md={6}>
           <Card className="h-100 text-center">

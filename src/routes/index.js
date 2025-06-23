@@ -61,8 +61,8 @@ const AppRouter = () => {
           }
         >
           <Route path="*" element={<NotFound />} />
-          <Route index element={<StudentDashboard />} />
-          <Route path="new-student-dashboard" element={<NewStudentDashboard />} />
+          <Route index element={<NewStudentDashboard />} />
+          {/* <Route path="new-student-dashboard" element={<NewStudentDashboard />} /> */}
           <Route path="questions" element={<Questions />} />
           <Route path="subjects" element={<Subject />} />
           <Route path="topics" element={<Topics />} />
@@ -80,8 +80,8 @@ const AppRouter = () => {
           }
         >
           <Route path="*" element={<NotFound />} />
-          <Route index element={<ParentDashboard />} />
-          <Route path="new-parent-dashboard" element={<NewParentDashboard />} />
+          <Route index element={<NewParentDashboard />} />
+          {/* <Route path="new-parent-dashboard" element={<NewParentDashboard />} /> */}
           <Route path="students" element={<StudentList />} />
           <Route path="students/create" element={<CreateStudent />} />
           <Route path="students/:id" element={<EditStudent />} />

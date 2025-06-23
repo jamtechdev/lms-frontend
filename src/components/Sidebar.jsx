@@ -11,7 +11,6 @@ const Sidebar = () => {
 
   const parentSidebar = [
     { route: "/parent", label: "Dashboard", iconClass: "ph ph-squares-four" },
-    { route: "/parent/new-parent-dashboard", label: "New Dashboard", iconClass: "ph ph-squares-four" },
     {
       route: "/parent/students",
       label: "Children",
@@ -31,7 +30,6 @@ const Sidebar = () => {
   ];
   const studentSidebar = [
     { route: "/student", label: "Dashboard", iconClass: "ph ph-squares-four" },
-    { route: "/student/new-student-dashboard", label: "New Dashboard", iconClass: "ph ph-squares-four" },
     // {
     //   route: "/student/questions",
     //   label: "Questions",
@@ -45,18 +43,21 @@ const Sidebar = () => {
   ];
   return (
     <aside className="sidebar">
+
       <button
         type="button"
         className="sidebar-close-btn text-gray-500 hover-text-white hover-bg-main-600 text-md w-24 h-24 border border-gray-100 hover-border-main-600 d-xl-none d-flex flex-center rounded-circle position-absolute"
       >
         <i className="ph ph-x"></i>
       </button>
+
       <Link
         to="/"
         className="sidebar__logo text-center p-20 position-sticky inset-block-start-0 bg-white w-100 z-1 pb-10"
       >
         <img src={logo} alt="LMS" />
       </Link>
+      
       <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm pt-3">
         <div className="p-20 pt-10">
           {permission === "child" && (

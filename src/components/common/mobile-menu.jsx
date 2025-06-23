@@ -6,7 +6,6 @@ const MobileMenu = (props) => {
     const path = location.pathname;
     const studentSidebar = [
         { route: "/student", label: "Dashboard", iconClass: "ph ph-squares-four" },
-        { route: "/student/new-student-dashboard", label: "New Dashboard", iconClass: "ph ph-squares-four" },
         {
             route: "/student/subjects",
             label: "Practice",
