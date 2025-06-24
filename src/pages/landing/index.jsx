@@ -12,11 +12,11 @@ function Landing() {
           <div className="col-lg-6 text-center text-lg-left mb-2 mb-lg-0">
             <div className="d-inline-flex align-items-center text-white">
               <small>
-                <i className="fa fa-phone-alt mr-2"></i>+012 LMS 6789
+                <i className="fa fa-phone-alt mr-2"></i>+012 QTN 6789
               </small>
               <small className="px-3">|</small>
               <small>
-                <i className="fa fa-envelope mr-2"></i>LMS@gmail.com
+                <i className="fa fa-envelope mr-2"></i>QTN@gmail.com
               </small>
             </div>
           </div>
@@ -46,7 +46,7 @@ function Landing() {
         <nav className="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
           <Link to="/" className="navbar-brand ml-lg-3">
             <h1 className="m-0 text-uppercase text-primary">
-              <i className="fa fa-book-reader mr-3"></i>LMS
+              <i className="fa fa-book-reader mr-3"></i>QTN Vault
             </h1>
           </Link>
           <button
@@ -116,7 +116,7 @@ function Landing() {
                 </h1>
               </div>
               <p>
-                LMS is an engaging online learning platform thoughtfully
+                QTN Vault is an engaging online learning platform thoughtfully
                 designed for children. It features a kid-friendly interface with
                 large icons and playful visuals, making navigation easy and
                 enjoyable. Lessons come to life through interactive activities
@@ -321,7 +321,7 @@ function Landing() {
             <div className="col-md-5 mb-5">
               <Link to="#" className="navbar-brand">
                 <h1 className="mt-n2 text-uppercase text-white">
-                  <i className="fa fa-book-reader mr-3"></i>LMS
+                  <i className="fa fa-book-reader mr-3"></i>QTN Vault
                 </h1>
               </Link>
               <p className="m-0">
@@ -395,7 +395,7 @@ function Landing() {
               <p className="m-0">
                 Copyright &copy;{" "}
                 <Link to="#" className="text-white">
-                  LMS
+                  QTN Vault
                 </Link>
                 . All Rights Reserved.
               </p>
