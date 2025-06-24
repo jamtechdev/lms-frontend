@@ -21,7 +21,7 @@ const SignUp = () => {
         <div className="auth-right py-40 px-24 flex-center flex-column">
           <div className="auth-right__inner mx-auto w-100">
             <Link to="/" className="auth-right__logo">
-              <img src={logo} alt="LMS" />
+              <img src={logo} alt="QTN" />
             </Link>
             <h2 className="mb-8">Sign Up</h2>
             <p className="text-gray-600 text-15 mb-32">
@@ -101,7 +101,7 @@ const SignUp = () => {
               <p className="mt-32 text-gray-600 text-center">
                 Already have an account?
                 <Link
-                  to="/"
+                  to="/login"
                   className="text-main-600 hover-text-decoration-underline"
                 >
                   {" "}

@@ -15,7 +15,7 @@ const ForgotPassword = () => {
       <div className="auth-right py-40 px-24 flex-center flex-column">
         <div className="auth-right__inner mx-auto w-100">
           <Link to="/" className="auth-right__logo">
-            <img src={logo} alt="LMS" />
+            <img src={logo} alt="QTN" />
           </Link>
           <h2 className="mb-8">Forgot Password?</h2>
           <p className="text-gray-600 text-15 mb-32">
@@ -44,7 +44,7 @@ const ForgotPassword = () => {
               Send Reset Link
             </button>
             <Link
-              to="/"
+              to="/login"
               className="my-32 text-main-600 flex-align gap-8 justify-content-center"
             >
               <i className="ph ph-arrow-left d-flex"></i> Back To Login
