@@ -67,7 +67,7 @@ const Comprehension = (props) => {
                     dispatch(setAttemptQuestions(payload));
                 }
 
-                return (
+                return <>
                     <div key={index} className="question-card max75">
                         <div
                             style={{
@@ -203,30 +203,32 @@ const Comprehension = (props) => {
                             }
 
                         })}
-
+                    <div className="flex justify-between">
+                        <button
+                            className="btn btn-primary mt-3 mr-2"
+                            onClick={() => setPage((prev) => prev - 1)}
+                            disabled={questions?.pagination?.current_page === 1}
+                        >
+                            Previous
+                        </button>
+                        {questions?.pagination?.total === page ? (
+                            <button onClick={() => handlePaperSubmit()} className="btn btn-primary mt-3 ml-2">Submit</button>
+                        ) : (
+                            <button
+                                onClick={() => setPage((prev) => prev + 1)}
+                                className="btn btn-primary mt-3"
+                            >
+                                Next
+                            </button>
+                        )}
                     </div>
-                );
+                    </div>
+
+                    
+                </>;
             })
             }
-            <div className="flex justify-between">
-                <button
-                    className="btn btn-primary mt-3 mr-2"
-                    onClick={() => setPage((prev) => prev - 1)}
-                    disabled={questions?.pagination?.current_page === 1}
-                >
-                    Previous
-                </button>
-                {questions?.pagination?.total === page ? (
-                    <button onClick={() => handlePaperSubmit()} className="btn btn-primary mt-3 ml-2">Submit</button>
-                ) : (
-                    <button
-                        onClick={() => setPage((prev) => prev + 1)}
-                        className="btn btn-primary mt-3"
-                    >
-                        Next
-                    </button>
-                )}
-            </div>
+           
         </>
     )
 }
