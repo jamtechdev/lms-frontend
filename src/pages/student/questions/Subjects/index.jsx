@@ -11,7 +11,7 @@ import {
 } from "../../../../_store/_reducers/auth";
 import userService from "../../../../_services/user.service";
 import parse from "html-react-parser";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Subject = () => {
     const dispatch = useDispatch();
@@ -62,8 +62,8 @@ const Subject = () => {
                     <div className="breadcrumb mb-24">
                         <ul className="flex-align gap-4">
                             <li>
-                                <a
-                                    href="#"
+                                <Link
+                                    to="/student/subjects"
                                     onClick={() => {
                                         setSelectedSubject(null);
                                         setSelectedQuestionType(null);
@@ -71,7 +71,7 @@ const Subject = () => {
                                     className="text-gray-200 fw-normal text-15 hover-text-main-600"
                                 >
                                     Back to Subjects
-                                </a>
+                                </Link>
                             </li>
                             <li>
                                 <span className="text-gray-500 fw-normal d-flex">

@@ -95,7 +95,7 @@ const Navbar = () => {
                     <li className="pt-8">
                       <button
                         onClick={handleLogout}
-                        className="py-12 text-15 px-10 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15 w-full text-left"
+                        className="py-12 text-15 px-10 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15 w-100 text-left"
                       >
                         <span className="text-2xl text-danger-600 d-flex">
                           <i className="ph ph-sign-out"></i>

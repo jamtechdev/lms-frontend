@@ -28,7 +28,7 @@ const Signup = lazy(() => import("../pages/signup/index"));
 const ForgotPassword = lazy(() => import("../pages/forgotpassword/index"));
 const Dashboard = lazy(() => import("../pages/dashboard/index"));
 const Questions = lazy(() => import("../pages/student/questions/index"));
-const NotFound = () => (
+const NoPage = () => (
   <div>
     <h3>404 - Page Not Found</h3>
     <p>Sorry, the page you're looking for does not exist.</p>
@@ -60,9 +60,8 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         >
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<NoPage />} />
           <Route index element={<NewStudentDashboard />} />
-          {/* <Route path="new-student-dashboard" element={<NewStudentDashboard />} /> */}
           <Route path="questions" element={<Questions />} />
           <Route path="subjects" element={<Subject />} />
           <Route path="topics" element={<Topics />} />
@@ -79,9 +78,8 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         >
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<NoPage />} />
           <Route index element={<NewParentDashboard />} />
-          {/* <Route path="new-parent-dashboard" element={<NewParentDashboard />} /> */}
           <Route path="students" element={<StudentList />} />
           <Route path="students/create" element={<CreateStudent />} />
           <Route path="students/:id" element={<EditStudent />} />
@@ -89,7 +87,7 @@ const AppRouter = () => {
           <Route path="gems" element={<Gems />} />
           <Route path="subscription" element={<Subscription />} />
         </Route>
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<NoPage />} />
       </Routes>
     </BrowserRouter>
   );
