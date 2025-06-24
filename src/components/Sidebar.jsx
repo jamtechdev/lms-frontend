@@ -43,7 +43,6 @@ const Sidebar = () => {
   ];
   return (
     <aside className="sidebar">
-
       <button
         type="button"
         className="sidebar-close-btn text-gray-500 hover-text-white hover-bg-main-600 text-md w-24 h-24 border border-gray-100 hover-border-main-600 d-xl-none d-flex flex-center rounded-circle position-absolute"
@@ -57,7 +56,7 @@ const Sidebar = () => {
       >
         <img src={logo} alt="QTN" />
       </Link>
-      
+
       <div className="sidebar-menu-wrapper overflow-y-auto scroll-sm pt-3">
         <div className="p-20 pt-10">
           {permission === "child" && (
