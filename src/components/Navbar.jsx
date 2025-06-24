@@ -76,12 +76,12 @@ const Navbar = () => {
               data-bs-toggle="dropdown"
             >
               <span className="position-relative">
-                <img
+                {/* <img
                   src={logo}
                   alt="Image"
                   className="h-32 w-32 rounded-circle"
                 />
-                <span className="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0"></span>
+                <span className="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0"></span> */}
               </span>
             </button>
 
@@ -95,7 +95,7 @@ const Navbar = () => {
                     <li className="pt-8">
                       <button
                         onClick={handleLogout}
-                        className="py-12 text-15 px-10 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15 w-full text-left"
+                        className="py-2 text-15 px-10 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15 w-full text-left"
                       >
                         <span className="text-2xl text-danger-600 d-flex">
                           <i className="ph ph-sign-out"></i>

@@ -89,31 +89,26 @@ const ReArrangeList = ({ question, words, onReorder, setPage, isFirst, isLast, s
     return (
         <div className="mt-4">
             <div className="ques">{parse(question?.question?.content)}</div>
-            <div className="rearrangeBox">
+            <div className="rearrangeBox mt-4">
                 {words?.map((word, index) => {
                     const key = `${word}-${index}`;
-                    return (
-                        <div
-                            key={key}
+                    return <>
+
+
+                        <div id="drop-zone" class="drop-zone flex flex-col gap-4 p-6 rounded-lg bg-gray-50 mb-8" key={key}
                             ref={(node) => (containerRefs.current[key] = node)}
                             draggable
                             onDragStart={(e) => handleDragStart(e, index)}
                             onDragOver={handleDragOver}
-                            onDrop={(e) => handleDrop(e, index)}
-                            style={{
-                                padding: "10px 14px",
-                                background: 'rgb(199, 196, 189)',
-                                borderRadius: "6px",
-                                cursor: "move",
-                                position: "relative",
-                                fontWeight: "bold",
-                                textAlign: "center",
-                            }}
-                            className="mt-2"
-                        >
-                            {word}
+                            onDrop={(e) => handleDrop(e, index)}> 
+
+                            <div id="item-1" class="draggable-item bg-purple-100 text-purple-800 p-4 rounded-xl shadow-md font-medium text-xl border border-blue-200" draggable="true">
+                                {word}
+                            </div>
+
                         </div>
-                    );
+
+                    </>;
                 })}
             </div>
             <p className="mt-2">Your Answer: <strong>{words?.join(" ")}</strong></p>

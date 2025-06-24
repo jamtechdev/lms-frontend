@@ -114,11 +114,9 @@ const EditingQuesions = (props) => {
                     <div key={index} className="question-card">
                         <div
                             style={{
-                                padding: "15px 20px",
-                                border: "1px solid #e2e8f0",
                                 borderRadius: "8px",
                                 backgroundColor: "#f8fafc",
-                                marginBottom: "25px",
+                                marginBottom: "0px",
                             }}
                         >
                             <h5 style={{ marginBottom: "12px", fontWeight: "600" }}>

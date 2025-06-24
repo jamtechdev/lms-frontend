@@ -982,11 +982,11 @@ ul.pagination li.disabled span{
     border: none !important;
 }
 
-.rearrangeBox div {
+/* .rearrangeBox div {
     width: 49%;
     background: rgb(90 126 239 / 84%) !important;
     color: #fff !important;
-}
+} */
 
 .rearrangeBox {
     display: flex;
@@ -1100,4 +1100,117 @@ li.page-item.active{
         grid-template-columns: auto;
         column-gap: 15px;
     }
+}
+/* Custom styles for drag-and-drop feedback */
+.draggable-item {
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: grab;
+    user-select: none; /* Prevent text selection during drag */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.draggable-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.draggable-item.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transform: scale(1.02);
+    border: 2px dashed #60A5FA; /* Blue for dragging */
+}
+
+.drop-zone {
+    border: 2px dashed #D1D5DB; /* Light gray dashed border */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.drop-zone.drag-over {
+    background-color: #EBF8FF; /* Light blue background when item is dragged over */
+}
+
+.text-purple-800{
+    --tw-text-opacity: 1;
+}
+
+.font-medium {
+    font-weight: 500;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+}
+
+.p-4 {
+    padding: 1rem;
+}
+
+
+.rearrangeBox .drop-zone:first-child .draggable-item{
+    background-color: rgb(243 232 255 / var(--tw-bg-opacity, 1))!important;
+    color: rgb(107 33 168 / var(--tw-text-opacity, 1))!important;
+    border-color: rgb(233 213 255 / var(--tw-border-opacity, 1))!important;
+}
+
+.rearrangeBox .drop-zone:nth-child(2) .draggable-item{
+    background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1)) !important;
+    color: rgb(30 64 175 / var(--tw-text-opacity, 1)) !important;
+    border-color: rgb(191 219 254 / var(--tw-border-opacity, 1))!important;
+}
+
+.rearrangeBox .drop-zone:nth-child(3) .draggable-item{
+    background-color: rgb(220 252 231 / var(--tw-bg-opacity, 1)) !important;
+    color: rgb(22 101 52 / var(--tw-text-opacity, 1)) !important;
+    border-color: rgb(187 247 208 / var(--tw-border-opacity, 1)) !important;
+}
+
+.rearrangeBox .drop-zone:nth-child(4) .draggable-item{
+    background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1)) !important;
+    color: rgb(153 27 27 / var(--tw-text-opacity, 1)) !important;
+    border-color: rgb(254 202 202 / var(--tw-border-opacity, 1)) !important;
+} 
+
+.rearrangeBox .drop-zone:nth-child(4) .draggable-item{
+    background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1)) !important;
+    color: rgb(153 27 27 / var(--tw-text-opacity, 1)) !important;
+    border-color: rgb(254 202 202 / var(--tw-border-opacity, 1)) !important;
+} 
+
+.rearrangeBox .drop-zone:nth-child(5) .draggable-item{
+    background-color: rgb(255 193 7 / 28%) !important;
+    color: rgb(19 19 19) !important;
+    border-color: rgb(254 202 202 / var(--tw-border-opacity, 1)) !important;
+}
+
+.rearrangeBox .drop-zone:nth-child(6) .draggable-item{
+    background-color: rgb(0 150 136 / 28%) !important;
+    color: #009688 !important;
+    border-color: rgb(0 150 136 / 28%) !important;
+}
+
+.rearrangeBox .drop-zone:nth-child(7) .draggable-item {
+    background-color: rgb(96 125 139 / 28%) !important;
+    color: #607D8B !important;
+    border-color: rgb(96 125 139 / 28%) !important;
+}
+
+/* End */
+
+.dropdown-menu.show {
+    display: block;
+    position: absolute;
+    right: 0;
+    left: -209px;
+    min-width: 4rem;
+    width: 230px;
+}
+
+.dropdown .users {
+    background: transparent!important;
 }
