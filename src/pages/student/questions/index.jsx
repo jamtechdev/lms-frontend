@@ -94,14 +94,12 @@ const AllQuestions = () => {
   const education = useSelector(getStudentType);
   const level = useSelector(getLevel);
   const [page, setPage] = useState(1);
-  // For linking
   const [shuffledRight, setShuffledRight] = useState([]);
   const [userMatches, setUserMatches] = useState({});
   const question = useSelector(getQuestion);
   const shuffleArray = (array) => {
     return [...array].sort(() => Math.random() - 0.5);
   };
-  // for grammer cloze with options
   const [inputs, setInputs] = useState({});
   const [inputErrors, setInputErrors] = useState({});
   const fetchQuestion = async () => {
@@ -118,7 +116,6 @@ const AllQuestions = () => {
       setQuestions(response?.data);
       if (type == "rearranging") {
         const reordered = response?.data?.questions_array?.map((q) => {
-          // Initialize from Redux or API
           const existingAnswer = getExistingAnswerFromRedux(q?.id);
           return {
             id: q?.id,
@@ -142,7 +139,7 @@ const AllQuestions = () => {
   };
   useEffect(() => {
     fetchQuestion();
-  }, [page, type]);
+  }, [page, type, subject, topic]);
   useEffect(() => {
     return () => {
       dispatch(removeAttemptQuestions());
@@ -160,7 +157,7 @@ const AllQuestions = () => {
     );
     return savedAnswer ? savedAnswer.user_answer.split(" ") : null;
   };
-  // relaod
+
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       const confirmationMessage = "Are you sure you want to reload the page?";
