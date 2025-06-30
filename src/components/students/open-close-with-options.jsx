@@ -42,9 +42,10 @@ const OpenClozeWithOptions = (props) => {
         const questionData = qObj.question;
         const paragraph = questionData.paragraph;
         const blanks = questionData.questions;
-        const options = questionData.question_group.shared_options.map((opt) =>
-          opt.toLowerCase()
-        );
+        const options =
+          questionData?.question_group?.shared_options?.map((opt) =>
+            opt.toLowerCase()
+          ) || [];
         const handleChange = (e, id, blank_number) => {
           const value = e.target.value.trim();
 
@@ -154,7 +155,11 @@ const OpenClozeWithOptions = (props) => {
                 <strong>Instruction:</strong> {questionData.instruction}
               </div>
             </div>
-            <strong>Options:</strong> {options.join(", ")}
+            {options.length > 0 && (
+              <div>
+                <strong>Options:</strong> {options.join(", ")}
+              </div>
+            )}
             <div className="px-0 py-3 options">
               <strong>{page}.</strong> {renderedParagraph}
             </div>

@@ -46,7 +46,10 @@ const TrueFalseQuestions = (props) => {
           <h2 className="mb-3">Questions</h2>
           <div className="question-card max50 mb-0">
             <div className="question-text">
-              {page}. {parse(question?.question?.content)}
+              {page}.{" "}
+              {typeof question?.question?.content === "string"
+                ? parse(question.question.content)
+                : ""}
             </div>
             {question?.question.options?.map((opt, index) => {
               const selectedAnswer = answersStore?.find(

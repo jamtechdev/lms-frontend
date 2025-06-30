@@ -97,40 +97,85 @@ const Comprehension = (props) => {
                 }}
               >
                 <h4>Passage:</h4>
-                <div>{parse(passage)}</div>
+                <div>{typeof passage === "string" ? parse(passage) : ""}</div>
               </div>
 
-              {subquestions.map((subq, subIndex) => {
-                const questionId = `${qObj.id}-${subIndex}`;
-                const selectedAnswer = answersStore?.find(
-                  (ans) => ans.question_id === questionId
-                );
-                // const prefilled = JSON.parse(answersStore.find(item => item.question_id === qObj?.id)?.user_answer || "[]")?.find(ans => ans?.subQues === subq?.question);
-
-                if (subq?.type == "mcq") {
-                  let prefilled;
-                  const getSelected = answersStore.find(
-                    (item) => item.question_id == qObj?.id
+              {Array.isArray(subquestions) &&
+                subquestions.map((subq, subIndex) => {
+                  const questionId = `${qObj.id}-${subIndex}`;
+                  const selectedAnswer = answersStore?.find(
+                    (ans) => ans.question_id === questionId
                   );
-                  if (getSelected) {
-                    prefilled = JSON.parse(getSelected?.user_answer);
-                    prefilled = prefilled?.find(
-                      (item) => item?.subQues == subq?.question
+                  // const prefilled = JSON.parse(answersStore.find(item => item.question_id === qObj?.id)?.user_answer || "[]")?.find(ans => ans?.subQues === subq?.question);
+
+                  if (subq?.type == "mcq") {
+                    let prefilled;
+                    const getSelected = answersStore.find(
+                      (item) => item.question_id == qObj?.id
+                    );
+                    if (getSelected) {
+                      prefilled = JSON.parse(getSelected?.user_answer);
+                      prefilled = prefilled?.find(
+                        (item) => item?.subQues == subq?.question
+                      );
+                    }
+                    return (
+                      <div key={subIndex}>
+                        <div className="question-text mt-2">
+                          {subIndex + 1}.{" "}
+                          {typeof subq?.question === "string"
+                            ? parse(subq.question)
+                            : ""}
+                        </div>
+                        {subq?.options?.map((opt, i) => (
+                          <div key={i}>
+                            <label className={`kbc-option-label`}>
+                              <input
+                                type="radio"
+                                name={`mcq-question`}
+                                value={opt}
+                                checked={prefilled?.user_answer == opt}
+                                onChange={(e) =>
+                                  handleChange(
+                                    subq.question,
+                                    e?.target?.value,
+                                    subq?.type
+                                  )
+                                }
+                              />
+                              {opt}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
                     );
                   }
-                  return (
-                    <div key={subIndex}>
-                      <div className="question-text mt-2">
-                        {subIndex + 1}. {parse(subq?.question)}
-                      </div>
-                      {subq?.options?.map((opt, i) => (
-                        <div key={i}>
-                          <label className={`kbc-option-label`}>
+                  if (subq?.type == "true_false") {
+                    let prefilled;
+                    const getSelected = answersStore.find(
+                      (item) => item.question_id == qObj?.id
+                    );
+                    if (getSelected) {
+                      prefilled = JSON.parse(getSelected?.user_answer);
+                      prefilled = prefilled?.find(
+                        (item) => item?.subQues == subq?.question
+                      );
+                    }
+                    return (
+                      <div key={subIndex}>
+                        <div className="question-text mt-2">
+                          {subIndex + 1}.{" "}
+                          {typeof subq?.question === "string"
+                            ? parse(subq.question)
+                            : ""}
+                        </div>
+                        <div>
+                          <label className="kbc-option-label">
                             <input
                               type="radio"
-                              name={`mcq-question`}
-                              value={opt}
-                              checked={prefilled?.user_answer == opt}
+                              name={`question`}
+                              value="True"
+                              checked={prefilled?.user_answer == "True"}
                               onChange={(e) =>
                                 handleChange(
                                   subq.question,
@@ -139,136 +184,104 @@ const Comprehension = (props) => {
                                 )
                               }
                             />
-                            {opt}
+                            True
+                          </label>
+                          <label className="kbc-option-label">
+                            <input
+                              type="radio"
+                              name={`question`}
+                              value="False"
+                              checked={prefilled?.user_answer == "False"}
+                              onChange={(e) =>
+                                handleChange(
+                                  subq.question,
+                                  e?.target?.value,
+                                  subq?.type
+                                )
+                              }
+                            />
+                            False
                           </label>
                         </div>
-                      ))}
-                    </div>
-                  );
-                }
-                if (subq?.type == "true_false") {
-                  let prefilled;
-                  const getSelected = answersStore.find(
-                    (item) => item.question_id == qObj?.id
-                  );
-                  if (getSelected) {
-                    prefilled = JSON.parse(getSelected?.user_answer);
-                    prefilled = prefilled?.find(
-                      (item) => item?.subQues == subq?.question
+                      </div>
                     );
                   }
-                  return (
-                    <div key={subIndex}>
-                      <div className="question-text mt-2">
-                        {subIndex + 1}. {parse(subq?.question)}
+                  if (subq?.type == "fill_blank") {
+                    let prefilled;
+                    const getSelected = answersStore.find(
+                      (item) => item.question_id == qObj?.id
+                    );
+                    if (getSelected) {
+                      prefilled = JSON.parse(getSelected?.user_answer);
+                      prefilled = prefilled?.find(
+                        (item) => item?.subQues == subq?.question
+                      );
+                    }
+                    return (
+                      <div key={subIndex}>
+                        <div className="question-text mt-2">
+                          {subIndex + 1}.{" "}
+                          {typeof subq?.question === "string"
+                            ? parse(subq.question)
+                            : ""}
+                        </div>
+                        <input
+                          type="text"
+                          name="fill_blank"
+                          // value={prefilled?.user_answer}
+                          onChange={(e) =>
+                            handleChange(
+                              subq.question,
+                              e?.target?.value,
+                              subq?.type
+                            )
+                          }
+                          className="comprehension_input"
+                        />
                       </div>
-                      <div>
-                        <label className="kbc-option-label">
-                          <input
-                            type="radio"
-                            name={`question`}
-                            value="True"
-                            checked={prefilled?.user_answer == "True"}
-                            onChange={(e) =>
-                              handleChange(
-                                subq.question,
-                                e?.target?.value,
-                                subq?.type
-                              )
-                            }
-                          />
-                          True
-                        </label>
-                        <label className="kbc-option-label">
-                          <input
-                            type="radio"
-                            name={`question`}
-                            value="False"
-                            checked={prefilled?.user_answer == "False"}
-                            onChange={(e) =>
-                              handleChange(
-                                subq.question,
-                                e?.target?.value,
-                                subq?.type
-                              )
-                            }
-                          />
-                          False
-                        </label>
-                      </div>
-                    </div>
-                  );
-                }
-                if (subq?.type == "fill_blank") {
-                  let prefilled;
-                  const getSelected = answersStore.find(
-                    (item) => item.question_id == qObj?.id
-                  );
-                  if (getSelected) {
-                    prefilled = JSON.parse(getSelected?.user_answer);
-                    prefilled = prefilled?.find(
-                      (item) => item?.subQues == subq?.question
                     );
                   }
-                  return (
-                    <div key={subIndex}>
-                      <div className="question-text mt-2">
-                        {subIndex + 1}. {parse(subq?.question)}
+                  if (subq?.type == "open_ended") {
+                    let prefilled;
+                    const getSelected = answersStore.find(
+                      (item) => item.question_id == qObj?.id
+                    );
+                    if (getSelected) {
+                      prefilled = JSON.parse(getSelected?.user_answer);
+                      prefilled = prefilled?.find(
+                        (item) => item?.subQues == subq?.question
+                      );
+                    }
+                    return (
+                      <div key={subIndex} className="comprehension-subq">
+                        <div className="question-text mt-2">
+                          {subIndex + 1}.{" "}
+                          {typeof subq?.question === "string"
+                            ? parse(subq.question)
+                            : ""}
+                        </div>
+                        <textarea
+                          rows={3}
+                          style={{
+                            width: "100%",
+                            borderColor: "#ccc",
+                            padding: "8px",
+                            borderRadius: "4px",
+                          }}
+                          value={prefilled?.user_answer}
+                          onChange={(e) =>
+                            handleChange(
+                              subq.question,
+                              e?.target?.value,
+                              subq?.type
+                            )
+                          }
+                          placeholder="Type your answer here..."
+                        />
                       </div>
-                      <input
-                        type="text"
-                        name="fill_blank"
-                        // value={prefilled?.user_answer}
-                        onChange={(e) =>
-                          handleChange(
-                            subq.question,
-                            e?.target?.value,
-                            subq?.type
-                          )
-                        }
-                        className="comprehension_input"
-                      />
-                    </div>
-                  );
-                }
-                if (subq?.type == "open_ended") {
-                  let prefilled;
-                  const getSelected = answersStore.find(
-                    (item) => item.question_id == qObj?.id
-                  );
-                  if (getSelected) {
-                    prefilled = JSON.parse(getSelected?.user_answer);
-                    prefilled = prefilled?.find(
-                      (item) => item?.subQues == subq?.question
                     );
                   }
-                  return (
-                    <div key={subIndex} className="comprehension-subq">
-                      <div className="question-text mt-2">
-                        {subIndex + 1}. {parse(subq?.question)}
-                      </div>
-                      <textarea
-                        rows={3}
-                        style={{
-                          width: "100%",
-                          borderColor: "#ccc",
-                          padding: "8px",
-                          borderRadius: "4px",
-                        }}
-                        value={prefilled?.user_answer}
-                        onChange={(e) =>
-                          handleChange(
-                            subq.question,
-                            e?.target?.value,
-                            subq?.type
-                          )
-                        }
-                        placeholder="Type your answer here..."
-                      />
-                    </div>
-                  );
-                }
-              })}
+                })}
               <div className="flex justify-between">
                 <button
                   className="btn btn-primary mt-3 mr-2"

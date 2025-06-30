@@ -49,7 +49,10 @@ const McqQuestions = (props) => {
           <h2 className="mb-3">Questions</h2>
           <div className="question-card">
             <div className="question-text">
-              {page}. {parse(question?.question?.content)}
+              {page}.{" "}
+              {typeof question?.question?.content === "string"
+                ? parse(question.question.content)
+                : ""}
             </div>
             <div className="mcq-options">
               {question?.question.options?.map((opt, index) => {

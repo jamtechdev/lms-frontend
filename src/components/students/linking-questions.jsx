@@ -137,16 +137,20 @@ const LinkingQuestions = (props) => {
         <DndProvider backend={HTML5Backend}>
           <div className="question-card mb-0">
             <h2 className="question-text">
-              {page}. {parse(currentQuestion?.question?.content)}
+              {page}.{" "}
+              {typeof currentQuestion?.question?.content === "string"
+                ? parse(currentQuestion.question.content)
+                : ""}
             </h2>
 
             <div className="linking-container">
               <div className="left-side">
-                {currentQuestion?.question?.answer?.map((pair, i) => (
-                  <div className="link-item" key={i} id={`left-${i}`}>
-                    <DraggableLeft item={pair.left} index={i} />
-                  </div>
-                ))}
+                {Array.isArray(currentQuestion?.question?.answer) &&
+                  currentQuestion.question.answer.map((pair, i) => (
+                    <div className="link-item" key={i} id={`left-${i}`}>
+                      <DraggableLeft item={pair.left} index={i} />
+                    </div>
+                  ))}
               </div>
 
               <div className="right-side">

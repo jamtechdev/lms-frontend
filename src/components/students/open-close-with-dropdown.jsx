@@ -51,7 +51,10 @@ const OpenClozeWithDropdown = (props) => {
     <>
       {questions.questions_array.map((qObj, index) => {
         const questionData = qObj.question;
-        const paragraph = questionData.paragraph.replace(/<[^>]+>/g, "");
+        const paragraph = (questionData.paragraph || "").replace(
+          /<[^>]+>/g,
+          ""
+        );
         const blanks = questionData.questions;
 
         const handleOptionClick = (blank_number, selectedOption) => {

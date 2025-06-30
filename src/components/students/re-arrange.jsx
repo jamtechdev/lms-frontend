@@ -99,7 +99,14 @@ const ReArrangeList = ({
 
   return (
     <div className="mt-4">
-      <div className="ques">{parse(question?.question?.content)}</div>
+      <div className="ques">
+        {" "}
+        {parse(
+          typeof question?.question?.content === "string"
+            ? question.question.content
+            : ""
+        )}
+      </div>
       <div className="rearrangeBox mt-4">
         {words?.map((word, index) => {
           const key = `${word}-${index}`;

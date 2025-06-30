@@ -28,6 +28,7 @@ import OpenClozeWithDropdown from "../../../components/students/open-close-with-
 import EditingQuesions from "../../../components/students/editing-questions";
 import FillInTheBlank from "../../../components/students/fill-in-the-blank";
 import Comprehension from "../../../components/students/comprehension";
+import loader from "../../../assets/images/loader.gif";
 const ItemTypes = {
   LEFT_ITEM: "LEFT_ITEM",
 };
@@ -172,7 +173,14 @@ const AllQuestions = () => {
     };
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="text-center mt-3">
+        <img src={loader} width={100} alt="Loading..." />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="dashboard-body">

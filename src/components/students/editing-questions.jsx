@@ -70,7 +70,9 @@ const EditingQuesions = (props) => {
           // );
         };
 
-        const renderedParagraph = paragraph
+        const renderedParagraph = (
+          typeof paragraph === "string" ? paragraph : ""
+        )
           .split(/(\(\d+\))/g)
           .map((part, i) => {
             const match = part.match(/\((\d+)\)/);
