@@ -58,7 +58,7 @@ const QuestionType = () => {
   return (
     <>
       <div className="dashboard-body">
-        <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
+        {/* <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
           <div className="breadcrumb mb-24">
             <ul className="flex-align gap-4">
               <li>
@@ -102,7 +102,7 @@ const QuestionType = () => {
               </li>
             </ul>
           </div>
-        </div>
+        </div> */}
 
         {subject && !selectedQuestionType && (
           <div className="row gy-4 questionTypes">

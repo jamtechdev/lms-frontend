@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getLevel, getQuestion, getQuestionsArray, getStudentType, getSubject, getTopic, } from "../../../_store/_reducers/auth";
+import {
+  getLevel,
+  getQuestion,
+  getQuestionsArray,
+  getStudentType,
+  getSubject,
+  getTopic,
+} from "../../../_store/_reducers/auth";
 import userService from "../../../_services/user.service";
 import parse from "html-react-parser";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { removeAttemptQuestions, setAttemptQuestions } from "../../../_store/_reducers/question";
+import {
+  removeAttemptQuestions,
+  setAttemptQuestions,
+} from "../../../_store/_reducers/question";
 import Result from "../../../components/students/result";
 import ReArrangeList from "../../../components/students/re-arrange";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
@@ -71,16 +81,17 @@ const DroppableRight = ({ item, index, onDrop }) => {
 const AllQuestions = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const type = queryParams.get('type');
+  const type = queryParams.get("type");
+  const subject = queryParams.get("sub");
+  const topic = queryParams.get("topic");
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const answersStore = useSelector((state) => state.question.attempts);
   const [questions, setQuestions] = useState(null);
   const [reorderState, setReorderState] = useState([]);
   const [result, setResult] = useState(false);
   const education = useSelector(getStudentType);
   const level = useSelector(getLevel);
-  const subject = useSelector(getSubject);
-  const topic = useSelector(getTopic);
   const [page, setPage] = useState(1);
   // For linking
   const [shuffledRight, setShuffledRight] = useState([]);
@@ -89,10 +100,11 @@ const AllQuestions = () => {
   const shuffleArray = (array) => {
     return [...array].sort(() => Math.random() - 0.5);
   };
-  // for grammer cloze with options 
+  // for grammer cloze with options
   const [inputs, setInputs] = useState({});
   const [inputErrors, setInputErrors] = useState({});
   const fetchQuestion = async () => {
+    setLoading(true);
     try {
       const data = {
         education_type: education,
@@ -109,7 +121,8 @@ const AllQuestions = () => {
           const existingAnswer = getExistingAnswerFromRedux(q?.id);
           return {
             id: q?.id,
-            words: existingAnswer || q?.question?.options?.map((opt) => opt?.value)
+            words:
+              existingAnswer || q?.question?.options?.map((opt) => opt?.value),
           };
         });
         setReorderState(reordered);
@@ -122,50 +135,53 @@ const AllQuestions = () => {
       }
     } catch (err) {
       console.log(err?.response?.data?.message || "Failed, please try again");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
   useEffect(() => {
     fetchQuestion();
-  }, [page]);
+  }, [page, type]);
   useEffect(() => {
     return () => {
       dispatch(removeAttemptQuestions());
-    }
+    };
   }, []);
-
 
   const handleReorder = (questionId, newOrder) => {
     setReorderState((prev) =>
-      prev.map((q) =>
-        q.id === questionId ? { ...q, words: newOrder } : q
-      )
+      prev.map((q) => (q.id === questionId ? { ...q, words: newOrder } : q))
     );
   };
   const getExistingAnswerFromRedux = (questionId) => {
-    const savedAnswer = answersStore.find((answer) => answer.question_id === questionId);
+    const savedAnswer = answersStore.find(
+      (answer) => answer.question_id === questionId
+    );
     return savedAnswer ? savedAnswer.user_answer.split(" ") : null;
   };
-  // relaod 
+  // relaod
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       const confirmationMessage = "Are you sure you want to reload the page?";
       event.returnValue = confirmationMessage;
       return confirmationMessage;
     };
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 
+  if (loading) return <p>Loading...</p>;
   return (
     <>
       <div className="dashboard-body">
-        <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
+        {/* <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
           <div className="breadcrumb mb-24">
             <ul className="flex-align gap-4">
               <li>
-                <Link to="/student/subjects"
+                <Link
+                  to="/student/subjects"
                   className="text-gray-200 fw-normal text-15 hover-text-main-600"
                 >
                   Back to Subjects
@@ -177,7 +193,8 @@ const AllQuestions = () => {
                 </span>
               </li>
               <li>
-                <Link to="/student/topics"
+                <Link
+                  to="/student/topics"
                   className="text-gray-200 fw-normal text-15 hover-text-main-600"
                 >
                   Topics
@@ -189,7 +206,8 @@ const AllQuestions = () => {
                 </span>
               </li>
               <li>
-                <Link to="/student/question-type"
+                <Link
+                  to="/student/question-type"
                   className="text-gray-200 fw-normal text-15 hover-text-main-600"
                 >
                   Question Type
@@ -207,18 +225,32 @@ const AllQuestions = () => {
               </li>
             </ul>
           </div>
-        </div>
-        {(questions && questions?.questions_array?.length == 0) && (<p>No Questions found</p>)}
-        {(questions && type == "mcq") && (
-          <McqQuestions questions={questions} page={page} setPage={setPage} type={type} />
+        </div> */}
+        {questions && questions?.questions_array?.length == 0 && (
+          <p>No Questions found</p>
         )}
-        {(questions && type == "true_false") && (
-          <TrueFalseQuestions questions={questions} page={page} setPage={setPage} type={type} />
+        {questions && type == "mcq" && (
+          <McqQuestions
+            questions={questions}
+            page={page}
+            setPage={setPage}
+            type={type}
+          />
         )}
-        {(questions && type === "linking") && (
+        {questions && type == "true_false" && (
+          <TrueFalseQuestions
+            questions={questions}
+            page={page}
+            setPage={setPage}
+            type={type}
+          />
+        )}
+        {questions && type === "linking" && (
           <LinkingQuestions
-            questions={questions} page={page}
-            setPage={setPage} type={type}
+            questions={questions}
+            page={page}
+            setPage={setPage}
+            type={type}
             shuffledRight={shuffledRight}
             setShuffledRight={setShuffledRight}
             userMatches={userMatches}
@@ -226,48 +258,76 @@ const AllQuestions = () => {
           />
         )}
 
-        {(questions && type == "rearranging" && !result) && questions?.questions_array?.map((q) => {
-          const currentWords = reorderState.find((r) => r.id === q.id)?.words || [];
-          return (
-            <ReArrangeList
-              key={q.id}
-              question={q}
-              words={currentWords}
-              onReorder={(newOrder) => handleReorder(q.id, newOrder)}
-              setPage={setPage}
-              isFirst={(questions?.pagination?.current_page == 1)}
-              isLast={page == questions?.pagination?.total}
-              setResult={setResult}
-            />
-          )
-        })}
+        {questions &&
+          type == "rearranging" &&
+          !result &&
+          questions?.questions_array?.map((q) => {
+            const currentWords =
+              reorderState.find((r) => r.id === q.id)?.words || [];
+            return (
+              <ReArrangeList
+                key={q.id}
+                question={q}
+                words={currentWords}
+                onReorder={(newOrder) => handleReorder(q.id, newOrder)}
+                setPage={setPage}
+                isFirst={questions?.pagination?.current_page == 1}
+                isLast={page == questions?.pagination?.total}
+                setResult={setResult}
+              />
+            );
+          })}
 
-        {(questions && type == "open_cloze_with_options") && (
-          <OpenClozeWithOptions questions={questions} page={page} setPage={setPage} type={type} />
+        {questions && type == "open_cloze_with_options" && (
+          <OpenClozeWithOptions
+            questions={questions}
+            page={page}
+            setPage={setPage}
+            type={type}
+          />
         )}
-        {(questions && type == "open_cloze_with_dropdown_options") && (
-          <OpenClozeWithDropdown questions={questions} page={page} setPage={setPage} type={type} />
+        {questions && type == "open_cloze_with_dropdown_options" && (
+          <OpenClozeWithDropdown
+            questions={questions}
+            page={page}
+            setPage={setPage}
+            type={type}
+          />
         )}
-        {(questions && type == "comprehension") && (
-          <Comprehension questions={questions} page={page} setPage={setPage} type={type}/>
+        {questions && type == "comprehension" && (
+          <Comprehension
+            questions={questions}
+            page={page}
+            setPage={setPage}
+            type={type}
+          />
         )}
 
-        
-        {(questions && type == "editing") && (
-          <EditingQuesions questions={questions} page={page} setPage={setPage} type={type} />
+        {questions && type == "editing" && (
+          <EditingQuesions
+            questions={questions}
+            page={page}
+            setPage={setPage}
+            type={type}
+          />
         )}
-        {(questions && type == "fill_in_the_blank") && (
-          <FillInTheBlank questions={questions} page={page} setPage={setPage} type={type} />
+        {questions && type == "fill_in_the_blank" && (
+          <FillInTheBlank
+            questions={questions}
+            page={page}
+            setPage={setPage}
+            type={type}
+          />
         )}
-
       </div>
-      {result && <div>
-        <button onClick={() => setResult(false)} className="btn ml-2">
-          Back to Quizz
-        </button>
-        <Result />
-      </div>
-      }
+      {result && (
+        <div>
+          <button onClick={() => setResult(false)} className="btn ml-2">
+            Back to Quizz
+          </button>
+          <Result />
+        </div>
+      )}
     </>
   );
 };

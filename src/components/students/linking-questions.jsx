@@ -123,7 +123,7 @@ const LinkingQuestions = (props) => {
       try {
         await userService.answer(finalPayload);
         toast.success("Answer submitted successfully.");
-        navigate("/student/question-type");
+        navigate("/student");
       } catch (err) {
         console.error(err);
         toast.error("Something went wrong while submitting.");
