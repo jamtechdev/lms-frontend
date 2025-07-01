@@ -136,7 +136,7 @@ const Sidebar = () => {
                     <Accordion.Header onClick={() => topicsBySubject(subject)}>
                       {subject?.subject_name}
                     </Accordion.Header>
-                    <Accordion.Body>
+                    <Accordion.Body className="subjects">
                       {topicsLoading ? (
                         <p>Loading...</p>
                       ) : topics?.length > 0 ? (

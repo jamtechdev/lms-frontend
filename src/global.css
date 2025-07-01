@@ -1266,3 +1266,45 @@ li.page-item.active{
 .dropdown .users {
     background: transparent!important;
 }
+
+.accordion-item{
+    border: none !important;
+}
+.accordion-button:not(.collapsed){
+    background: rgb(89 119 244 / 30%);
+    padding: 10px 16px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.accordion-body {
+    padding: 0px 0px;
+    margin: auto;
+    text-align: center;
+}
+.accordion-body p {
+    margin-bottom: 0;
+    padding: 14px 0px;
+    font-size: 14px;
+}
+button.accordion-button:focus {
+    outline: 1px solid #ddd;
+    box-shadow: none;
+    padding: 11px 18px;
+}
+.accordion-button {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 11px 18px;
+    margin-bottom: 12px;
+}
+.accordion-body a {
+    display: block;
+    border-bottom: 1px solid #d3d3fa;
+    padding: 10px 10px;
+    font-size: 14px;
+    text-align: left;
+    color: var(--bs-accordion-active-color);
+}
+.subjects{
+    margin-bottom: 14px;
+}
