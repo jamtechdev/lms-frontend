@@ -906,15 +906,67 @@ table#assignmentTable td {
 
 /* Each item (left or right) */
 .link-item {
-    display: flex;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  position: relative;
+  min-width: 140px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.link-item:hover {
+  transform: scale(1.02);
+  background-color: #f9fafb;
+}
+
+.selector-circle {
+  width: 10px;
+  height: 10px;
+  background-color: #2563eb;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.left-side .selector-circle {
+  right: -6px;
+}
+
+.right-side .selector-circle {
+  left: -6px;
+}
+
+.connected {
+  border-color: #6366f1;
+  box-shadow: 0 0 6px #6366f1aa;
+}
+
+.selected {
+  border-color: #3b82f6;
+  box-shadow: 0 0 6px #3b82f6aa;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+@media (max-width: 768px) {
+  .linking-container {
+    flex-direction: column !important;
+    gap: 2rem !important;
     align-items: center;
-    padding: 8px 12px;
-    background-color: #f9fafb;
-    border: 1px solid rgb(75 87 230 / 65%);
-    border-radius: 8px;
-    /* min-height: 48px; */
-    font-size: 16px;
-    gap: 0.5rem;
+  }
+
+  .left-side,
+  .right-side {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 
 .link-item img {
