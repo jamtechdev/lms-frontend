@@ -53,7 +53,7 @@ const McqQuestions = (props) => {
         console.error("Error", error);
       });
   };
-
+  console.log(questions);
   return (
     <>
       {questions?.questions_array?.map((question, index) => {
@@ -65,6 +65,10 @@ const McqQuestions = (props) => {
         return (
           <div key={index}>
             <h2 className="mb-3">Question</h2>
+            <div>
+              {" "}
+              <strong>Instruction:</strong> {question.question.instruction}
+            </div>
             <div className="question-card">
               <div className="question-text mb-2">
                 {page}.{" "}
