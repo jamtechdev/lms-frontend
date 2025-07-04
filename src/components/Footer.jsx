@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="dashboard-footer py-2 mt-4">
+    <div className="dashboard-footer p-3">
       <div className="flex-between flex-wrap gap-16">
         <p className="text-gray-300 text-13 fw-normal mb-0">
           {" "}

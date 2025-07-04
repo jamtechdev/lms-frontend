@@ -52,7 +52,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="top-navbar flex-between gap-16 p-2 px-5">
+      <div className="top-navbar flex-between gap-16 p-2">
         {/* Mobile Menu Button */}
         <div className="flex-align gap-16">
           <button
@@ -65,50 +65,15 @@ const Navbar = () => {
         </div>
 
         {/* Profile Dropdown */}
-        <div className="flex-align gap-16" ref={dropdownRef}>
-          <div className={`dropdown ${isDropdownOpen ? "show" : ""}`}>
-            <button
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className={`users arrow-down-icon border border-gray-200 rounded-pill p-2 d-inline-block pe-40 position-relative ${isDropdownOpen ? "show" : ""
-                }`}
-              type="button"
-              aria-expanded={isDropdownOpen}
-              data-bs-toggle="dropdown"
-            >
-              <span className="position-relative">
-                {/* <img
-                  src={logo}
-                  alt="Image"
-                  className="h-32 w-32 rounded-circle"
-                />
-                <span className="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0"></span> */}
-              </span>
-            </button>
-
-            <div
-              className={`dropdown-menu dropdown-menu--lg border-0 bg-transparent p-0 ${isDropdownOpen ? "show" : ""
-                }`}
-            >
-              <div className="card border border-gray-100 rounded-12 box-shadow-custom">
-                <div className="card-body py-1 px-3">
-                  <ul className="max-h-270 overflow-y-auto scroll-sm pe-4 mb-2">
-                    <li className="pt-8">
-                      <button
-                        onClick={handleLogout}
-                        className="py-2 text-15 px-10 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15 w-full text-left"
-                      >
-                        <span className="text-2xl text-danger-600 d-flex">
-                          <i className="ph ph-sign-out"></i>
-                        </span>
-                        <span className="text">Log Out</span>
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <button
+          onClick={handleLogout}
+          className="py-2 text-15 px-10 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15 w-full text-left logout-btn"
+        >
+          <span className="text-2xl text-danger-600 d-flex">
+            <i className="ph ph-sign-out"></i>
+          </span>
+          <span className="text">Log Out</span>
+        </button>
       </div>
 
       {/* Mobile Menu Overlay */}

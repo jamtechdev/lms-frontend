@@ -9,15 +9,15 @@ const ForgotPassword = () => {
         <div className="loader"></div>
       </div>
       <div className="side-overlay"></div>
-      <div className="auth-left bg-main-50 flex-center p-24">
-        <img src={forgotImage} alt="Auth Visual" />
+      <div className="auth-left bg-main-50 flex-center p-24 auth-bg-section">
+       
       </div>
-      <div className="auth-right py-40 px-24 flex-center flex-column">
+      <div className="auth-right py-40 px-24 flex-center flex-column auth-bg-color">
         <div className="auth-right__inner mx-auto w-100">
-          <Link to="/" className="auth-right__logo">
-            <img src={logo} alt="QTN" />
+          <Link to="/" className="mb-3">
+            <img width={150} src={logo} alt="QTN" />
           </Link>
-          <h2 className="mb-8">Forgot Password?</h2>
+          <h1 className="mb-8">Forgot Password?</h1>
           <p className="text-gray-600 text-15 mb-32">
             Lost your password? Please enter your email address. You will
             receive a link to create a new password via email.
@@ -40,7 +40,8 @@ const ForgotPassword = () => {
                 </span>
               </div>
             </div>
-            <button type="submit" className="btn btn-main rounded-pill w-100">
+            <button type="submit" 
+                  className="btn btn-primary rounded-pill w-100">
               Send Reset Link
             </button>
             <Link
@@ -49,32 +50,6 @@ const ForgotPassword = () => {
             >
               <i className="ph ph-arrow-left d-flex"></i> Back To Login
             </Link>
-            <ul className="flex-align gap-10 flex-wrap justify-content-center">
-              <li>
-                <Link
-                  to="https://www.facebook.com"
-                  className="w-38 h-38 flex-center rounded-6 text-facebook-600 bg-facebook-50 hover-bg-facebook-600 hover-text-white text-lg"
-                >
-                  <i className="ph ph-facebook-logo"></i>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="https://www.twitter.com"
-                  className="w-38 h-38 flex-center rounded-6 text-twitter-600 bg-twitter-50 hover-bg-twitter-600 hover-text-white text-lg"
-                >
-                  <i className="ph ph-twitter-logo"></i>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="https://www.google.com"
-                  className="w-38 h-38 flex-center rounded-6 text-google-600 bg-google-50 hover-bg-google-600 hover-text-white text-lg"
-                >
-                  <i className="ph ph-google-logo"></i>
-                </Link>
-              </li>
-            </ul>
           </form>
         </div>
       </div>

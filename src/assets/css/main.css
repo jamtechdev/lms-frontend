@@ -8911,13 +8911,18 @@ button:focus {
 /* ============================ Image Upload Css End ==================== */
 /* ============================= Sidebar Css Start ============================ */
 .sidebar {
-    width: 252px;
+  width: 280px;
     position: fixed;
     inset-inline-start: 0;
     inset-block-start: 0;
-    background-color: hsl(var(--white));
-    border-right: 1px solid var(--gray-100);
-    height: 100%;
+    height: calc(100vh - 30px);
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    border-radius: 24px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+       background: #ffffff;
 }
 
 @media screen and (max-width: 1199px) {
@@ -9093,9 +9098,8 @@ button:focus {
     padding-block-start: 16px;
     padding-block-end: 16px;
     position: sticky;
-    top: 0;
-    z-index: 9;
-    border-bottom: 1px solid var(--gray-100);
+    top: 15px;
+    z-index: 100;
 }
 
 @media screen and (max-width: 991px) {
@@ -9231,14 +9235,28 @@ button:focus {
 
 /* =========================== Top Navbar Css End =============================== */
 /* ===================== Dashboard Main wrapper css start ========================= */
+
+.dashboard-container{
+    background: url("../../assets/images/dashboard-bg.png");
+    background-position: center;
+    background-repeat: repeat;
+    background-color: #fff9f3;
+}
+
 .dashboard-main-wrapper {
-    margin-inline-start: 252px;
+    margin-inline-start: 300px;
     min-height: 100vh;
     display: flex;
     flex-wrap: wrap;
     flex-flow: column;
     transition: 0.2s linear;
-    background-color: var(--main-50);
+}
+
+.dashboard-main-wrapper > .dashboard-inner-content{
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
 }
 
 @media screen and (max-width: 1199px) {
@@ -9273,11 +9291,6 @@ button:focus {
     }
 }
 
-.dashboard-footer {
-    margin-inline-start: 24px;
-    margin-inline-end: 24px;
-}
-
 @media screen and (max-width: 1199px) {
     .dashboard-footer {
         margin-inline-start: 16px;
@@ -9290,8 +9303,15 @@ button:focus {
 .dashboard-footer {
     margin-top: auto;
     padding: 20px;
-    border-radius: 16px 16px 0 0;
-    background-color: hsl(var(--white));
+    background-color: #4c4c4c;
+    max-width: 98%;
+    margin: 0 auto 15px !important;
+    width: 100%;
+    border-radius: 12px;
+}
+
+.dashboard-footer p, .dashboard-footer span{
+    color: #fff !important;
 }
 
 @media screen and (max-width: 991px) {
@@ -9829,7 +9849,7 @@ button:focus {
 }
 
 .sidebar__logo img {
-    width: 140px;
+    width: 180px;
 }
 
 .divider::before {

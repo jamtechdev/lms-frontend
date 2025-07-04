@@ -15,15 +15,15 @@ const SignUp = () => {
       </div>
       <div className="side-overlay"></div>
       <section className="auth d-flex">
-        <div className="auth-left bg-main-50 flex-center p-24">
-          <img src={signupImage} alt="Auth Visual" />
+        <div className="auth-left bg-main-50 flex-center p-24 auth-bg-section">
+          {/* <img src={signupImage} alt="Auth Visual" /> */}
         </div>
-        <div className="auth-right py-40 px-24 flex-center flex-column">
+        <div className="auth-right py-40 px-24 flex-center flex-column auth-bg-color">
           <div className="auth-right__inner mx-auto w-100">
-            <Link to="/" className="auth-right__logo">
-              <img src={logo} alt="QTN" />
+            <Link to="/" className="mb-3">
+              <img width={150} src={logo} alt="QTN" />
             </Link>
-            <h2 className="mb-8">Sign Up</h2>
+            <h1 className="mb-8">Sign Up</h1>
             <p className="text-gray-600 text-15 mb-32">
               Please sign up to your account and start the adventure
             </p>
@@ -87,25 +87,24 @@ const SignUp = () => {
                   Must be at least 8 characters
                 </span>
               </div>
-              <div className="mb-32 flex-between flex-wrap gap-8">
+              {/* <div className="mb-32 flex-between flex-wrap gap-8">
                 <Link
                   to="/forgotpassword"
                   className="text-main-600 hover-text-decoration-underline text-15 fw-medium"
                 >
                   Forgot Password?
                 </Link>
-              </div>
-              <button type="submit" className="btn btn-main rounded-pill w-100">
+              </div> */}
+              <button type="submit"
+                  className="btn btn-primary rounded-pill w-100">
                 Sign Up
               </button>
               <p className="mt-32 text-gray-600 text-center">
-                Already have an account?
-                <Link
+                Already have an account? <Link
                   to="/login"
                   className="text-main-600 hover-text-decoration-underline"
                 >
-                  {" "}
-                  Log In
+                   Log In
                 </Link>
               </p>
               <div className="divider my-32 position-relative text-center">

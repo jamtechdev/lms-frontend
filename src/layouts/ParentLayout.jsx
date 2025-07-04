@@ -10,11 +10,13 @@ export default function ParentLayout() {
                 <div className="loader"></div>
             </div>
             <div className="side-overlay"></div>
-            <div className='flex '>
+            <div className='flex dashboard-container'>
                 <Sidebar />
                 <div className="dashboard-main-wrapper">
                     <Navbar />
-                    <Outlet />
+                    <div className="dashboard-inner-content">
+                        <Outlet />
+                    </div>
                     <Footer />
                 </div>
             </div>
