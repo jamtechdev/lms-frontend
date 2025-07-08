@@ -166,7 +166,7 @@ const Login = () => {
                 </div>
                 <button
                   type="submit"
-                  className="btn btn-primary rounded-pill w-100"
+                  className="dashboard-button w-100"
                 >
                   Sign In
                 </button>
@@ -182,7 +182,7 @@ const Login = () => {
                 Create an account
               </Link>
             </p>
-            <div className="divider my-32 position-relative text-center">
+            {/* <div className="divider my-32 position-relative text-center">
               <span className="divider__text text-gray-600 text-13 fw-medium px-26 bg-white">
                 or
               </span>
@@ -212,7 +212,7 @@ const Login = () => {
                   <i className="ph ph-google-logo"></i>
                 </Link>
               </li>
-            </ul>
+            </ul> */}
           </div>
         </div>
       </section>

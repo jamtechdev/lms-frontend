@@ -11,7 +11,7 @@ export default function StudentLayout() {
       </div>
       <div className="side-overlay"></div>
       <div className="flex dashboard-container">
-        <Sidebar />
+        {/* <Sidebar /> */}
         <div className="dashboard-main-wrapper">
           <Navbar />
           <div className="dashboard-inner-content">

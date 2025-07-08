@@ -41,7 +41,7 @@ const ForgotPassword = () => {
               </div>
             </div>
             <button type="submit" 
-                  className="btn btn-primary rounded-pill w-100">
+                  className="dashboard-button w-100">
               Send Reset Link
             </button>
             <Link
