@@ -1,13 +1,54 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import logo from "../../assets/images/logo/logo.png";
-import signupImage from "../../assets/images/auth-img2.png";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { login } from "../../_store/_reducers/auth";
+import parentService from "../../_services/parent.service";
 
 const SignUp = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted");
+  const dispatch = useDispatch();
+  const initialValues = {
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+    phone: "",
   };
+
+  const validationSchema = Yup.object({
+    first_name: Yup.string().required("First name is required"),
+    last_name: Yup.string().required("Last name is required"),
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .required("Password is required"),
+    password_confirmation: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .required("Please confirm your password"),
+    phone: Yup.string()
+      .matches(/^\d+$/, "Phone number must be digits only")
+      .min(10, "Phone number must be at least 10 digits")
+      .required("Phone number is required"),
+  });
+
+  const handlesignup = async (values, { resetForm }) => {
+    try {
+      const response = await parentService.signUp(values);
+      toast.success(
+        "Signup successful! Check your email to verify your account."
+      );
+      resetForm();
+    } catch (err) {
+      toast.error(
+        err?.response?.data?.message || "Signup failed. Please try again later."
+      );
+    }
+  };
+
   return (
     <div>
       <div className="preloader">
@@ -15,9 +56,7 @@ const SignUp = () => {
       </div>
       <div className="side-overlay"></div>
       <section className="auth d-flex">
-        <div className="auth-left bg-main-50 flex-center p-24 auth-bg-section">
-          {/* <img src={signupImage} alt="Auth Visual" /> */}
-        </div>
+        <div className="auth-left bg-main-50 flex-center p-24 auth-bg-section"></div>
         <div className="auth-right py-40 px-24 flex-center flex-column auth-bg-color">
           <div className="auth-right__inner mx-auto w-100">
             <Link to="/" className="mb-3">
@@ -27,118 +66,175 @@ const SignUp = () => {
             <p className="text-gray-600 text-15 mb-32">
               Please sign up to your account and start the adventure
             </p>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-24">
-                <label htmlFor="username" className="form-label mb-8 h6">
-                  Username
-                </label>
-                <div className="position-relative">
-                  <input
-                    type="text"
-                    className="form-control py-11 ps-40"
-                    id="username"
-                    placeholder="Type your username"
-                  />
-                  <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
-                    <i className="ph ph-user"></i>
-                  </span>
-                </div>
-              </div>
-              <div className="mb-24">
-                <label htmlFor="email" className="form-label mb-8 h6">
-                  Email
-                </label>
-                <div className="position-relative">
-                  <input
-                    type="email"
-                    className="form-control py-11 ps-40"
-                    id="email"
-                    placeholder="Type your email address"
-                  />
-                  <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
-                    <i className="ph ph-envelope"></i>
-                  </span>
-                </div>
-              </div>
-              <div className="mb-24">
-                <label
-                  htmlFor="current-password"
-                  className="form-label mb-8 h6"
-                >
-                  Current Password
-                </label>
-                <div className="position-relative">
-                  <input
-                    type="password"
-                    className="form-control py-11 ps-40"
-                    id="current-password"
-                    placeholder="Enter Current Password"
-                    defaultValue="password"
-                  />
-                  <span
-                    className="toggle-password position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y ph ph-eye-slash"
-                    id="#current-password"
-                  ></span>
-                  <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
-                    <i className="ph ph-lock"></i>
-                  </span>
-                </div>
-                <span className="text-gray-900 text-15 mt-4">
-                  Must be at least 8 characters
-                </span>
-              </div>
-              {/* <div className="mb-32 flex-between flex-wrap gap-8">
-                <Link
-                  to="/forgotpassword"
-                  className="text-main-600 hover-text-decoration-underline text-15 fw-medium"
-                >
-                  Forgot Password?
-                </Link>
-              </div> */}
-              <button type="submit"
-                  className="dashboard-button w-100">
-                Sign Up
-              </button>
-              <p className="mt-32 text-gray-600 text-center">
-                Already have an account? <Link
-                  to="/login"
-                  className="text-main-600 hover-text-decoration-underline"
-                >
-                   Log In
-                </Link>
-              </p>
-              {/* <div className="divider my-32 position-relative text-center">
-                <span className="divider__text text-gray-600 text-13 fw-medium px-26 bg-white">
-                  or
-                </span>
-              </div>
-              <ul className="flex-align gap-10 flex-wrap justify-content-center">
-                <li>
-                  <Link
-                    to="https://www.facebook.com"
-                    className="w-38 h-38 flex-center rounded-6 text-facebook-600 bg-facebook-50 hover-bg-facebook-600 hover-text-white text-lg"
+
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handlesignup}
+            >
+              {({ isSubmitting }) => (
+                <Form>
+                  <div className="mb-24">
+                    <label htmlFor="first_name" className="form-label mb-8 h6">
+                      First Name
+                    </label>
+                    <div className="position-relative">
+                      <Field
+                        name="first_name"
+                        type="text"
+                        id="first_name"
+                        placeholder="Enter your first name"
+                        className="form-control py-11 ps-40"
+                      />
+                      <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
+                        <i className="ph ph-user"></i>
+                      </span>
+                    </div>
+                    <ErrorMessage
+                      name="first_name"
+                      component="div"
+                      className="text-danger text-14 mt-2"
+                    />
+                  </div>
+
+                  <div className="mb-24">
+                    <label htmlFor="last_name" className="form-label mb-8 h6">
+                      Last Name
+                    </label>
+                    <div className="position-relative">
+                      <Field
+                        name="last_name"
+                        type="text"
+                        id="last_name"
+                        placeholder="Enter your last name"
+                        className="form-control py-11 ps-40"
+                      />
+                      <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
+                        <i className="ph ph-user"></i>
+                      </span>
+                    </div>
+                    <ErrorMessage
+                      name="last_name"
+                      component="div"
+                      className="text-danger text-14 mt-2"
+                    />
+                  </div>
+
+                  <div className="mb-24">
+                    <label htmlFor="email" className="form-label mb-8 h6">
+                      Email
+                    </label>
+                    <div className="position-relative">
+                      <Field
+                        name="email"
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        className="form-control py-11 ps-40"
+                      />
+                      <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
+                        <i className="ph ph-envelope"></i>
+                      </span>
+                    </div>
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="text-danger text-14 mt-2"
+                    />
+                  </div>
+
+                  <div className="mb-24">
+                    <label htmlFor="password" className="form-label mb-8 h6">
+                      Password
+                    </label>
+                    <div className="position-relative">
+                      <Field
+                        name="password"
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        className="form-control py-11 ps-40"
+                      />
+                      <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
+                        <i className="ph ph-lock"></i>
+                      </span>
+                    </div>
+                    <ErrorMessage
+                      name="password"
+                      component="div"
+                      className="text-danger text-14 mt-2"
+                    />
+                  </div>
+
+                  <div className="mb-24">
+                    <label
+                      htmlFor="password_confirmation"
+                      className="form-label mb-8 h6"
+                    >
+                      Confirm Password
+                    </label>
+                    <div className="position-relative">
+                      <Field
+                        name="password_confirmation"
+                        type="password"
+                        id="password_confirmation"
+                        placeholder="Confirm your password"
+                        className="form-control py-11 ps-40"
+                      />
+                      <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
+                        <i className="ph ph-lock"></i>
+                      </span>
+                    </div>
+                    <ErrorMessage
+                      name="password_confirmation"
+                      component="div"
+                      className="text-danger text-14 mt-2"
+                    />
+                  </div>
+
+                  <div className="mb-24">
+                    <label htmlFor="phone" className="form-label mb-8 h6">
+                      Phone
+                    </label>
+                    <div className="position-relative">
+                      <Field
+                        name="phone"
+                        type="text"
+                        id="phone"
+                        placeholder="Enter your phone number"
+                        className="form-control py-11 ps-40"
+                      />
+                      <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
+                        <i className="ph ph-phone"></i>
+                      </span>
+                    </div>
+                    <ErrorMessage
+                      name="phone"
+                      component="div"
+                      className="text-danger text-14 mt-2"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="dashboard-button w-100"
+                    disabled={isSubmitting}
                   >
-                    <i className="ph ph-facebook-logo"></i>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="https://www.twitter.com"
-                    className="w-38 h-38 flex-center rounded-6 text-twitter-600 bg-twitter-50 hover-bg-twitter-600 hover-text-white text-lg"
-                  >
-                    <i className="ph ph-twitter-logo"></i>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="https://www.google.com"
-                    className="w-38 h-38 flex-center rounded-6 text-google-600 bg-google-50 hover-bg-google-600 hover-text-white text-lg"
-                  >
-                    <i className="ph ph-google-logo"></i>
-                  </Link>
-                </li>
-              </ul> */}
-            </form>
+                    {isSubmitting ? "Signing Up..." : "Sign Up"}
+                  </button>
+
+                  <p className="mt-32 text-gray-600 text-center">
+                    Already have an account?{" "}
+                    <Link
+                      to="/login"
+                      className="text-main-600 hover-text-decoration-underline"
+                    >
+                      Log In
+                    </Link>
+                  </p>
+                </Form>
+              )}
+            </Formik>
           </div>
         </div>
       </section>

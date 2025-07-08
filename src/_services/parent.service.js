@@ -8,6 +8,7 @@ const parentService = {
     updateStudentByParent,
     deleteStudentByParent,
     updateLockCode,
+    signUp,
 };
 
 async function getStudentLevel() {
@@ -42,9 +43,12 @@ async function updateStudentByParent(id, data) {
 async function deleteStudentByParent(id) {
     return await axiosInstance.delete(`api/v1/parent/student/${id}`);
 }
-async function updateLockCode(id, data){
+async function updateLockCode(id, data) {
     return await axiosInstance.post(`/api/v1/parent/student/${id}/lock-code`,
         data,
     )
+}
+async function signUp(data) {
+    return await axiosInstance.post(`/api/v1/auth/register`, data);
 }
 export default parentService;
