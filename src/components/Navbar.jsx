@@ -1,41 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
-import logo from "../assets/images/logo/logos.png";
+import logo from "../assets/images/logo/logo.png";
+import dashboard from "../assets/images/dashboard-icon/dashboard-icon-1.png";
 import userService from "../_services/user.service";
 import { useDispatch } from "react-redux";
 import { logout } from "../_store/_reducers/auth";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { Offcanvas } from "react-bootstrap";
+import { Container, Offcanvas, Navbar } from "react-bootstrap";
 import MobileMenu from "./common/mobile-menu";
 
-const Navbar = () => {
+const Nav = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenu, setIsMobileMenu] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    if (isDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isDropdownOpen]);
-
-  useEffect(() => {
-    // Close mobile menu on route change
-    setIsMobileMenu(false);
-  }, [location]);
+  const location = useLocation();
+  const path = location.pathname;
 
   const handleLogout = async () => {
     try {
@@ -50,48 +31,71 @@ const Navbar = () => {
     }
   };
 
+  const parentSidebar = [
+    
+    {
+      route: "/parent/students",
+      label: "Children",
+      iconImage: dashboard,
+    },
+    {
+      route: "/parent/assessment",
+      label: "Assessment History",
+      iconImage: "https://cdn-icons-png.flaticon.com/512/15175/15175912.png",
+    },
+    { route: "/parent/gems", label: "Gems", iconImage: "https://cdn-icons-png.flaticon.com/512/6577/6577837.png" },
+    {
+      route: "/parent/subscription",
+      label: "Subscription",
+      iconImage: "https://cdn-icons-png.flaticon.com/512/11264/11264808.png",
+    },
+  ];
+
   return (
     <>
-      <div className="top-navbar flex-between gap-16 p-2">
-        {/* Mobile Menu Button */}
-        <div className="flex-align gap-16">
-          <button
-            onClick={() => setIsMobileMenu(true)}
-            type="button"
-            className="toggle-btn d-xl-none d-flex text-26 text-gray-500"
+      <Navbar expand="xl" className="top-navbar p-3">
+        <Container fluid className="p-0">
+          <Link to="/" className="sidebar__logo">
+            <img src={logo} alt="QTN" />
+          </Link>
+          <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-lg`} />
+          <Navbar.Offcanvas
+            id={`offcanvasNavbar-expand-lg`}
+            aria-labelledby={`offcanvasNavbarLabel-expand-lg`}
+            placement="end"
           >
-            <i className="ph ph-list"></i>
+            <Offcanvas.Header closeButton></Offcanvas.Header>
+            <Offcanvas.Body>
+              <ul className="sidebar-menu">
+                {parentSidebar.map(({ route, label, iconImage }) => (
+                  <li
+                    key={route}
+                    className={`sidebar-menu__item ${
+                      path === route ? "activePage" : ""
+                    }`}
+                  >
+                    <Link to={route} className="sidebar-menu__link">
+                      <img src={iconImage} alt={label} width="30" height="30" />
+                      <span className="text">{label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Offcanvas.Body>
+          </Navbar.Offcanvas>
+          <button
+            onClick={handleLogout}
+            className="logout-btn"
+          >
+            <span className="text-2xl text-danger-600 d-flex">
+              <i className="ph ph-sign-out"></i>
+            </span>
+            <span className="text">Log Out</span>
           </button>
-        </div>
-
-        {/* Profile Dropdown */}
-        <button
-          onClick={handleLogout}
-          className="py-2 text-15 px-10 hover-bg-danger-50 text-gray-300 hover-text-danger-600 rounded-8 flex-align gap-8 fw-medium text-15 w-full text-left logout-btn"
-        >
-          <span className="text-2xl text-danger-600 d-flex">
-            <i className="ph ph-sign-out"></i>
-          </span>
-          <span className="text">Log Out</span>
-        </button>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      <Offcanvas
-        show={isMobileMenu}
-        onHide={() => setIsMobileMenu(false)}
-        placement="start"
-        className="bg-white"
-      >
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Menu</Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-          <MobileMenu />
-        </Offcanvas.Body>
-      </Offcanvas>
+        </Container>
+      </Navbar>
     </>
   );
 };
 
-export default Navbar;
+export default Nav;

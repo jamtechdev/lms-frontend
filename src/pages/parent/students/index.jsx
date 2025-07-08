@@ -82,10 +82,15 @@ const StudentList = () => {
         console.error("Error", error);
       });
   };
-  if (loading && !lockCodeUpdating) return <div className="text-center mt-5"><img src={loader} width={100} /></div>;
+  if (loading && !lockCodeUpdating)
+    return (
+      <div className="text-center mt-5">
+        <img src={loader} width={100} />
+      </div>
+    );
   return (
     <>
-      <div className="dashboard-body">
+      <div>
         <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
           <div className="breadcrumb mb-24">
             <ul className="flex-align gap-4 mb-0">
@@ -134,79 +139,76 @@ const StudentList = () => {
           </div> */}
         </div>
 
-        <div className="d-flex align-items-center justify-content-between mb-3">
+        <div className="d-flex align-items-center justify-content-between mb-2">
           <h3>Student List</h3>
-          <Link
-            to={"/parent/students/create"}
-            className="btn btn-primary text-sm btn-sm px-24 py-12 gap-8"
-          >
+          <Link to={"/parent/students/create"} className="dashboard-button">
             Create
           </Link>
         </div>
-        <div className="table-container">
-          <table className="student-table table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th className="text-white-300">Avatar</th>
-                <th className="text-white-300">Name</th>
-                <th className="text-white-300">Email</th>
-                <th className="text-white-300">Phone</th>
-                <th className="text-white-300">Student Type</th>
-                <th className="text-white-300">Student Level</th>
-                <th className="text-white-300">Address</th>
-                <th className="text-white-300">Lock Code</th>
-                <th className="text-white-300">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {students &&
-                students?.students?.map((student) => (
-                  <tr key={student?.id}>
-                    <td>
-                      <img
-                        src={student?.avatar}
-                        alt="avatar"
-                        className="avatar-img"
+        <div class="table-responsive">
+ <table className="student-table table table-bordered">
+          <thead>
+            <tr>
+              <th className="text-white-300">Avatar</th>
+              <th className="text-white-300">Name</th>
+              <th className="text-white-300">Email</th>
+              <th className="text-white-300">Phone</th>
+              <th className="text-white-300">Student Type</th>
+              <th className="text-white-300">Student Level</th>
+              <th className="text-white-300">Address</th>
+              <th className="text-white-300">Lock Code</th>
+              <th className="text-white-300">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {students &&
+              students?.students?.map((student) => (
+                <tr key={student?.id}>
+                  <td>
+                    <img
+                      src={student?.avatar}
+                      alt="avatar"
+                      className="avatar-img"
+                    />
+                  </td>
+                  <td>
+                    {student?.first_name} {student?.last_name}
+                  </td>
+                  <td>{student?.email}</td>
+                  <td>{student?.phone}</td>
+                  <td>{student?.student_type}</td>
+                  <td>{student?.student_level}</td>
+                  <td>{student?.address}</td>
+                  <td>{student?.lock_code}</td>
+                  <td style={{ textAlign: "center" }}>
+                    <label className="switch">
+                      <input
+                        type="checkbox"
+                        checked={student?.lock_code_enabled}
+                        onChange={() => handleToggle(student)}
+                        disabled={lockCodeUpdating}
                       />
-                    </td>
-                    <td>
-                      {student?.first_name} {student?.last_name}
-                    </td>
-                    <td>{student?.email}</td>
-                    <td>{student?.phone}</td>
-                    <td>{student?.student_type}</td>
-                    <td>{student?.student_level}</td>
-                    <td>{student?.address}</td>
-                    <td>{student?.lock_code}</td>
-                    <td style={{ textAlign: "center" }}>
-                      <label className="switch">
-                        <input
-                          type="checkbox"
-                          checked={student?.lock_code_enabled}
-                          onChange={() => handleToggle(student)}
-                          disabled={lockCodeUpdating}
-                        />
-                        <span className="slider round"></span>
-                      </label>
-                      <button
-                        className="icon-button"
-                        onClick={() => handleEdit(student.id)}
-                        title="Edit"
-                      >
-                        <i className="ph ph-pencil-simple"></i>
-                      </button>
-                      <button
-                        className="icon-button text-danger ms-2"
-                        onClick={() => handleDelete(student.id)}
-                        title="Delete"
-                      >
-                        <i className="ph ph-trash"></i>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+                      <span className="slider round"></span>
+                    </label>
+                    <button
+                      className="icon-button"
+                      onClick={() => handleEdit(student.id)}
+                      title="Edit"
+                    >
+                      <i className="ph ph-pencil-simple"></i>
+                    </button>
+                    <button
+                      className="icon-button text-danger ms-2"
+                      onClick={() => handleDelete(student.id)}
+                      title="Delete"
+                    >
+                      <i className="ph ph-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
         </div>
         {/* Pagination Controls */}
         <ResponsivePagination
@@ -214,11 +216,7 @@ const StudentList = () => {
           total={students?.pagination?.total_pages}
           onPageChange={handlePage}
         />
-
       </div>
-
-
-
     </>
   );
 };

@@ -96,7 +96,7 @@ const SignUp = () => {
                 </Link>
               </div> */}
               <button type="submit"
-                  className="btn btn-primary rounded-pill w-100">
+                  className="dashboard-button w-100">
                 Sign Up
               </button>
               <p className="mt-32 text-gray-600 text-center">
@@ -107,7 +107,7 @@ const SignUp = () => {
                    Log In
                 </Link>
               </p>
-              <div className="divider my-32 position-relative text-center">
+              {/* <div className="divider my-32 position-relative text-center">
                 <span className="divider__text text-gray-600 text-13 fw-medium px-26 bg-white">
                   or
                 </span>
@@ -137,7 +137,7 @@ const SignUp = () => {
                     <i className="ph ph-google-logo"></i>
                   </Link>
                 </li>
-              </ul>
+              </ul> */}
             </form>
           </div>
         </div>

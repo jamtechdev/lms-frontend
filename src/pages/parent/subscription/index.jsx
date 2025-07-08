@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Subscription = () => {
   return (
     <>
-      <div className="dashboard-body">
+      <div>
         <div className="breadcrumb mb-24">
           <ul className="flex-align gap-4 mb-0">
             <li>
@@ -29,7 +29,7 @@ const Subscription = () => {
 
         <div className="card mt-24">
           <div className="card-header border-bottom">
-            <h4 className="mb-4">Pricing Breakdown</h4>
+            <h2 className="mb-0">Pricing Breakdown</h2>
             <p className="text-gray-600 text-15">
               Creating a detailed pricing plan for your course requries
               considering various factors.
@@ -95,7 +95,7 @@ const Subscription = () => {
                   </ul>
                   <Link
                     to="#"
-                    className="btn btn-outline-main w-100 rounded-pill py-16 border-main-300 text-17 fw-medium mt-32"
+                    className="dashboard-button"
                   >
                     Get Started
                   </Link>
@@ -163,7 +163,7 @@ const Subscription = () => {
                   </ul>
                   <Link
                     to="#"
-                    className="btn btn-primary w-100 rounded-pill py-16 border-main-600 text-17 fw-medium mt-32"
+                    className="dashboard-button"
                   >
                     Get Started
                   </Link>
@@ -228,7 +228,7 @@ const Subscription = () => {
                   </ul>
                   <Link
                     to="#"
-                    className="btn btn-outline-main w-100 rounded-pill py-16 border-main-300 text-17 fw-medium mt-32"
+                    className="dashboard-button"
                   >
                     Get Started
                   </Link>
