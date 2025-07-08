@@ -1,50 +1,63 @@
 import { Fragment, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
-import { useSelector } from "react-redux";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import ResponsivePagination from "react-responsive-pagination";
+import "react-responsive-pagination/themes/classic.css";
 
 const OpenClozeWithDropdown = (props) => {
   const { questions, type, page, setPage } = props;
   const dispatch = useDispatch();
   const answersStore = useSelector((state) => state.question.attempts);
-  const navigate = useNavigate();
   const [inputs, setInputs] = useState({});
-  const [inputErrors, setInputErrors] = useState({});
-  const [userAnswerJSON, setUserAnswerJSON] = useState([]);
+  const [submittedQuestions, setSubmittedQuestions] = useState({});
+
   useEffect(() => {
     setInputs({});
-  }, [page]);
+    setSubmittedQuestions({});
+  }, [questions]);
 
   const handleStoreData = async (question) => {
-    let payload = {
-      question_id: question?.id,
+    const questionId = question?.id;
+
+    const payload = {
+      question_id: questionId,
       type: type,
-      user_answer: JSON.stringify(inputs),
+      user_answer: JSON.stringify(inputs[questionId]),
     };
+
     dispatch(setAttemptQuestions(payload));
-    if (questions?.pagination?.total === page) {
-      const updatedAnswers = [...answersStore, payload];
-      let finalPayload = {
-        answers: updatedAnswers?.map((item) => ({
-          question_id: item.question_id,
-          answer: item.user_answer,
-          type: item?.type,
-        })),
-      };
-      await userService
-        .answer(finalPayload)
-        .then((data) => {
-          console.log(data);
-          toast.success("Answer submitted successfully.");
-          navigate("/student/question-type");
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
+    const updatedAnswers = [...answersStore, payload];
+
+    const finalPayload = {
+      answers: updatedAnswers.map((item) => ({
+        question_id: item.question_id,
+        answer: item.user_answer,
+        type: item.type,
+      })),
+    };
+
+    try {
+      await userService.answer(finalPayload);
+      toast.success("Answer submitted successfully.");
+      setSubmittedQuestions((prev) => ({ ...prev, [questionId]: true }));
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast.error("Failed to submit answer.");
     }
+  };
+
+  const handleOptionClick = (questionId, blankNumber, selectedOption) => {
+    if (submittedQuestions[questionId]) return;
+
+    setInputs((prev) => ({
+      ...prev,
+      [questionId]: {
+        ...prev[questionId],
+        [blankNumber]: selectedOption,
+      },
+    }));
   };
 
   return (
@@ -55,19 +68,10 @@ const OpenClozeWithDropdown = (props) => {
           /<[^>]+>/g,
           ""
         );
-        const blanks = questionData.questions;
-
-        const handleOptionClick = (blank_number, selectedOption) => {
-          setInputs((prev) => ({ ...prev, [blank_number]: selectedOption }));
-
-          // dispatch(
-          //     setAttemptQuestions({
-          //         question_id: questionId,
-          //         user_answer: selectedOption,
-          //         type: type,
-          //     })
-          // );
-        };
+        const blanks = questionData.questions || [];
+        const questionId = qObj.id;
+        const selectedAnswers = inputs[questionId] || {};
+        const isSubmitted = submittedQuestions[questionId] || false;
 
         const renderedParagraph = paragraph
           .split(/(\(\d+\)\[[^\]]+\])/g)
@@ -79,7 +83,9 @@ const OpenClozeWithDropdown = (props) => {
               const question = blanks.find(
                 (q) => q.blank_number === blankNumber
               );
-              const selectedAnswer = inputs[question.blank_number];
+              if (!question) return <span key={i}>{part}</span>;
+
+              const selectedAnswer = selectedAnswers[blankNumber];
               const options = optionsText.split("/").map((opt) => opt.trim());
 
               return (
@@ -94,13 +100,14 @@ const OpenClozeWithDropdown = (props) => {
                         )}
                         <span
                           onClick={() =>
-                            handleOptionClick(question.blank_number, opt)
+                            handleOptionClick(questionId, blankNumber, opt)
                           }
                           style={{
-                            cursor: "pointer",
+                            cursor: isSubmitted ? "not-allowed" : "pointer",
                             margin: "0 5px",
                             fontWeight: "bold",
                             textDecoration: isSelected ? "underline" : "none",
+                            opacity: isSubmitted ? 0.6 : 1,
                           }}
                         >
                           {opt}
@@ -115,6 +122,10 @@ const OpenClozeWithDropdown = (props) => {
               return <span key={i}>{part}</span>;
             }
           });
+
+        const allAnswered = blanks.every(
+          (q) => selectedAnswers[q.blank_number]
+        );
 
         return (
           <div key={index} style={{ marginBottom: "30px" }}>
@@ -136,41 +147,35 @@ const OpenClozeWithDropdown = (props) => {
                 lineHeight: "1.8",
               }}
             >
-              <strong>{index + 1}.</strong> {renderedParagraph}
+              <strong>
+                {(page - 1) * questions.pagination.per_page + index + 1}.
+              </strong>{" "}
+              {renderedParagraph}
             </div>
-            <div className="flex justify-between mt-4">
+
+            <div className="flex justify-end mt-4">
               <button
-                className="btn btn-primary mt-3 mr-2"
-                onClick={() => setPage((prev) => prev - 1)}
-                disabled={questions?.pagination?.current_page === 1}
+                onClick={() => handleStoreData(qObj)}
+                className="btn btn-primary mt-3"
+                disabled={!allAnswered || isSubmitted}
               >
-                Previous
+                {isSubmitted ? "Submitted" : "Submit"}
               </button>
-              {questions?.pagination?.total === page ? (
-                <button
-                  onClick={() => {
-                    handleStoreData(qObj);
-                  }}
-                  className="btn btn-primary mt-3 ml-2"
-                >
-                  Submit
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    setPage((prev) => prev + 1);
-                    handleStoreData(qObj);
-                  }}
-                  className="btn btn-primary mt-3"
-                >
-                  Next
-                </button>
-              )}
             </div>
           </div>
         );
       })}
+      {questions?.pagination?.total_pages > 1 && (
+        <div className="mt-4 flex justify-center">
+          <ResponsivePagination
+            current={page}
+            total={questions.pagination.total_pages}
+            onPageChange={setPage}
+          />
+        </div>
+      )}
     </>
   );
 };
+
 export default OpenClozeWithDropdown;

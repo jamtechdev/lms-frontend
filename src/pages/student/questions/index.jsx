@@ -29,6 +29,9 @@ import EditingQuesions from "../../../components/students/editing-questions";
 import FillInTheBlank from "../../../components/students/fill-in-the-blank";
 import Comprehension from "../../../components/students/comprehension";
 import loader from "../../../assets/images/loader.gif";
+import ResponsivePagination from "react-responsive-pagination";
+import "react-responsive-pagination/themes/classic.css";
+
 const ItemTypes = {
   LEFT_ITEM: "LEFT_ITEM",
 };
@@ -263,25 +266,37 @@ const AllQuestions = () => {
           />
         )}
 
-        {questions &&
-          type == "rearranging" &&
-          !result &&
-          questions?.questions_array?.map((q) => {
-            const currentWords =
-              reorderState.find((r) => r.id === q.id)?.words || [];
-            return (
-              <ReArrangeList
-                key={q.id}
-                question={q}
-                words={currentWords}
-                onReorder={(newOrder) => handleReorder(q.id, newOrder)}
-                setPage={setPage}
-                isFirst={questions?.pagination?.current_page == 1}
-                isLast={page == questions?.pagination?.total}
-                setResult={setResult}
-              />
-            );
-          })}
+        {questions && type == "rearranging" && !result && (
+          <>
+            {questions?.questions_array?.map((q) => {
+              const currentWords =
+                reorderState.find((r) => r.id === q.id)?.words || [];
+              return (
+                <ReArrangeList
+                  key={q.id}
+                  question={q}
+                  page={page}
+                  words={currentWords}
+                  onReorder={(newOrder) => handleReorder(q.id, newOrder)}
+                  setPage={setPage}
+                  isFirst={questions?.pagination?.current_page === 1}
+                  isLast={page === questions?.pagination?.total}
+                  setResult={setResult}
+                />
+              );
+            })}
+
+            {questions?.pagination?.total_pages > 1 && (
+              <div className="mt-4 flex justify-center">
+                <ResponsivePagination
+                  current={page}
+                  total={questions.pagination.total_pages}
+                  onPageChange={setPage}
+                />
+              </div>
+            )}
+          </>
+        )}
 
         {questions && type == "open_cloze_with_options" && (
           <OpenClozeWithOptions

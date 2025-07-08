@@ -5,11 +5,14 @@ import parse from "html-react-parser";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import ResponsivePagination from "react-responsive-pagination";
+import "react-responsive-pagination/themes/classic.css";
 
 const Comprehension = (props) => {
   const { questions, type: globalType, page, setPage } = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const answersStore = useSelector((state) => state.question.attempts);
   const [inputs, setInputs] = useState([]);
   useEffect(() => {
@@ -24,15 +27,14 @@ const Comprehension = (props) => {
         type: item?.type,
       })),
     };
-    await userService
-      .answer(payload)
-      .then((data) => {
-        toast.success("Answer submitted successfully.");
-        navigate("/student");
-      })
-      .catch((error) => {
-        console.error("Error", error);
-      });
+
+    try {
+      await userService.answer(payload);
+      toast.success("Answer submitted successfully.");
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Error", error);
+    }
   };
 
   return (
@@ -43,11 +45,9 @@ const Comprehension = (props) => {
         const subquestions = questionData.subquestions;
         const handleChange = (subQues, value, type) => {
           setInputs((prevInputs) => {
-            // Check if the subQues already exists
             const index = prevInputs.findIndex(
               (input) => input.subQues === subQues
             );
-            // If subQues exists, update its userAnswer
             if (index !== -1) {
               const updatedInputs = [...prevInputs];
               updatedInputs[index] = {
@@ -63,7 +63,6 @@ const Comprehension = (props) => {
             ];
             return newInputs;
           });
-          // Work with a local array that mimics the state
           let updatedInputs = [...inputs];
           const index = updatedInputs.findIndex(
             (input) => input.subQues === subQues
@@ -106,8 +105,6 @@ const Comprehension = (props) => {
                   const selectedAnswer = answersStore?.find(
                     (ans) => ans.question_id === questionId
                   );
-                  // const prefilled = JSON.parse(answersStore.find(item => item.question_id === qObj?.id)?.user_answer || "[]")?.find(ans => ans?.subQues === subq?.question);
-
                   if (subq?.type == "mcq") {
                     let prefilled;
                     const getSelected = answersStore.find(
@@ -133,6 +130,7 @@ const Comprehension = (props) => {
                               <input
                                 type="radio"
                                 name={`mcq-question`}
+                                disabled={isSubmitted}
                                 value={opt}
                                 checked={prefilled?.user_answer == opt}
                                 onChange={(e) =>
@@ -174,6 +172,7 @@ const Comprehension = (props) => {
                             <input
                               type="radio"
                               name={`question`}
+                              disabled={isSubmitted}
                               value="True"
                               checked={prefilled?.user_answer == "True"}
                               onChange={(e) =>
@@ -190,6 +189,7 @@ const Comprehension = (props) => {
                             <input
                               type="radio"
                               name={`question`}
+                              disabled={isSubmitted}
                               value="False"
                               checked={prefilled?.user_answer == "False"}
                               onChange={(e) =>
@@ -228,7 +228,7 @@ const Comprehension = (props) => {
                         <input
                           type="text"
                           name="fill_blank"
-                          // value={prefilled?.user_answer}
+                          disabled={isSubmitted}
                           onChange={(e) =>
                             handleChange(
                               subq.question,
@@ -262,6 +262,7 @@ const Comprehension = (props) => {
                         </div>
                         <textarea
                           rows={3}
+                          disabled={isSubmitted}
                           style={{
                             width: "100%",
                             borderColor: "#ccc",
@@ -282,34 +283,26 @@ const Comprehension = (props) => {
                     );
                   }
                 })}
-              <div className="flex justify-between">
-                <button
-                  className="btn btn-primary mt-3 mr-2"
-                  onClick={() => setPage((prev) => prev - 1)}
-                  disabled={questions?.pagination?.current_page === 1}
-                >
-                  Previous
-                </button>
-                {questions?.pagination?.total === page ? (
-                  <button
-                    onClick={() => handlePaperSubmit()}
-                    className="btn btn-primary mt-3 ml-2"
-                  >
-                    Submit
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setPage((prev) => prev + 1)}
-                    className="btn btn-primary mt-3"
-                  >
-                    Next
-                  </button>
-                )}
-              </div>
+              <button
+                onClick={handlePaperSubmit}
+                className="btn btn-primary mt-3"
+                disabled={answersStore.length === 0 || isSubmitted}
+              >
+                {isSubmitted ? "Submitted" : "Submit"}
+              </button>
             </div>
           </>
         );
       })}
+      {questions?.pagination?.total_pages > 1 && (
+        <div className="mt-4 flex justify-center">
+          <ResponsivePagination
+            current={page}
+            total={questions.pagination.total_pages}
+            onPageChange={setPage}
+          />
+        </div>
+      )}
     </>
   );
 };

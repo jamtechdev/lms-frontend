@@ -5,11 +5,14 @@ import { setAttemptQuestions } from "../../_store/_reducers/question";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import ResponsivePagination from "react-responsive-pagination";
+import "react-responsive-pagination/themes/classic.css";
 
 const EditingQuesions = (props) => {
   const { questions, page, setPage, type } = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [submitted, setSubmitted] = useState({});
   const answersStore = useSelector((state) => state.question.attempts);
   const [inputs, setInputs] = useState({});
   useEffect(() => {
@@ -17,32 +20,34 @@ const EditingQuesions = (props) => {
   }, [page]);
 
   const handleStoreData = async (question) => {
-    console.log(question);
-    let payload = {
-      question_id: question?.id,
+    const questionId = question?.id;
+
+    const payload = {
+      question_id: questionId,
       type: type,
       user_answer: JSON.stringify(inputs),
     };
+
     dispatch(setAttemptQuestions(payload));
+    setSubmitted((prev) => ({ ...prev, [questionId]: true }));
+
     if (questions?.pagination?.total === page) {
       const updatedAnswers = [...answersStore, payload];
-      let finalPayload = {
-        answers: updatedAnswers?.map((item) => ({
+      const finalPayload = {
+        answers: updatedAnswers.map((item) => ({
           question_id: item.question_id,
           answer: item.user_answer,
           type: item?.type,
         })),
       };
-      await userService
-        .answer(finalPayload)
-        .then((data) => {
-          console.log(data);
-          toast.success("Answer submitted successfully.");
-          navigate("/student");
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
+
+      try {
+        await userService.answer(finalPayload);
+        toast.success("Answer submitted successfully.");
+      } catch (error) {
+        console.error("Error", error);
+        toast.error("Submission failed.");
+      }
     }
   };
 
@@ -52,22 +57,15 @@ const EditingQuesions = (props) => {
         const questionData = qObj.question;
         const paragraph = questionData.paragraph;
         const boxes = questionData.questions;
+        const questionId = qObj.id;
+        const isSubmitted = submitted[questionId] === true;
+        const isAnyInputFilled = Object.values(inputs).some(
+          (val) => val.trim() !== ""
+        );
 
         const handleInputChange = (e, boxNumber) => {
           const value = e.target.value;
           setInputs((prev) => ({ ...prev, [boxNumber]: value }));
-          // console.log({
-          //     question_id: qObj.id,
-          //     user_answer: value,
-          //     type: "editing",
-          // })
-          // dispatch(
-          //     setAttemptQuestions({
-          //         question_id: `${qObj.id}-${boxNumber}`,
-          //         user_answer: value,
-          //         type: "editing",
-          //     })
-          // );
         };
 
         const renderedParagraph = (
@@ -86,6 +84,7 @@ const EditingQuesions = (props) => {
                     key={i}
                     type="text"
                     value={inputVal}
+                    disabled={isSubmitted}
                     placeholder={`Word ${boxNumber}`}
                     onChange={(e) => handleInputChange(e, boxNumber)}
                     style={{
@@ -101,6 +100,7 @@ const EditingQuesions = (props) => {
                       outlineColor: "#2563eb",
                     }}
                   />
+
                   <br></br>
                 </>
               );
@@ -109,7 +109,6 @@ const EditingQuesions = (props) => {
                 <span
                   key={i}
                   style={{
-                    // critical to prevent wrapping
                     display: "inline-flex",
                     whiteSpace: "pre-wrap",
                   }}
@@ -149,36 +148,31 @@ const EditingQuesions = (props) => {
                 {renderedParagraph}
               </div>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-end">
               <button
-                className="btn btn-primary mt-3 mr-2"
-                onClick={() => setPage((prev) => prev - 1)}
-                disabled={questions?.pagination?.current_page === 1}
+                onClick={() => handleStoreData(qObj)}
+                disabled={isSubmitted || !isAnyInputFilled}
+                className={`btn btn-primary mt-3 ${
+                  isSubmitted || !isAnyInputFilled
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
               >
-                Previous
+                {isSubmitted ? "Submitted" : "Submit"}
               </button>
-              {questions?.pagination?.total === page ? (
-                <button
-                  onClick={() => handleStoreData(qObj)}
-                  className="btn btn-primary mt-3 ml-2"
-                >
-                  Submit
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    setPage((prev) => prev + 1);
-                    handleStoreData(qObj);
-                  }}
-                  className="btn btn-primary mt-3"
-                >
-                  Next
-                </button>
-              )}
             </div>
           </div>
         );
       })}
+      {questions?.pagination?.total_pages > 1 && (
+        <div className="mt-4 flex justify-center">
+          <ResponsivePagination
+            current={page}
+            total={questions.pagination.total_pages}
+            onPageChange={setPage}
+          />
+        </div>
+      )}
     </>
   );
 };

@@ -1,39 +1,47 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
-import { useSelector } from "react-redux";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import ResponsivePagination from "react-responsive-pagination";
+import "react-responsive-pagination/themes/classic.css";
 
 const OpenClozeWithOptions = (props) => {
   const { questions, type, page, setPage } = props;
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const answersStore = useSelector((state) => state.question.attempts);
   const [inputs, setInputs] = useState({});
   const [inputErrors, setInputErrors] = useState({});
-  const [userAnswerJSON, setUserAnswerJSON] = useState([]);
+  const [userAnswerJSON, setUserAnswerJSON] = useState({});
+  const [submittedQuestions, setSubmittedQuestions] = useState({});
+
   useEffect(() => {
     setInputs({});
+    setInputErrors({});
+    setUserAnswerJSON({});
+    setSubmittedQuestions({});
   }, [page]);
-  const handlePaperSubmit = async () => {
-    let payload = {
+
+  const handlePaperSubmit = async (questionId) => {
+    const payload = {
       answers: answersStore?.map((item) => ({
         question_id: item.question_id,
         answer: item.user_answer,
         type: item?.type,
       })),
     };
-    await userService
-      .answer(payload)
-      .then((data) => {
-        toast.success("Answer submitted successfully.");
-        navigate("/student");
-      })
-      .catch((error) => {
-        console.error("Error", error);
-      });
+
+    try {
+      await userService.answer(payload);
+      toast.success("Answer submitted successfully.");
+      setSubmittedQuestions((prev) => ({
+        ...prev,
+        [questionId]: true,
+      }));
+    } catch (error) {
+      console.error("Error", error);
+    }
   };
 
   return (
@@ -46,41 +54,58 @@ const OpenClozeWithOptions = (props) => {
           questionData?.question_group?.shared_options?.map((opt) =>
             opt.toLowerCase()
           ) || [];
-        const handleChange = (e, id, blank_number) => {
+
+        const handleChange = (e, questionId, blank_number, inputId) => {
           const value = e.target.value.trim();
 
-          setInputs((prev) => ({ ...prev, [id]: value }));
+          setInputs((prev) => ({
+            ...prev,
+            [questionId]: {
+              ...(prev[questionId] || {}),
+              [inputId]: value,
+            },
+          }));
 
-          if (value === "" || options.includes(value.toLowerCase())) {
-            // valid input → clear error and dispatch
-            setInputErrors((prev) => ({ ...prev, [id]: false }));
-            // user answer json format
-            const existingAnswerIndex = userAnswerJSON.findIndex(
-              (answer) => answer.blank_number === blank_number
-            );
-            if (existingAnswerIndex !== -1) {
-              userAnswerJSON[existingAnswerIndex] = {
-                blank_number: blank_number,
-                value: value,
+          const isValid = value === "" || options.includes(value.toLowerCase());
+
+          setInputErrors((prev) => ({
+            ...prev,
+            [questionId]: {
+              ...(prev[questionId] || {}),
+              [inputId]: !isValid,
+            },
+          }));
+
+          if (isValid) {
+            setUserAnswerJSON((prev) => {
+              const updated = [...(prev[questionId] || [])];
+              const idx = updated.findIndex(
+                (item) => item.blank_number === blank_number
+              );
+              if (idx !== -1) {
+                updated[idx] = { blank_number, value };
+              } else {
+                updated.push({ blank_number, value });
+              }
+
+              const newState = {
+                ...prev,
+                [questionId]: updated,
               };
-            } else {
-              userAnswerJSON.push({
-                blank_number: blank_number,
-                value: value,
-              });
-            }
-            let payload = {
-              question_id: qObj?.id,
-              type: type,
-              user_answer: JSON.stringify(userAnswerJSON),
-            };
-            console.log(payload, "============");
-            dispatch(setAttemptQuestions(payload));
-          } else {
-            // invalid → show error but don't dispatch
-            setInputErrors((prev) => ({ ...prev, [id]: true }));
+
+              dispatch(
+                setAttemptQuestions({
+                  question_id: questionId,
+                  type: type,
+                  user_answer: JSON.stringify(updated),
+                })
+              );
+
+              return newState;
+            });
           }
         };
+
         const renderedParagraph = paragraph
           ?.split(/(\(\d+\)_____)/g)
           ?.map((part, i) => {
@@ -90,56 +115,45 @@ const OpenClozeWithOptions = (props) => {
               const question = blanks.find(
                 (q) => q.blank_number === blankNumber
               );
-              const inputValue = inputs[question.id] || "";
-              const hasError = inputErrors[question.id];
-              const foundObject = answersStore?.find(
-                (item) => item.question_id === qObj?.id
-              );
-              let prefilledFromStore;
-              if (foundObject) {
-                prefilledFromStore = JSON.parse(foundObject?.user_answer)?.find(
-                  (item) => item?.blank_number == question?.blank_number
-                );
-              }
+
+              const inputValue =
+                inputs[qObj.id]?.[question.id] ||
+                JSON.parse(
+                  answersStore?.find((item) => item.question_id === qObj.id)
+                    ?.user_answer || "[]"
+                )?.find((item) => item.blank_number === blankNumber)?.value ||
+                "";
+
+              const hasError = inputErrors[qObj.id]?.[question.id];
+
               return (
-                <>
-                  <span
-                    style={{
-                      fontSize: "larger",
-                      color: "black",
-                      margin: "1px",
-                      marginLeft: "7px",
-                    }}
-                  >
-                    ({question?.blank_number})
+                <span key={i}>
+                  <span style={{ fontWeight: "bold", marginLeft: "7px" }}>
+                    ({blankNumber})
                   </span>
                   <input
-                    key={i}
                     type="text"
-                    placeholder={`_____`}
-                    value={
-                      inputs[question.id] || prefilledFromStore?.value || ""
-                    }
+                    placeholder="_____"
+                    value={inputValue}
                     onChange={(e) =>
-                      handleChange(e, question.id, question?.blank_number)
+                      handleChange(e, qObj.id, blankNumber, question.id)
                     }
                     style={{
                       width: "60px",
                       margin: "0 5px",
                       border: "none",
                       background: "transparent",
-                      borderBottom: inputErrors[question.id]
-                        ? "2px solid red"
-                        : "none",
+                      borderBottom: hasError ? "2px solid red" : "none",
                       textAlign: "center",
                     }}
                   />
-                </>
+                </span>
               );
             } else {
               return <span key={i}>{part}</span>;
             }
           });
+
         return (
           <div key={index} style={{ marginBottom: "30px" }}>
             <div
@@ -151,46 +165,46 @@ const OpenClozeWithOptions = (props) => {
               }}
             >
               <div>
-                {" "}
                 <strong>Instruction:</strong> {questionData.instruction}
               </div>
             </div>
+
             {options.length > 0 && (
               <div>
                 <strong>Options:</strong> {options.join(", ")}
               </div>
             )}
+
             <div className="px-0 py-3 options">
-              <strong>{page}.</strong> {renderedParagraph}
+              <strong>
+                {(page - 1) * questions.pagination.per_page + index + 1}. .
+              </strong>{" "}
+              {renderedParagraph}
             </div>
-            <div className="flex justify-between">
+
+            <div className="flex justify-end">
               <button
-                className="btn btn-primary mt-3 mr-2"
-                onClick={() => setPage((prev) => prev - 1)}
-                disabled={questions?.pagination?.current_page === 1}
+                onClick={() => handlePaperSubmit(qObj.id)}
+                className="btn btn-primary mt-3"
+                disabled={submittedQuestions[qObj.id]}
               >
-                Previous
+                {submittedQuestions[qObj.id] ? "Submitted" : "Submit"}
               </button>
-              {questions?.pagination?.total === page ? (
-                <button
-                  onClick={() => handlePaperSubmit()}
-                  className="btn btn-primary mt-3 ml-2"
-                >
-                  Submit
-                </button>
-              ) : (
-                <button
-                  onClick={() => setPage((prev) => prev + 1)}
-                  className="btn btn-primary mt-3"
-                >
-                  Next
-                </button>
-              )}
             </div>
           </div>
         );
       })}
+      {questions?.pagination?.total_pages > 1 && (
+        <div className="mt-4 flex justify-center">
+          <ResponsivePagination
+            current={page}
+            total={questions.pagination.total_pages}
+            onPageChange={setPage}
+          />
+        </div>
+      )}
     </>
   );
 };
+
 export default OpenClozeWithOptions;

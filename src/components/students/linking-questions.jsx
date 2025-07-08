@@ -6,6 +6,8 @@ import { setAttemptQuestions } from "../../_store/_reducers/question";
 import { userService } from "../../_services";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import ResponsivePagination from "react-responsive-pagination";
+import "react-responsive-pagination/themes/classic.css";
 
 const LinkingQuestions = ({
   questions,
@@ -15,52 +17,54 @@ const LinkingQuestions = ({
   shuffledRight,
 }) => {
   const [matchesByQuestion, setMatchesByQuestion] = useState({});
-  const [selectedLeft, setSelectedLeft] = useState(null);
-  const [selectedRight, setSelectedRight] = useState(null);
+  const [selected, setSelected] = useState({});
+  const [submittedQuestions, setSubmittedQuestions] = useState(new Set());
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const answersStore = useSelector((state) => state.question.attempts);
 
-  const currentQuestion = questions?.questions_array?.[0];
-  if (
-    !currentQuestion ||
-    !currentQuestion.question ||
-    !Array.isArray(currentQuestion.question.answer)
-  ) {
-    return null;
-  }
-
-  const currentQuestionId = currentQuestion.id;
-  const currentMatches = matchesByQuestion[currentQuestionId] ?? {};
-  const leftItems = currentQuestion.question.answer.map((a) => a.left);
-  const maxLength = Math.max(leftItems.length, shuffledRight.length);
-
-  const handleLeftClick = (index) => {
-    setSelectedLeft(index);
-    setSelectedRight(null);
+  const handleLeftClick = (qId, index) => {
+    if (submittedQuestions.has(qId)) return;
+    setSelected((prev) => ({
+      ...prev,
+      [qId]: { leftIndex: index, rightIndex: null },
+    }));
   };
 
-  const handleRightClick = (index) => {
-    if (selectedLeft !== null) {
+  const handleRightClick = (qId, index) => {
+    if (submittedQuestions.has(qId)) return;
+    const selectedState = selected[qId] ?? {};
+    if (
+      selectedState.leftIndex !== null &&
+      selectedState.leftIndex !== undefined
+    ) {
       setMatchesByQuestion((prev) => {
-        const prevForQ = prev[currentQuestionId] ?? {};
+        const prevForQ = prev[qId] ?? {};
         return {
           ...prev,
-          [currentQuestionId]: {
+          [qId]: {
             ...prevForQ,
-            [selectedLeft]: index,
+            [selectedState.leftIndex]: index,
           },
         };
       });
-      setSelectedLeft(null);
+      setSelected((prev) => ({
+        ...prev,
+        [qId]: { leftIndex: null, rightIndex: null },
+      }));
     } else {
-      setSelectedRight(index);
+      setSelected((prev) => ({
+        ...prev,
+        [qId]: { leftIndex: null, rightIndex: index },
+      }));
     }
   };
 
-  const handleStoreQuestion = async () => {
-    const currentMatchMap = matchesByQuestion[currentQuestionId] ?? {};
+  const handleSubmitSingle = async (q) => {
+    const qId = q.id;
+    const leftItems = q.question.answer.map((a) => a.left);
+    const currentMatchMap = matchesByQuestion[qId] ?? {};
     const userAnswerTextMap = {};
 
     for (const [leftIndex, rightIndex] of Object.entries(currentMatchMap)) {
@@ -72,181 +76,190 @@ const LinkingQuestions = ({
     }
 
     const payload = {
-      question_id: currentQuestion.id,
+      question_id: qId,
       type,
       user_answer: JSON.stringify(userAnswerTextMap),
     };
 
-    const updatedAnswers = [...answersStore, payload];
     dispatch(setAttemptQuestions(payload));
 
-    if (questions?.pagination?.total === page) {
-      const finalPayload = {
-        answers: updatedAnswers.map((a) => ({
-          question_id: a.question_id,
-          answer: a.user_answer,
-          type: a.type,
-        })),
-      };
-
-      try {
-        await userService.answer(finalPayload);
-        toast.success("Answer submitted successfully.");
-        navigate("/student");
-      } catch (err) {
-        console.error(err);
-        toast.error("Something went wrong while submitting.");
-      }
+    try {
+      await userService.answer({
+        answers: [
+          {
+            question_id: payload.question_id,
+            answer: payload.user_answer,
+            type: payload.type,
+          },
+        ],
+      });
+      toast.success(`Answer submitted`);
+      setSubmittedQuestions((prev) => new Set(prev).add(qId));
+    } catch (err) {
+      console.error(err);
+      toast.error("Submission failed");
     }
   };
 
   return (
-    <div key={currentQuestion.id}>
-      <div>
-        <strong>Instruction:</strong> {currentQuestion.question.instruction}
-      </div>
+    <div>
+      {questions.questions_array.map((q, qIdx) => {
+        if (!Array.isArray(q.question.answer)) return null;
 
-      <div className="question-card mb-0">
-        <h2 className="question-text mb-4">
-          {page}.{" "}
-          {typeof currentQuestion.question.content === "string"
-            ? parse(currentQuestion.question.content)
-            : ""}
-        </h2>
+        const qId = q.id;
+        const currentMatches = matchesByQuestion[qId] ?? {};
+        const leftItems = q.question.answer.map((a) => a.left);
+        const maxLength = Math.max(leftItems.length, shuffledRight.length);
+        const selectedLeft = selected[qId]?.leftIndex;
+        const selectedRight = selected[qId]?.rightIndex;
+        const isSubmitted = submittedQuestions.has(qId);
+        const isButtonDisabled = Object.keys(currentMatches).length === 0;
 
-        <div className="flex justify-center">
-          <div
-            className="flex linking-container"
-            style={{
-              gap: "8rem",
-              maxWidth: "1000px",
-              width: "100%",
-              overflow: "visible",
-              position: "relative",
-            }}
-          >
-            <div className="flex flex-col gap-6 left-side">
-              {Array.from({ length: maxLength }).map((_, i) => {
-                const item = leftItems[i];
-                const isConnected = currentMatches[i] !== undefined;
-                const isSelected = selectedLeft === i;
-
-                return item ? (
-                  <div
-                    key={i}
-                    id={`left-${i}`}
-                    className={`link-item ${isConnected ? "connected" : ""} ${
-                      isSelected ? "selected" : ""
-                    }`}
-                    onClick={() => handleLeftClick(i)}
-                  >
-                    <div className="selector-circle" />
-                    {item.match_type === "text" ? (
-                      item.word
-                    ) : (
-                      <img src={item.image_uri} alt="left" />
-                    )}
-                  </div>
-                ) : (
-                  <div className="link-item invisible" key={i} />
-                );
-              })}
+        return (
+          <div key={qId} className="mb-10">
+            <div>
+              <strong>Instruction:</strong> {q.question.instruction}
             </div>
+            <div className="question-card mb-0">
+              <h2 className="question-text mb-4">
+                {questions.pagination.per_page * (page - 1) + qIdx + 1}.{" "}
+                {parse(q.question.content)}
+              </h2>
 
-            <div className="flex flex-col gap-6 right-side">
-              {Array.from({ length: maxLength }).map((_, i) => {
-                const item = shuffledRight[i];
-                const isConnected = Object.values(currentMatches).includes(i);
-                const isSelected = selectedRight === i;
+              <div className="flex justify-center">
+                <div
+                  className="flex linking-container"
+                  style={{
+                    gap: "8rem",
+                    maxWidth: "1000px",
+                    width: "100%",
+                    overflow: "visible",
+                    position: "relative",
+                  }}
+                >
+                  <div className="flex flex-col gap-6 left-side">
+                    {Array.from({ length: maxLength }).map((_, i) => {
+                      const item = leftItems[i];
+                      const isConnected = currentMatches[i] !== undefined;
+                      const isSelected = selectedLeft === i;
 
-                return item ? (
-                  <div
-                    key={i}
-                    id={`right-${i}`}
-                    className={`link-item ${isConnected ? "connected" : ""} ${
-                      isSelected ? "selected" : ""
-                    }`}
-                    onClick={() => handleRightClick(i)}
-                  >
-                    <div className="selector-circle" />
-                    {item.match_type === "text" ? (
-                      item.word
-                    ) : (
-                      <img src={item.image_uri} alt="right" />
-                    )}
+                      return item ? (
+                        <div
+                          key={i}
+                          id={`left-${qId}-${i}`}
+                          className={`link-item ${
+                            isConnected ? "connected" : ""
+                          } ${isSelected ? "selected" : ""} ${
+                            isSubmitted ? "disabled" : ""
+                          }`}
+                          onClick={() => handleLeftClick(qId, i)}
+                        >
+                          <div className="selector-circle" />
+                          {item.match_type === "text" ? (
+                            item.word
+                          ) : (
+                            <img src={item.image_uri} alt="left" />
+                          )}
+                        </div>
+                      ) : (
+                        <div className="link-item invisible" key={i} />
+                      );
+                    })}
                   </div>
-                ) : (
-                  <div className="link-item invisible" key={i} />
-                );
-              })}
+
+                  <div className="flex flex-col gap-6 right-side">
+                    {Array.from({ length: maxLength }).map((_, i) => {
+                      const item = shuffledRight[i];
+                      const isConnected =
+                        Object.values(currentMatches).includes(i);
+                      const isSelected = selectedRight === i;
+
+                      return item ? (
+                        <div
+                          key={i}
+                          id={`right-${qId}-${i}`}
+                          className={`link-item ${
+                            isConnected ? "connected" : ""
+                          } ${isSelected ? "selected" : ""} ${
+                            isSubmitted ? "disabled" : ""
+                          }`}
+                          onClick={() => handleRightClick(qId, i)}
+                        >
+                          <div className="selector-circle" />
+                          {item.match_type === "text" ? (
+                            item.word
+                          ) : (
+                            <img src={item.image_uri} alt="right" />
+                          )}
+                        </div>
+                      ) : (
+                        <div className="link-item invisible" key={i} />
+                      );
+                    })}
+                  </div>
+
+                  {(() => {
+                    const colors = [
+                      "#a637f7",
+                      "#d10d0d",
+                      "#FF8C00",
+                      "#00008B",
+                      "#006400",
+                      "#9B870C",
+                      "#8B008B",
+                      "#0dd8d8",
+                      "#3B3B3B",
+                      "#4B3621",
+                      "#191970",
+                      "#800000",
+                      "#5F9EA0",
+                      "#483D8B",
+                      "#556B2F",
+                    ];
+
+                    return Object.entries(currentMatches).map(
+                      ([leftIndex, rightIndex], i) => (
+                        <Xarrow
+                          key={`${qId}-${i}`}
+                          start={`left-${qId}-${leftIndex}`}
+                          end={`right-${qId}-${rightIndex}`}
+                          startAnchor="right"
+                          endAnchor="left"
+                          strokeWidth={3}
+                          curveness={0.5}
+                          path="smooth"
+                          animateDrawing
+                          headSize={4}
+                          color={colors[i % colors.length]}
+                        />
+                      )
+                    );
+                  })()}
+                </div>
+              </div>
+
+              <div className="flex justify-center mt-4">
+                <button
+                  onClick={() => handleSubmitSingle(q)}
+                  className="btn btn-primary"
+                  disabled={isSubmitted || isButtonDisabled}
+                >
+                  {isSubmitted ? "Submitted" : "Submit"}
+                </button>
+              </div>
             </div>
-
-            {(() => {
-              const colors = [
-                "#a637f7",
-                "#d10d0d",
-                "#FF8C00",
-                "#00008B",
-                "#006400",
-                "#9B870C",
-                "#8B008B",
-                "#0dd8d8",
-                "#3B3B3B",
-                "#4B3621",
-                "#191970",
-                "#800000",
-                "#5F9EA0",
-                "#483D8B",
-                "#556B2F",
-              ];
-
-              return Object.entries(currentMatches).map(
-                ([leftIndex, rightIndex], i) => (
-                  <Xarrow
-                    key={i}
-                    start={`left-${leftIndex}`}
-                    end={`right-${rightIndex}`}
-                    startAnchor="right"
-                    endAnchor="left"
-                    strokeWidth={3}
-                    curveness={0.5}
-                    path="smooth"
-                    animateDrawing
-                    headSize={4}
-                    color={colors[i % colors.length]}
-                  />
-                )
-              );
-            })()}
           </div>
+        );
+      })}
+      {questions?.pagination?.total_pages > 1 && (
+        <div className="mt-4 flex justify-center">
+          <ResponsivePagination
+            current={page}
+            total={questions.pagination.total_pages}
+            onPageChange={setPage}
+          />
         </div>
-      </div>
-
-      <div className="flex justify-between mt-6">
-        <button
-          className="btn btn-primary"
-          onClick={() => setPage((prev) => prev - 1)}
-          disabled={questions?.pagination?.current_page === 1}
-        >
-          Previous
-        </button>
-
-        {questions?.pagination?.total === page ? (
-          <button onClick={handleStoreQuestion} className="btn btn-primary">
-            Submit
-          </button>
-        ) : (
-          <button
-            onClick={() => {
-              handleStoreQuestion();
-              setPage((prev) => prev + 1);
-            }}
-            className="btn btn-primary"
-          >
-            Next
-          </button>
-        )}
-      </div>
+      )}
     </div>
   );
 };

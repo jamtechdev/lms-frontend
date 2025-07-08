@@ -5,21 +5,30 @@ import parse from "html-react-parser";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { userService } from "../../_services";
+import ResponsivePagination from "react-responsive-pagination";
+import "react-responsive-pagination/themes/classic.css";
 
 const FillInTheBlank = (props) => {
   const { questions, type, page, setPage } = props;
+  const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const answersStore = useSelector((state) => state.question.attempts);
   const [inputs, setInputs] = useState({});
+  const isAllFilled = () => {
+    const blanks = questions?.questions_array?.[0]?.question?.blanks ?? [];
+    return blanks.every((b) => inputs[b.blank_number]?.trim());
+  };
 
   useEffect(() => {
     const currentQuestionId = questions?.questions_array?.[0]?.id;
     const prev = answersStore.find((a) => a.question_id === currentQuestionId);
     if (prev) {
       setInputs(JSON.parse(prev.user_answer));
+      setSubmitted(true);
     } else {
       setInputs({});
+      setSubmitted(false);
     }
   }, [page, questions, answersStore]);
 
@@ -30,6 +39,11 @@ const FillInTheBlank = (props) => {
     }, {});
 
   const handleStoreData = async (question, currentInputs = inputs) => {
+    if (!isAllFilled()) {
+      toast.error("Please fill all blanks before submitting.");
+      return;
+    }
+
     const payload = {
       question_id: question?.id,
       type: type,
@@ -38,6 +52,7 @@ const FillInTheBlank = (props) => {
     };
 
     dispatch(setAttemptQuestions(payload));
+    setSubmitted(true);
 
     const updatedAnswers = [
       ...answersStore.filter((a) => a.question_id !== question?.id),
@@ -53,17 +68,13 @@ const FillInTheBlank = (props) => {
         })),
       };
 
-      await userService
-        .answer(finalpayload)
-        .then((data) => {
-          console.log(data);
-          toast.success("Answer submitted successfully.");
-          navigate("/student/question-type");
-        })
-        .catch((error) => {
-          console.error("Error", error);
-          toast.error("Something went wrong while submitting.");
-        });
+      try {
+        await userService.answer(finalpayload);
+        toast.success("Answer submitted successfully.");
+      } catch (error) {
+        console.error("Error", error);
+        toast.error("Something went wrong while submitting.");
+      }
     }
   };
 
@@ -111,36 +122,26 @@ const FillInTheBlank = (props) => {
           </div>
           <div>{renderParsedQuestion(qObj?.question?.question_text ?? "")}</div>
 
-          <div className="flex justify-between">
+          <div className="flex justify-end">
             <button
-              className="btn btn-primary mt-3 mr-2"
-              onClick={() => setPage((prev) => prev - 1)}
-              disabled={questions?.pagination?.current_page === 1}
+              onClick={() => handleStoreData(qObj)}
+              className="btn btn-primary mt-3"
+              disabled={!isAllFilled() || submitted}
             >
-              Previous
+              {submitted ? "Submitted" : "Submit"}
             </button>
-
-            {questions?.pagination?.total === page ? (
-              <button
-                onClick={() => handleStoreData(qObj)}
-                className="btn btn-primary mt-3 ml-2"
-              >
-                Submit
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  handleStoreData(qObj);
-                  setPage((prev) => prev + 1);
-                }}
-                className="btn btn-primary mt-3"
-              >
-                Next
-              </button>
-            )}
           </div>
         </div>
       ))}
+      {questions?.pagination?.total_pages > 1 && (
+        <div className="mt-4 flex justify-center">
+          <ResponsivePagination
+            current={page}
+            total={questions.pagination.total_pages}
+            onPageChange={setPage}
+          />
+        </div>
+      )}
     </>
   );
 };

@@ -1,18 +1,21 @@
+import React, { useState } from "react";
 import parse from "html-react-parser";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
 import userService from "../../_services/user.service";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import ResponsivePagination from "react-responsive-pagination";
+import "react-responsive-pagination/themes/classic.css";
 
 const TrueFalseQuestions = (props) => {
   const { questions, page, setPage, type } = props;
-  const navigate = useNavigate();
-  const answersStore = useSelector((state) => state.question.attempts);
   const dispatch = useDispatch();
+  const answersStore = useSelector((state) => state.question.attempts);
+
+  const [submittedQuestions, setSubmittedQuestions] = useState({});
+
   const handleOptionChange = (e, question) => {
-    let payload = {
+    const payload = {
       question_id: question?.id,
       answer: question?.question?.answer?.choice,
       user_answer: e?.target?.value,
@@ -20,84 +23,99 @@ const TrueFalseQuestions = (props) => {
     };
     dispatch(setAttemptQuestions(payload));
   };
-  const handleSubmit = async () => {
-    let payload = {
-      answers: answersStore?.map((item) => ({
-        question_id: item.question_id,
-        answer: item.user_answer,
-        type: item?.type,
-      })),
+
+  const handleSubmit = async (question) => {
+    const selectedAnswer = answersStore?.find(
+      (item) => item.question_id === question.id
+    );
+
+    if (!selectedAnswer) return;
+
+    const payload = {
+      answers: [
+        {
+          question_id: question.id,
+          answer: selectedAnswer.user_answer,
+          type: type,
+        },
+      ],
     };
-    await userService
-      .answer(payload)
-      .then((data) => {
-        toast.success("Answer submitted successfully.");
-        navigate("/student");
-      })
-      .catch((error) => {
-        console.error("Error", error);
-      });
+
+    try {
+      await userService.answer(payload);
+      toast.success("Answer submitted successfully.");
+      setSubmittedQuestions((prev) => ({
+        ...prev,
+        [question.id]: true,
+      }));
+    } catch (error) {
+      console.error("Error", error);
+    }
   };
 
   return (
     <>
-      {questions?.questions_array?.map((question, index) => (
-        <div key={index}>
-          <h2 className="mb-3">Questions</h2>
-          <div className="question-card max50 mb-0">
-            <div className="question-text">
-              {page}.{" "}
-              {typeof question?.question?.content === "string"
-                ? parse(question.question.content)
-                : ""}
-            </div>
-            {question?.question.options?.map((opt, index) => {
-              const selectedAnswer = answersStore?.find(
-                (ans) => ans.question_id === question.id
-              );
-              return (
-                <div key={index}>
-                  <label className={`kbc-option-label`}>
+      <h2 className="mb-3">Questions</h2>
+      {questions?.questions_array?.map((question, index) => {
+        const selectedAnswer = answersStore?.find(
+          (ans) => ans.question_id === question.id
+        );
+        const isSubmitted = submittedQuestions[question.id];
+
+        return (
+          <div key={index}>
+            <strong>Instruction:</strong> {question.question.instruction}
+            <div className="question-card max50 mb-0">
+              <div className="question-text">
+                {(page - 1) * questions.pagination.per_page + index + 1}.{" "}
+                {typeof question?.question?.content === "string"
+                  ? parse(question.question.content)
+                  : ""}
+              </div>
+              {question?.question.options?.map((opt, idx) => (
+                <div key={idx}>
+                  <label className="kbc-option-label">
                     <input
                       type="radio"
-                      name={`question-${opt.value}`}
+                      name={`question-${question.id}`}
                       value={opt?.value}
+                      disabled={isSubmitted}
                       checked={selectedAnswer?.user_answer == opt?.value}
                       onChange={(e) => handleOptionChange(e, question)}
                     />
                     {opt.value}
                   </label>
                 </div>
-              );
-            })}
-          </div>
-          <div className="flex justify-between mt-3">
-            <button
-              className="btn btn-primary mt-3 mr-2"
-              onClick={(e) => setPage((prev) => prev - 1)}
-              disabled={questions?.pagination?.current_page == 1}
-            >
-              Previous
-            </button>
-            {questions?.pagination?.total == page ? (
+              ))}
+            </div>
+            {isSubmitted && (
+              <div className="mt-3 text-green-600">
+                <strong>Explanation:</strong> {question.question.explation}
+              </div>
+            )}
+            <div className="flex justify-end mt-3">
               <button
-                onClick={() => handleSubmit()}
-                className="btn btn-primary mt-3 ml-2"
+                onClick={() => handleSubmit(question)}
+                className="btn btn-primary mt-3"
+                disabled={!selectedAnswer || isSubmitted}
               >
                 Submit
               </button>
-            ) : (
-              <button
-                onClick={(e) => setPage((prev) => prev + 1)}
-                className="btn btn-primary mt-3"
-              >
-                Next
-              </button>
-            )}
+            </div>
           </div>
+        );
+      })}
+      {questions?.pagination?.total_pages > 1 && (
+        <div className="mt-4 flex justify-center">
+          <ResponsivePagination
+            current={page}
+            total={questions.pagination.total_pages}
+            onPageChange={setPage}
+          />
         </div>
-      ))}
+      )}
     </>
   );
 };
+
 export default TrueFalseQuestions;
