@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Card,
@@ -10,13 +10,35 @@ import {
 } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { getFirstName, getLastName } from "../../_store/_reducers/auth";
+import parentService from "../../_services/parent.service";
+import loader from "../../assets/images/loader.gif";
 
 const NewParentDashboard = () => {
   const [show, setShow] = useState(false);
+  const [children, setChildren] = useState([]);
+  const [loading, setLoading] = useState(false);
   const firstname = useSelector(getFirstName);
   const lastname = useSelector(getLastName);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const fetchChild = async () => {
+    setLoading(true);
+    try {
+      const response = await parentService.getChild();
+      if (response?.data) {
+        setChildren(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching child:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchChild();
+  }, []);
+
   return (
     <>
       <Card className="text-left my-2">
@@ -39,39 +61,40 @@ const NewParentDashboard = () => {
             <Card.Body>
               <h2 className="pb-2 border-bottom mb-3">🧑‍ Student List</h2>
               <Row className="g-3">
-                <Col xl={3} lg={4} md={6}>
-                  <div className="student-card">
-                    <div className="student-info">
-                      <h5 className="mb-3 text-white">Sophie</h5>
-                      <button onClick={handleShow} className="dashboard-button">
-                        Enter Kid mode
-                      </button>
-                    </div>
-                    <div className="student-image">SO</div>
+                {loading ? (
+                  <div className="text-center w-100 mt-3">
+                    <img src={loader} width={100} alt="Loading..." />
                   </div>
-                </Col>
-                <Col xl={3} lg={4} md={6}>
-                  <div className="student-card">
-                    <div className="student-info">
-                      <h5 className="mb-3 text-white">Ryan</h5>
-                      <button className="dashboard-button">
-                        Enter Kid mode
-                      </button>
-                    </div>
-                    <div className="student-image">RY</div>
+                ) : children.length === 0 ? (
+                  <div className="text-center w-100 py-5">
+                    <p>No students found.</p>
                   </div>
-                </Col>
-                <Col xl={3} lg={4} md={6}>
-                  <div className="student-card">
-                    <div className="student-info">
-                      <h5 className="mb-3 text-white">Chloe</h5>
-                      <button className="dashboard-button">
-                        Enter Kid mode
-                      </button>
-                    </div>
-                    <div className="student-image">CH</div>
-                  </div>
-                </Col>
+                ) : (
+                  children.map((child) => (
+                    <Col key={child.id} xl={3} lg={4} md={6}>
+                      <div className="student-card">
+                        <div className="student-info">
+                          <h5 className="mb-3 text-white">
+                            {child.first_name} {child.last_name}
+                          </h5>
+                          <button
+                            onClick={handleShow}
+                            className="dashboard-button"
+                          >
+                            Enter Kid mode
+                          </button>
+                        </div>
+                        <div className="student-image">
+                          <img
+                            src={child.avatar}
+                            alt={`${child.first_name} ${child.last_name}`}
+                            className="student-avatar"
+                          />
+                        </div>
+                      </div>
+                    </Col>
+                  ))
+                )}
               </Row>
             </Card.Body>
           </Card>
@@ -79,70 +102,6 @@ const NewParentDashboard = () => {
       </Row>
 
       <Row className="g-3 my-2">
-        {/* <Col lg={6}>
-          <Card className="mb-4">
-            <Card.Body>
-              <h2 className="pb-2 border-bottom mb-3">
-                🗂️ Weekly Overview (2–8 June)
-              </h2>
-              <Table striped className="w-full" responsive>
-                <thead>
-                  <tr>
-                    <th>Subject</th>
-                    <th>Attempted</th>
-                    <th>Correct</th>
-                    <th>Wrong</th>
-                    <th>Results</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    {
-                      subject: "English",
-                      attempted: 20,
-                      correct: 18,
-                      wrong: 2,
-                      results: "2025-06-02: 9/10, 2025-06-05: 8/10",
-                    },
-                    {
-                      subject: "Math",
-                      attempted: 10,
-                      correct: 6,
-                      wrong: 4,
-                      results: "2025-06-03: 6/10",
-                    },
-                    {
-                      subject: "Science",
-                      attempted: 10,
-                      correct: 7,
-                      wrong: 3,
-                      results: "2025-06-04: 7/10",
-                    },
-                  ].map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.subject}</td>
-                      <td>{item.attempted}</td>
-                      <td>{item.correct}</td>
-                      <td
-                        className="text-primary"
-                        style={{ cursor: "pointer" }}
-                      >
-                        {item.wrong}
-                      </td>
-                      <td>{item.results}</td>
-                      <td>
-                        <Button size="sm" variant="primary">
-                          ⬇️ Download Full Report
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </Card.Body>
-          </Card>
-        </Col> */}
         <Col lg={12}>
           <Card>
             <Card.Body>
@@ -176,7 +135,7 @@ const NewParentDashboard = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="text-center">
-            A 4-digit PIN is required for this action.
+            A 6-digit PIN is required for this action.
             <div className="d-flex align-items-center justify-content-center gap-5 px-2 mt-3 w-75 mx-auto">
               <input type="text" className="form-control text-center" />
               <input type="text" className="form-control text-center" />

@@ -9,6 +9,7 @@ const parentService = {
     deleteStudentByParent,
     updateLockCode,
     signUp,
+    getChild,
 };
 
 async function getStudentLevel() {
@@ -50,5 +51,8 @@ async function updateLockCode(id, data) {
 }
 async function signUp(data) {
     return await axiosInstance.post(`/api/v1/auth/register`, data);
+}
+async function getChild() {
+    return await axiosInstance.get(`/api/v1/parent/my-students`);
 }
 export default parentService;
