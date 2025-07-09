@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import logo from "../assets/images/logo/logo.png";
 import dashboard from "../assets/images/dashboard-icon/dashboard-icon-1.png";
+import home from "../assets/images/dashboard-icon/dashboard-icon-6.png";
+import assessment from "../assets/images/dashboard-icon/dashboard-icon-2.png";
+import gems from "../assets/images/dashboard-icon/dashboard-icon-3.png";
+import subscription from "../assets/images/dashboard-icon/dashboard-icon-4.png";
 import userService from "../_services/user.service";
 import { useDispatch } from "react-redux";
 import { logout } from "../_store/_reducers/auth";
@@ -32,6 +36,11 @@ const Nav = () => {
   };
 
   const parentSidebar = [
+    {
+      route: "/parent",
+      label: "Home",
+      iconImage: home,
+    },
     
     {
       route: "/parent/students",
@@ -41,13 +50,13 @@ const Nav = () => {
     {
       route: "/parent/assessment",
       label: "Assessment History",
-      iconImage: "https://cdn-icons-png.flaticon.com/512/15175/15175912.png",
+      iconImage: assessment,
     },
-    { route: "/parent/gems", label: "Gems", iconImage: "https://cdn-icons-png.flaticon.com/512/6577/6577837.png" },
+    { route: "/parent/gems", label: "Gems", iconImage: gems },
     {
       route: "/parent/subscription",
       label: "Subscription",
-      iconImage: "https://cdn-icons-png.flaticon.com/512/11264/11264808.png",
+      iconImage: subscription,
     },
   ];
 
