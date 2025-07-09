@@ -10,6 +10,9 @@ const parentService = {
     updateLockCode,
     signUp,
     getChild,
+    reset,
+    verifyOtp,
+    updatePassword,
 };
 
 async function getStudentLevel() {
@@ -54,5 +57,19 @@ async function signUp(data) {
 }
 async function getChild() {
     return await axiosInstance.get(`/api/v1/parent/my-students`);
+}
+async function reset(data) {
+    return axiosInstance.post(`api/v1/auth/reset-password`, data, {
+    });
+}
+
+async function verifyOtp(data) {
+    return axiosInstance.post(`api/v1/auth/verify-email-otp`, data, {
+    });
+}
+
+async function updatePassword(data) {
+    return axiosInstance.post(`api/v1/auth/update-password`, data, {
+    });
 }
 export default parentService;

@@ -1,26 +1,38 @@
-import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Card,
-  Button,
-  Table,
-  Row,
-  Col,
-  Modal,
-} from "react-bootstrap";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState, useRef } from "react";
+import { Card, Row, Col, Modal } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
 import { getFirstName, getLastName } from "../../_store/_reducers/auth";
 import parentService from "../../_services/parent.service";
+import userService from "../../_services/user.service";
+import { login } from "../../_store/_reducers/auth";
+import { useNavigate } from "react-router-dom";
+
 import loader from "../../assets/images/loader.gif";
+import toast from "react-hot-toast";
 
 const NewParentDashboard = () => {
   const [show, setShow] = useState(false);
   const [children, setChildren] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [pin, setPin] = useState(["", "", "", "", "", ""]);
+  const [selectedChildId, setSelectedChildId] = useState(null);
+  const inputRefs = useRef([]);
+
   const firstname = useSelector(getFirstName);
   const lastname = useSelector(getLastName);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleClose = () => {
+    setShow(false);
+    setPin(["", "", "", "", "", ""]);
+    setSelectedChildId(null);
+  };
+
+  const handleShow = (childId) => {
+    setSelectedChildId(childId);
+    setShow(true);
+  };
 
   const fetchChild = async () => {
     setLoading(true);
@@ -35,6 +47,60 @@ const NewParentDashboard = () => {
       setLoading(false);
     }
   };
+
+  const handleStudentSubmit = async (pinCode) => {
+    try {
+      const values = {
+        lock_code: pinCode,
+        child_id: selectedChildId,
+      };
+      const response = await userService.loginStudent(values);
+      const userData = response.data;
+
+      dispatch(
+        login({
+          token: userData.token,
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          student_type: userData.student_type,
+          level: userData.level_id,
+          role: userData?.role,
+        })
+      );
+
+      toast.success("Student login successful!");
+      navigate("/student");
+    } catch (err) {
+      toast.error(
+        err?.response?.data?.message || "Student login failed, please try again"
+      );
+    } finally {
+      handleClose();
+    }
+  };
+
+  const handlePinChange = (value, index) => {
+    if (!/^\d*$/.test(value)) return;
+    const newPin = [...pin];
+    newPin[index] = value;
+    setPin(newPin);
+
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+
+    if (newPin.every((digit) => digit !== "")) {
+      const pinCode = newPin.join("");
+      handleStudentSubmit(pinCode);
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !pin[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
   useEffect(() => {
     fetchChild();
   }, []);
@@ -78,7 +144,7 @@ const NewParentDashboard = () => {
                             {child.first_name} {child.last_name}
                           </h5>
                           <button
-                            onClick={handleShow}
+                            onClick={() => handleShow(child.id)}
                             className="dashboard-button"
                           >
                             Enter Kid mode
@@ -128,6 +194,7 @@ const NewParentDashboard = () => {
           </Card>
         </Col>
       </Row>
+
       <Modal show={show} onHide={handleClose} centered>
         <Modal.Header>
           <h2 className="modal-title text-center w-100">Enter Kid's Mode</h2>
@@ -135,26 +202,33 @@ const NewParentDashboard = () => {
         <Modal.Body>
           <div className="text-center">
             A 6-digit PIN is required for this action.
-            <div className="d-flex align-items-center justify-content-center gap-5 px-2 mt-3 w-75 mx-auto">
-              <input type="text" className="form-control text-center" />
-              <input type="text" className="form-control text-center" />
-              <input type="text" className="form-control text-center" />
-              <input type="text" className="form-control text-center" />
-              <input type="text" className="form-control text-center" />
-              <input type="text" className="form-control text-center" />
+            <div className="d-flex align-items-center justify-content-center gap-2 px-2 mt-3 w-100 mx-auto">
+              {pin.map((digit, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  className="form-control text-center"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handlePinChange(e.target.value, index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  ref={(el) => (inputRefs.current[index] = el)}
+                  style={{ width: "40px", fontSize: "1.5rem" }}
+                />
+              ))}
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <div className="d-flex align-items-center justify-content-center w-100 gap-5 m-0">
-            <button
-              className="logout-btn w-100 justify-content-center"
-              variant="secondary"
-              onClick={handleClose}
-            >
+          <div className="d-flex align-items-center justify-content-center w-100 gap-3 m-0">
+            <button className="logout-btn w-100" onClick={handleClose}>
               Cancel
             </button>
-            <button className="dashboard-button w-100" onClick={handleClose}>
+            <button
+              className="dashboard-button w-100"
+              onClick={() => handleStudentSubmit(pin.join(""))}
+              disabled={pin.some((digit) => digit === "")}
+            >
               Confirm
             </button>
           </div>
