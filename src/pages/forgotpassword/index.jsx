@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import logo from "../../assets/images/logo/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import parentService from "../../_services/parent.service";
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);
+  const [savedEmail, setSavedEmail] = useState("");
+  const [savedOtp, setSavedOtp] = useState("");
+  const navigate = useNavigate();
 
   const initialValues = {
     email: "",
@@ -33,13 +38,61 @@ const ForgotPassword = () => {
     }),
   ];
 
+  const handleReset = async (values, { setSubmitting }) => {
+    try {
+      await parentService.reset({ email: values.email });
+      toast.success("Reset link sent successfully!");
+      setSavedEmail(values.email);
+      setStep(2);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Reset Failed! Try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleOtp = async (values, { setSubmitting }) => {
+    try {
+      await parentService.verifyOtp({
+        email: savedEmail,
+        otp: values.otp,
+      });
+      toast.success("OTP Verified Successfully!");
+      setSavedOtp(values.otp);
+      setStep(3);
+    } catch (error) {
+      console.error("OTP Error:", error.response?.data || error.message);
+      toast.error("OTP Verification Failed! Try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleUpdatePassword = async (values, { setSubmitting }) => {
+    try {
+      await parentService.updatePassword({
+        email: savedEmail,
+        otp: savedOtp,
+        password: values.password,
+        password_confirmation: values.confirmPassword,
+      });
+      toast.success("Password updated successfully!");
+      navigate("/login");
+    } catch (error) {
+      console.error("Update Error:", error.response?.data || error.message);
+      toast.error("Password update failed! Try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const handleSubmit = (values, actions) => {
-    if (step < 3) {
-      setStep(step + 1);
-      actions.setTouched({});
-      actions.setSubmitting(false);
-    } else {
-      console.log("Final values submitted:", values);
+    if (step === 1) {
+      handleReset(values, actions);
+    } else if (step === 2) {
+      handleOtp(values, actions);
+    } else if (step === 3) {
+      handleUpdatePassword(values, actions);
     }
   };
 
@@ -173,7 +226,11 @@ const ForgotPassword = () => {
                   className="dashboard-button w-100"
                   disabled={isSubmitting}
                 >
-                  {step < 3 ? "Next" : "Reset Password"}
+                  {isSubmitting
+                    ? "Please wait..."
+                    : step < 3
+                    ? "Next"
+                    : "Reset Password"}
                 </button>
 
                 <Link
