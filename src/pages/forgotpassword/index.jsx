@@ -82,12 +82,12 @@ const ForgotPassword = () => {
                       <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
                         <i className="ph ph-envelope"></i>
                       </span>
-                      <ErrorMessage
+                    </div>
+                     <ErrorMessage
                         name="email"
                         component="div"
                         className="text-danger mt-2"
                       />
-                    </div>
                   </div>
                 )}
 
@@ -106,12 +106,12 @@ const ForgotPassword = () => {
                       <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
                         <i className="ph ph-key"></i>
                       </span>
-                      <ErrorMessage
+                    </div>
+                     <ErrorMessage
                         name="otp"
                         component="div"
                         className="text-danger mt-2"
                       />
-                    </div>
                   </div>
                 )}
 
