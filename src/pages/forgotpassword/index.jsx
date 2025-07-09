@@ -16,15 +16,17 @@ const ForgotPassword = () => {
 
   const validationSchemas = [
     Yup.object({
-      email: Yup.string().email("Invalid email").required("Required"),
+      email: Yup.string().email("Invalid email").required("Email is required"),
     }),
     Yup.object({
-      otp: Yup.string().length(6, "OTP must be 6 digits").required("Required"),
+      otp: Yup.string()
+        .length(6, "OTP must be 6 digits")
+        .required("OTP is required"),
     }),
     Yup.object({
       password: Yup.string()
         .min(6, "At least 6 characters")
-        .required("Required"),
+        .required("Password is required"),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password")], "Passwords must match")
         .required("Required"),
@@ -83,11 +85,11 @@ const ForgotPassword = () => {
                         <i className="ph ph-envelope"></i>
                       </span>
                     </div>
-                     <ErrorMessage
-                        name="email"
-                        component="div"
-                        className="text-danger mt-2"
-                      />
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="text-danger mt-2"
+                    />
                   </div>
                 )}
 
@@ -107,11 +109,11 @@ const ForgotPassword = () => {
                         <i className="ph ph-key"></i>
                       </span>
                     </div>
-                     <ErrorMessage
-                        name="otp"
-                        component="div"
-                        className="text-danger mt-2"
-                      />
+                    <ErrorMessage
+                      name="otp"
+                      component="div"
+                      className="text-danger mt-2"
+                    />
                   </div>
                 )}
 
