@@ -196,13 +196,13 @@ const NewParentDashboard = () => {
       </Row>
 
       <Modal show={show} onHide={handleClose} centered>
-        <Modal.Header>
+        <Modal.Header className="pb-0">
           <h2 className="modal-title text-center w-100">Enter Kid's Mode</h2>
         </Modal.Header>
         <Modal.Body>
           <div className="text-center">
             A 6-digit PIN is required for this action.
-            <div className="d-flex align-items-center justify-content-center gap-2 px-2 mt-3 w-100 mx-auto">
+            <div className="d-flex align-items-center justify-content-center gap-5 mt-3 w-100 mx-auto">
               {pin.map((digit, index) => (
                 <input
                   key={index}
@@ -213,7 +213,7 @@ const NewParentDashboard = () => {
                   onChange={(e) => handlePinChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   ref={(el) => (inputRefs.current[index] = el)}
-                  style={{ width: "40px", fontSize: "1.5rem" }}
+                  style={{ width: "50px", fontSize: "1.5rem" }}
                 />
               ))}
             </div>
@@ -221,7 +221,7 @@ const NewParentDashboard = () => {
         </Modal.Body>
         <Modal.Footer>
           <div className="d-flex align-items-center justify-content-center w-100 gap-3 m-0">
-            <button className="logout-btn w-100" onClick={handleClose}>
+            <button className="logout-btn w-100 justify-content-center" onClick={handleClose}>
               Cancel
             </button>
             <button

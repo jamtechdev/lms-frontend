@@ -1,27 +1,48 @@
-import React from 'react';
-import { Container, ContainerFluid, Row, Col, Card, Button, ProgressBar, Table, Alert } from 'react-bootstrap';
+import React from "react";
+import {
+  Container,
+  ContainerFluid,
+  Row,
+  Col,
+  Card,
+  Button,
+  ProgressBar,
+  Table,
+  Alert,
+} from "react-bootstrap";
 
 const NewStudentDashboard = () => {
   return (
     <Container className="my-4" fluid>
       <Row className="mb-4">
-        <Col md={6}>
-          <Card className="h-100 text-center">
+        <Col md={9}>
+          <Card className="h-100 text-left">
             <Card.Body>
-              <Card.Title>Hi Sophie! 👋</Card.Title>
-              <Card.Text>You’re doing great in P3. Let’s keep learning!</Card.Text>
-              <Card.Footer className="text-muted">💡 Tip: Stay curious and ask questions — it's the best way to learn!</Card.Footer>
+              <h1>Hi Sophie! 👋</h1>
+              <Card.Text className="mb-3">
+                You’re doing great in P3. Let’s keep learning!
+              </Card.Text>
+              <div className="text-muted alert alert-warning">
+                💡 Tip: Stay curious and ask questions — it's the best way to
+                learn!
+              </div>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={6}>
+        <Col md={3}>
           <Card className="h-100">
             <Card.Body>
-              <Card.Title>Your Gems</Card.Title>
-              <h3 className="text-warning">💎 45</h3>
-              <Button variant="primary" size="sm" className="mt-2 float-end">View Prizes</Button>
-              <p className="text-muted mt-4 mb-1">Progress to next reward</p>
-              <ProgressBar now={45} label={`45%`} />
+              <div className="d-flex align-items-center justify-content-between">
+                <h2 className="mb-0">Your Gems</h2>
+                <h3 className="text-warning mb-0">💎 45</h3>
+              </div>
+              <div className="pt-2 pb-3">
+                <p className="text-muted my-1">Progress to next reward</p>
+                <ProgressBar now={45} label={`45%`} />
+              </div>
+              <button className="dashboard-button w-100" size="sm">
+                View Prizes
+              </button>
             </Card.Body>
           </Card>
         </Col>
@@ -29,32 +50,60 @@ const NewStudentDashboard = () => {
 
       <Card className="mb-4">
         <Card.Body>
-          <Card.Title>Weekly Assignment Target</Card.Title>
-          <Card.Text>Your parent has assigned you to complete 3 papers this week.</Card.Text>
-          <ProgressBar now={33} className="mb-2" />
-          <small>1 of 3 completed</small>
+          <h2 class="pb-2 border-bottom mb-3">🧑 Weekly Assignment Target</h2>
+          <div>
+            <h5 className="mb-3">
+              Your parent has assigned you to complete 3 papers this week.
+            </h5>
+            <ProgressBar
+              label={`1 of 3 completed`}
+              now={33}
+              className="flex-1 w-100"
+            />
+          </div>
         </Card.Body>
       </Card>
 
       <Card className="mb-4">
         <Card.Body>
-          <Card.Title>This Week’s Required Papers</Card.Title>
-          <p className="text-muted">You must complete at least one paper per subject this week.</p>
+          <h2 class="pb-2 border-bottom mb-3">
+            📃 This Week’s Required Papers
+          </h2>
+          <p>You must complete at least one paper per subject this week.</p>
           <Row>
             {[
-              { subject: 'English', due: '28 Apr 2025', status: 'Start', variant: 'primary' },
-              { subject: 'Math', due: '28 Apr 2025', status: 'Completed', variant: 'success', disabled: true },
-              { subject: 'Science', due: '28 Apr 2025', status: 'Start', variant: 'primary' },
+              {
+                subject: "English",
+                due: "28 Apr 2025",
+                status: "Start",
+                variant: "primary",
+              },
+              {
+                subject: "Math",
+                due: "28 Apr 2025",
+                status: "Completed",
+                variant: "success",
+                disabled: true,
+              },
+              {
+                subject: "Science",
+                due: "28 Apr 2025",
+                status: "Start",
+                variant: "primary",
+              },
             ].map(({ subject, due, status, variant, disabled }, i) => (
               <Col md={4} className="mb-3" key={i}>
-                <Card>
-                  <Card.Body className="d-flex justify-content-between align-items-center">
-                    <div>
-                      <strong>📘 {subject}</strong>
-                      <div className="text-muted text-sm">Due: {due}</div>
-                    </div>
-                    <Button variant={variant} size="sm" disabled={disabled}>{status}</Button>
-                  </Card.Body>
+                <Card className="student-card flex-row align-items-start justify-content-between m-0">
+                  <div>
+                    <h4 className="text-white">📘 {subject}</h4>
+                    <p className="text-white m-0">Due: {due}</p>
+                  </div>
+                  <button
+                    className="dashboard-button width-fit"
+                    disabled={disabled}
+                  >
+                    {status}
+                  </button>
                 </Card>
               </Col>
             ))}
@@ -66,24 +115,30 @@ const NewStudentDashboard = () => {
         <Col md={6}>
           <Card>
             <Card.Body>
-              <Card.Title>Daily Challenge</Card.Title>
-              <Card.Text>Complete today’s special challenge to earn bonus gems!</Card.Text>
-              <Card className="p-3 d-flex justify-content-between align-items-center">
+              <h2 class="pb-2 border-bottom mb-3">📅 Daily Challenge</h2>
+              <Card className="student-card flex-row align-items-start justify-content-between m-0">
                 <div>
-                  <strong>🔍 Mystery Science Quiz</strong>
-                  <div className="text-muted text-sm">Earn +5 Gems</div>
+                  <h4 className="text-white">🔍 Mystery Science Quiz</h4>
+                  <p className="mb-2 text-white">
+                    Complete today’s special challenge to earn bonus gems!
+                  </p>
+                  <p className="badge badge-success">Earn +5 Gems</p>
                 </div>
-                <Button variant="purple" size="sm" style={{ backgroundColor: '#6f42c1' }}>Start Challenge</Button>
+                <button className="dashboard-button">Start Challenge</button>
               </Card>
             </Card.Body>
           </Card>
         </Col>
         <Col md={6}>
-          <Card>
+          <Card className="h-100">
             <Card.Body>
-              <Card.Title>Question Bank</Card.Title>
-              <Card.Text>Browse and filter questions by subject from our full library.</Card.Text>
-              <Button variant="primary">Start</Button>
+              <h2 class="pb-2 border-bottom mb-3">❓ Question Bank</h2>
+              <div className="flex-column text-center align-items-center pt-4">
+                <h5>
+                  Browse and filter questions by subject from our full library.
+                </h5>
+                <button className="dashboard-button mx-auto mt-4">Start</button>
+              </div>
             </Card.Body>
           </Card>
         </Col>
@@ -91,8 +146,8 @@ const NewStudentDashboard = () => {
 
       <Card className="mb-4">
         <Card.Body>
-          <Card.Title>Your Past Assessments</Card.Title>
-          <Table hover>
+          <h2 class="pb-2 border-bottom mb-3">📃 Your Past Assessments</h2>
+          <Table responsive>
             <thead>
               <tr>
                 <th>Subject</th>
@@ -106,13 +161,21 @@ const NewStudentDashboard = () => {
                 <td>English</td>
                 <td>20 Apr 2025</td>
                 <td>90%</td>
-                <td><Button variant="link" size="sm">Review</Button></td>
+                <td>
+                  <Button variant="link" size="sm">
+                    Review
+                  </Button>
+                </td>
               </tr>
               <tr>
                 <td>Math</td>
                 <td>15 Apr 2025</td>
                 <td>85%</td>
-                <td><Button variant="link" size="sm">Review</Button></td>
+                <td>
+                  <Button variant="link" size="sm">
+                    Review
+                  </Button>
+                </td>
               </tr>
             </tbody>
           </Table>
@@ -120,7 +183,10 @@ const NewStudentDashboard = () => {
       </Card>
 
       <Alert variant="warning" className="d-flex align-items-center">
-        😊 <span className="ms-2">Did you know? Frogs can breathe through their skin! 🐸</span>
+        😊{" "}
+        <span className="ms-2">
+          Did you know? Frogs can breathe through their skin! 🐸
+        </span>
       </Alert>
     </Container>
   );

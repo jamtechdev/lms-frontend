@@ -1719,6 +1719,15 @@ input[type="file"]::-webkit-file-upload-button {
   font-family: "Rowdies", sans-serif !important;
 }
 
+.progress{
+  background-color: #ffeedd !important;
+  height: 1.5rem;
+}
+
+.progress .progress-bar{
+  background-color: #f7941e;
+}
+
 @media screen and (max-width: 1199px) {
   .offcanvas {
     background: #ffe1bd !important;
@@ -1799,11 +1808,11 @@ input[type="file"]::-webkit-file-upload-button {
   .dashboard-footer > * {
     justify-content: center;
     gap: 10px !important;
-}
+  }
 
-.dashboard-footer > * > *{
-  width: 100%;
-  text-align: center;
-  justify-content: center;
-}
+  .dashboard-footer > * > * {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
 }
