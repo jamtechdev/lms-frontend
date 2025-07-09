@@ -88,7 +88,6 @@ const NewParentDashboard = () => {
                           <img
                             src={child.avatar}
                             alt={`${child.first_name} ${child.last_name}`}
-                            className="student-avatar"
                           />
                         </div>
                       </div>
