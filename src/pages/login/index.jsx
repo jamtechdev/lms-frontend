@@ -8,12 +8,17 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../_store/_reducers/auth";
+import parentService from "../../_services/parent.service";
+import { Modal } from "react-bootstrap";
+import emailImage from "../../assets/images/email.png";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [passwordShown, setPasswordShown] = useState(false);
   const [activeTab, setActiveTab] = useState("parent");
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState("");
 
   const togglePasswordVisibility = () => setPasswordShown((prev) => !prev);
 
@@ -50,9 +55,26 @@ const Login = () => {
       toast.success("Login successful!");
       navigate("/parent");
     } catch (err) {
-      toast.error(
-        err?.response?.data?.message || "Login failed, please try again"
-      );
+      if (
+        err?.response?.status === 401 &&
+        err?.response?.data?.message?.toLowerCase().includes("not verified")
+      ) {
+        setUnverifiedEmail(values.email);
+        setShowVerifyModal(true);
+      } else {
+        toast.error(
+          err?.response?.data?.message || "Login failed, please try again"
+        );
+      }
+    }
+  };
+
+  const handleResendVerification = async () => {
+    try {
+      await parentService.resendVerify({ email: unverifiedEmail });
+      toast.success("Verification email sent!");
+    } catch (err) {
+      toast.error("Failed to resend verification email.");
     }
   };
 
@@ -86,9 +108,7 @@ const Login = () => {
       </div>
       <div className="side-overlay"></div>
       <section className="auth d-flex">
-        <div className="auth-left bg-main-50 flex-center p-24 auth-bg-section">
-          
-        </div>
+        <div className="auth-left bg-main-50 flex-center p-24 auth-bg-section"></div>
         <div className="auth-right py-40 px-24 flex-center flex-column auth-bg-color">
           <div className="auth-right__inner mx-auto w-100 mt-5">
             <Link to="/" className="mb-3">
@@ -164,10 +184,7 @@ const Login = () => {
                     Forgot Password?
                   </Link>
                 </div>
-                <button
-                  type="submit"
-                  className="dashboard-button w-100"
-                >
+                <button type="submit" className="dashboard-button w-100">
                   Sign In
                 </button>
               </Form>
@@ -216,6 +233,46 @@ const Login = () => {
           </div>
         </div>
       </section>
+      <Modal
+        show={showVerifyModal}
+        onHide={() => setShowVerifyModal(false)}
+        centered
+        backdrop="static"
+        dialogClassName="verify-modal"
+        contentClassName="rounded-4 border-0 shadow-lg animate-modal"
+      >
+        <Modal.Header closeButton className="border-0 pb-0">
+          <Modal.Title className="w-100 text-center text-primary fs-4 fw-bold">
+            <i className="ph ph-warning-circle text-warning me-2 fs-3"></i>
+            Email Not Verified
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body className="text-center pt-2 px-4">
+          <img src={emailImage} alt="Email Verification" loading="eager" />
+          <p className="mb-0 fs-5 text-secondary">
+            Please verify your email first. We’ve sent you a verification link.
+          </p>
+        </Modal.Body>
+
+        <Modal.Footer className="border-0 pt-0 d-flex flex-column gap-2 px-4 pb-4">
+          <button
+            className="btn btn-light border w-100 rounded-pill py-2 fs-6"
+            onClick={() => {
+              setShowVerifyModal(false);
+              setUnverifiedEmail("");
+            }}
+          >
+            Back to Login
+          </button>
+          <button
+            className="btn btn-primary w-100 rounded-pill py-2 fs-6"
+            onClick={handleResendVerification}
+          >
+            Resend Verification Email
+          </button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

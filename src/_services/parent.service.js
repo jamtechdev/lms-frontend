@@ -13,6 +13,7 @@ const parentService = {
     reset,
     verifyOtp,
     updatePassword,
+    resendVerify,
 };
 
 async function getStudentLevel() {
@@ -72,4 +73,9 @@ async function updatePassword(data) {
     return axiosInstance.post(`api/v1/auth/update-password`, data, {
     });
 }
+async function resendVerify(data) {
+    return axiosInstance.post(`api/v1/auth/resend-verification-email`, data, {
+    });
+}
+
 export default parentService;
