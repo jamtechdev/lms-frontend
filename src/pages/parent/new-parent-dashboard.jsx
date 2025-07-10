@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Card, Row, Col, Modal } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { getFirstName, getLastName } from "../../_store/_reducers/auth";
+import {
+  getFirstName,
+  getLastName,
+  getToken,
+} from "../../_store/_reducers/auth";
 import parentService from "../../_services/parent.service";
 import userService from "../../_services/user.service";
 import { login } from "../../_store/_reducers/auth";
@@ -17,7 +21,7 @@ const NewParentDashboard = () => {
   const [pin, setPin] = useState(["", "", "", "", "", ""]);
   const [selectedChildId, setSelectedChildId] = useState(null);
   const inputRefs = useRef([]);
-
+  const parentToken = useSelector(getToken);
   const firstname = useSelector(getFirstName);
   const lastname = useSelector(getLastName);
   const dispatch = useDispatch();
@@ -59,7 +63,7 @@ const NewParentDashboard = () => {
 
       dispatch(
         login({
-          token: userData.token,
+          token: parentToken,
           first_name: userData.first_name,
           last_name: userData.last_name,
           student_type: userData.student_type,
@@ -221,7 +225,10 @@ const NewParentDashboard = () => {
         </Modal.Body>
         <Modal.Footer>
           <div className="d-flex align-items-center justify-content-center w-100 gap-3 m-0">
-            <button className="logout-btn w-100 justify-content-center" onClick={handleClose}>
+            <button
+              className="logout-btn w-100 justify-content-center"
+              onClick={handleClose}
+            >
               Cancel
             </button>
             <button
