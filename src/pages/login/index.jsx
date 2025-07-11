@@ -7,7 +7,7 @@ import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../../_store/_reducers/auth";
+import { login, setParentBackup } from "../../_store/_reducers/auth";
 import parentService from "../../_services/parent.service";
 import { Modal } from "react-bootstrap";
 import emailImage from "../../assets/images/email.png";
@@ -44,6 +44,16 @@ const Login = () => {
       const userData = response.data;
       dispatch(
         login({
+          token: userData.token,
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          student_type: userData.student_type,
+          level: userData.level_id,
+          role: userData?.role,
+        })
+      );
+      dispatch(
+        setParentBackup({
           token: userData.token,
           first_name: userData.first_name,
           last_name: userData.last_name,

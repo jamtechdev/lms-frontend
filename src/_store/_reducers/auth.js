@@ -11,7 +11,9 @@ const initialState = {
     subject: null,
     topic: null,
     role: null,
-    fetchedQuestion: [  ]
+    avatar: null,
+    fetchedQuestion: [],
+    parentBackup: null,
 };
 
 const authSlice = createSlice({
@@ -26,6 +28,7 @@ const authSlice = createSlice({
             state.student_type = action.payload.student_type;
             state.level = action.payload.level;
             state.role = action.payload.role;
+            state.avatar = action.payload.avatar;
         },
         logout: (state) => {
             state.isAuthenticated = false;
@@ -37,6 +40,7 @@ const authSlice = createSlice({
             state.question = null;
             state.subject = null;
             state.role = null;
+            state.avatar = null;
         },
         setQuestion: (state, action) => {
             state.question = action.payload;
@@ -47,13 +51,16 @@ const authSlice = createSlice({
         setTopic: (state, action) => {
             state.topic = action.payload;
         },
-        setFetchedQuestionArray:(state, action) => {
+        setFetchedQuestionArray: (state, action) => {
             state.fetchedQuestion = action.payload
-        }
+        },
+        setParentBackup: (state, action) => {
+            state.parentBackup = action.payload;
+        },
     },
 });
 
-export const { login, logout, setQuestion, setSubject, setTopic, setFetchedQuestionArray } = authSlice.actions;
+export const { login, logout, setQuestion, setSubject, setTopic, setFetchedQuestionArray, setParentBackup } = authSlice.actions;
 export const getIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const hasPermission = (state) => state.auth.role;
 export const getToken = (state) => state.auth.token;
@@ -65,5 +72,6 @@ export const getQuestion = (state) => state.auth.question;
 export const getSubject = (state) => state.auth.subject;
 export const getTopic = (state) => state.auth.topic;
 export const getQuestionsArray = (state) => state.auth.fetchedQuestion;
-
+export const getParentBackup = (state) => state.auth.parentBackup;
+export const getAvatar = (state) => state.auth.avatar;
 export default authSlice.reducer;

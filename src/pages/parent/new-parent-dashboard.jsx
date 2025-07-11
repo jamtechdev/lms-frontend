@@ -64,11 +64,12 @@ const NewParentDashboard = () => {
       dispatch(
         login({
           token: parentToken,
-          first_name: userData.first_name,
-          last_name: userData.last_name,
-          student_type: userData.student_type,
-          level: userData.level_id,
+          first_name: userData?.first_name,
+          last_name: userData?.last_name,
+          student_type: userData?.student_type,
+          level: userData?.level_id,
           role: userData?.role,
+          avatar: userData?.avatar,
         })
       );
 
