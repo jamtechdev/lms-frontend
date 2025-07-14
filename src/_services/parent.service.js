@@ -14,6 +14,8 @@ const parentService = {
     verifyOtp,
     updatePassword,
     resendVerify,
+    getassignment,
+    deleteAssignments,
 };
 
 async function getStudentLevel() {
@@ -76,6 +78,12 @@ async function updatePassword(data) {
 async function resendVerify(data) {
     return axiosInstance.post(`api/v1/auth/resend-verification-email`, data, {
     });
+}
+async function getassignment() {
+    return await axiosInstance.post(`/api/v1/assignments/get`);
+}
+async function deleteAssignments(data) {
+    return await axiosInstance.post(`api/v1/assignments/delete`, data);
 }
 
 export default parentService;

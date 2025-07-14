@@ -271,7 +271,7 @@ const AllQuestions = () => {
                   setUserMatches={setUserMatches}
                 />
               } */}
-              {question && (question?.question?.type || question?.question?.question_type) == "open_cloze_with_options" &&
+              {/* {question && (question?.question?.type || question?.question?.question_type) == "open_cloze_with_options" &&
                 <OpenClozeWithOptions
                   question={question}
                   index={index}
@@ -288,7 +288,7 @@ const AllQuestions = () => {
                   question={question}
                   index={index}
                 />
-              }
+              } */}
             </div>
           )
         })}

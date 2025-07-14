@@ -302,12 +302,13 @@ const NewStudentDashboard = () => {
           </Form>
         </Modal.Body>
 
-        <Modal.Footer className="kids-modal-footer">
-          <Button variant="outline-danger" onClick={handleCloseModal}>
+        <Modal.Footer className="pt-0">
+          <div className="d-flex align-items-center justify-content-center w-100 gap-3 m-0">
+  <button className="logout-btn w-50 justify-content-center" onClick={handleCloseModal}>
             ❌ Cancel
-          </Button>
-          <Button
-            variant="success"
+          </button>
+          <button
+            className="dashboard-button w-50"
             disabled={!selectedSubject || !selectedTopic}
             onClick={() => {
               navigate(
@@ -317,7 +318,8 @@ const NewStudentDashboard = () => {
             }}
           >
             ✅ Start Paper
-          </Button>
+          </button>
+          </div>
         </Modal.Footer>
       </Modal>
     </Container>

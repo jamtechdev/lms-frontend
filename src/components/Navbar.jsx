@@ -92,40 +92,50 @@ const Nav = () => {
           <Link to="/" className="sidebar__logo">
             <img src={logo} alt="QTN" />
           </Link>
-          <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-lg`} />
-          <Navbar.Offcanvas
-            id={`offcanvasNavbar-expand-lg`}
-            aria-labelledby={`offcanvasNavbarLabel-expand-lg`}
-            placement="end"
-          >
-            <Offcanvas.Header closeButton></Offcanvas.Header>
-            <Offcanvas.Body>
-              <ul className="sidebar-menu">
-                {permission === "parent" &&
-                  parentSidebar.map(({ route, label, iconImage }) => (
-                    <li
-                      key={route}
-                      className={`sidebar-menu__item ${
-                        path === route ? "activePage" : ""
-                      }`}
-                    >
-                      <Link to={route} className="sidebar-menu__link">
-                        <img
-                          src={iconImage}
-                          alt={label}
-                          width="30"
-                          height="30"
-                        />
-                        <span className="text">{label}</span>
-                      </Link>
-                    </li>
-                  ))}
-              </ul>
-            </Offcanvas.Body>
-          </Navbar.Offcanvas>
-          {permission === "child" && (
+          {permission === "parent" && (
             <>
-              <span className="position-relative">
+              <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-lg`} />
+              <Navbar.Offcanvas
+                id={`offcanvasNavbar-expand-lg`}
+                aria-labelledby={`offcanvasNavbarLabel-expand-lg`}
+                placement="end"
+              >
+                <Offcanvas.Header closeButton></Offcanvas.Header>
+                <Offcanvas.Body>
+                  <ul className="sidebar-menu">
+                    {parentSidebar.map(({ route, label, iconImage }) => (
+                      <li
+                        key={route}
+                        className={`sidebar-menu__item ${
+                          path === route ? "activePage" : ""
+                        }`}
+                      >
+                        <Link to={route} className="sidebar-menu__link">
+                          <img
+                            src={iconImage}
+                            alt={label}
+                            width="30"
+                            height="30"
+                          />
+                          <span className="text">{label}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </Offcanvas.Body>
+              </Navbar.Offcanvas>
+            </>
+          )}
+          {permission === "child" && (
+            <div className="d-flex align-items-center gap-5">
+              <button onClick={handleSwitchToParent} className="logout-btn">
+                <span className="text-2xl text-primary-600 d-flex">
+                  <i className="ph ph-user-switch"></i>
+                </span>
+                <span className="text">Switch to Parent</span>
+              </button>
+
+              <span className="position-relative avatar-image">
                 <img
                   src={childImage}
                   alt="Image"
@@ -134,13 +144,7 @@ const Nav = () => {
                 <span className="activation-badge w-8 h-8 position-absolute inset-block-end-0 inset-inline-end-0"></span>
               </span>
 
-              <button onClick={handleSwitchToParent} className="logout-btn">
-                <span className="text-2xl text-primary-600 d-flex">
-                  <i className="ph ph-user-switch"></i>
-                </span>
-                <span className="text">Switch to Parent</span>
-              </button>
-            </>
+            </div>
           )}
           {permission === "parent" && (
             <button onClick={handleLogout} className="logout-btn">

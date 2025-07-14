@@ -259,28 +259,35 @@ const Login = () => {
         </Modal.Header>
 
         <Modal.Body className="text-center pt-2 px-4">
-          <img src={emailImage} alt="Email Verification" loading="eager" />
-          <p className="mb-0 fs-5 text-secondary">
+          <img
+            src={emailImage}
+            alt="Email Verification"
+            className="w-50"
+            loading="eager"
+          />
+          <p className="mb-0 fs-5 text-black">
             Please verify your email first. We’ve sent you a verification link.
           </p>
         </Modal.Body>
 
-        <Modal.Footer className="border-0 pt-0 d-flex flex-column gap-2 px-4 pb-4">
-          <button
-            className="btn btn-light border w-100 rounded-pill py-2 fs-6"
-            onClick={() => {
-              setShowVerifyModal(false);
-              setUnverifiedEmail("");
-            }}
-          >
-            Back to Login
-          </button>
-          <button
-            className="btn btn-primary w-100 rounded-pill py-2 fs-6"
-            onClick={handleResendVerification}
-          >
-            Resend Verification Email
-          </button>
+        <Modal.Footer>
+          <div className="d-flex align-items-center justify-content-center w-100 gap-3 m-0">
+            <button
+              className="logout-btn w-50 justify-content-center "
+              onClick={() => {
+                setShowVerifyModal(false);
+                setUnverifiedEmail("");
+              }}
+            >
+              Back to Login
+            </button>
+            <button
+              className="dashboard-button w-50"
+              onClick={handleResendVerification}
+            >
+              Resend Email
+            </button>
+          </div>
         </Modal.Footer>
       </Modal>
     </>
