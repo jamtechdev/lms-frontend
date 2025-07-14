@@ -237,29 +237,20 @@ const AllQuestions = () => {
         {questions && questions?.questions_array?.length == 0 && (
           <p>No Questions found</p>
         )}
-        {questions && questions?.questions_array?.map((question, index) => {
-
-          return (
-            <div key={index}>
-              {question && question?.question?.type == "true_false" &&
-                <TrueFalseQuestions
-                  question={question}
-                  index={index}
-                />
-              }
-              {question && question?.question?.type == "mcq" &&
-                <McqQuestions
-                  question={question}
-                  index={index}
-                />
-              }
-              {question && question?.question?.type == "rearranging" &&
-                <ReArrangeList
-                  question={question}
-                  index={index}
-                />
-              }
-              {/* {question && question?.question?.type == "linking" &&
+        {questions &&
+          questions?.questions_array?.map((question, index) => {
+            return (
+              <div key={index}>
+                {question && question?.question?.type == "true_false" && (
+                  <TrueFalseQuestions question={question} index={index} />
+                )}
+                {question && question?.question?.type == "mcq" && (
+                  <McqQuestions question={question} index={index} />
+                )}
+                {question && question?.question?.type == "rearranging" && (
+                  <ReArrangeList question={question} index={index} />
+                )}
+                {/* {question && question?.question?.type == "linking" &&
                 <LinkingQuestions
                   question={question}
                   page={page}
@@ -271,7 +262,7 @@ const AllQuestions = () => {
                   setUserMatches={setUserMatches}
                 />
               } */}
-              {/* {question && (question?.question?.type || question?.question?.question_type) == "open_cloze_with_options" &&
+                {/* {question && (question?.question?.type || question?.question?.question_type) == "open_cloze_with_options" &&
                 <OpenClozeWithOptions
                   question={question}
                   index={index}
@@ -289,9 +280,9 @@ const AllQuestions = () => {
                   index={index}
                 />
               } */}
-            </div>
-          )
-        })}
+              </div>
+            );
+          })}
         {/* {questions && type == "mcq" && (
           <McqQuestions
             questions={questions}
@@ -395,7 +386,13 @@ const AllQuestions = () => {
           />
         )} */}
       </div>
-
+      <div className="mt-4 flex justify-center">
+        <ResponsivePagination
+          current={page}
+          total={questions.pagination.total_pages}
+          onPageChange={setPage}
+        />
+      </div>
     </>
   );
 };
