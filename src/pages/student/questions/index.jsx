@@ -389,7 +389,7 @@ const AllQuestions = () => {
       <div className="mt-4 flex justify-center">
         <ResponsivePagination
           current={page}
-          total={questions.pagination.total_pages}
+          total={questions?.pagination?.total_pages}
           onPageChange={setPage}
         />
       </div>
