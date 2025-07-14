@@ -145,7 +145,7 @@ const StudentList = () => {
             Create
           </Link>
         </div>
-        <div class="table-responsive">
+        <div className="table-responsive">
  <table className="student-table table table-bordered">
           <thead>
             <tr>

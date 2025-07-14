@@ -8,7 +8,7 @@ import ResponsivePagination from "react-responsive-pagination";
 import "react-responsive-pagination/themes/classic.css";
 
 const TrueFalseQuestions = (props) => {
-  const { questions, page, setPage, type } = props;
+  const { question, index, } = props;
   const dispatch = useDispatch();
   const answersStore = useSelector((state) => state.question.attempts);
 
@@ -19,7 +19,7 @@ const TrueFalseQuestions = (props) => {
       question_id: question?.id,
       answer: question?.question?.answer?.choice,
       user_answer: e?.target?.value,
-      type: type,
+      // type: type,
     };
     dispatch(setAttemptQuestions(payload));
   };
@@ -36,7 +36,7 @@ const TrueFalseQuestions = (props) => {
         {
           question_id: question.id,
           answer: selectedAnswer.user_answer,
-          type: type,
+          type: question?.question?.type,
         },
       ],
     };
@@ -55,65 +55,44 @@ const TrueFalseQuestions = (props) => {
 
   return (
     <>
-      <h2 className="mb-3">Questions</h2>
-      {questions?.questions_array?.map((question, index) => {
-        const selectedAnswer = answersStore?.find(
-          (ans) => ans.question_id === question.id
-        );
-        const isSubmitted = submittedQuestions[question.id];
-
-        return (
-          <div key={index}>
-            <strong>Instruction:</strong> {question.question.instruction}
-            <div className="question-card max50 mb-0">
-              <div className="question-text">
-                {(page - 1) * questions.pagination.per_page + index + 1}.{" "}
-                {typeof question?.question?.content === "string"
-                  ? parse(question.question.content)
-                  : ""}
-              </div>
-              {question?.question.options?.map((opt, idx) => (
-                <div key={idx}>
-                  <label className="kbc-option-label">
-                    <input
-                      type="radio"
-                      name={`question-${question.id}`}
-                      value={opt?.value}
-                      disabled={isSubmitted}
-                      checked={selectedAnswer?.user_answer == opt?.value}
-                      onChange={(e) => handleOptionChange(e, question)}
-                    />
-                    {opt.value}
-                  </label>
-                </div>
-              ))}
-            </div>
-            {isSubmitted && (
-              <div className="mt-3 text-green-600">
-                <strong>Explanation:</strong> {question.question.explation}
-              </div>
-            )}
-            <div className="flex justify-end mt-3">
-              <button
-                onClick={() => handleSubmit(question)}
-                className="btn btn-primary mt-3"
-                disabled={!selectedAnswer || isSubmitted}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        );
-      })}
-      {questions?.pagination?.total_pages > 1 && (
-        <div className="mt-4 flex justify-center">
-          <ResponsivePagination
-            current={page}
-            total={questions.pagination.total_pages}
-            onPageChange={setPage}
-          />
+      <h2 className="mb-3">Question {index + 1}</h2>
+      <strong>Instruction:</strong> {question.question.instruction}
+      <div className="question-card mt-2">
+        <div className="question-text mb-2 font-medium">
+          {typeof question?.question?.content === "string"
+            ? parse(question.question.content)
+            : ""}
         </div>
-      )}
+        {question?.question?.options?.map((opt, idx) => (
+          <div key={idx}>
+            <label className="kbc-option-label">
+              <input
+                type="radio"
+                name={`question-${question.id}`}
+                value={opt?.value}
+                // disabled={isSubmitted}
+                // checked={selectedAnswer?.user_answer == opt?.value}
+                onChange={(e) => handleOptionChange(e, question)}
+              />
+              {opt.value}
+            </label>
+          </div>
+        ))}
+        {true && (
+          <div className="mt-3 text-green-600">
+            <strong>Explanation:</strong> {question.question.explation}
+          </div>
+        )}
+        <div className="flex text-end mt-3">
+          <button
+            onClick={() => handleSubmit(question)}
+            className="btn btn-primary mt-3"
+          // disabled={!selectedAnswer || isSubmitted}
+          >
+            Submit
+          </button>
+        </div>
+      </div>
     </>
   );
 };

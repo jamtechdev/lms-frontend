@@ -237,7 +237,62 @@ const AllQuestions = () => {
         {questions && questions?.questions_array?.length == 0 && (
           <p>No Questions found</p>
         )}
-        {questions && type == "mcq" && (
+        {questions && questions?.questions_array?.map((question, index) => {
+
+          return (
+            <div key={index}>
+              {question && question?.question?.type == "true_false" &&
+                <TrueFalseQuestions
+                  question={question}
+                  index={index}
+                />
+              }
+              {question && question?.question?.type == "mcq" &&
+                <McqQuestions
+                  question={question}
+                  index={index}
+                />
+              }
+              {question && question?.question?.type == "rearranging" &&
+                <ReArrangeList
+                  question={question}
+                  index={index}
+                />
+              }
+              {/* {question && question?.question?.type == "linking" &&
+                <LinkingQuestions
+                  question={question}
+                  page={page}
+                  setPage={setPage}
+                  type={type}
+                  shuffledRight={shuffledRight}
+                  setShuffledRight={setShuffledRight}
+                  userMatches={userMatches}
+                  setUserMatches={setUserMatches}
+                />
+              } */}
+              {question && (question?.question?.type || question?.question?.question_type) == "open_cloze_with_options" &&
+                <OpenClozeWithOptions
+                  question={question}
+                  index={index}
+                />
+              }
+              {question && (question?.question?.type || question?.question?.question_type) == "open_cloze_with_dropdown_options" &&
+                <OpenClozeWithDropdown
+                  question={question}
+                  index={index}
+                />
+              }
+              {question && (question?.question?.type || question?.question?.question_type) == "comprehension" &&
+                <Comprehension
+                  question={question}
+                  index={index}
+                />
+              }
+            </div>
+          )
+        })}
+        {/* {questions && type == "mcq" && (
           <McqQuestions
             questions={questions}
             page={page}
@@ -338,16 +393,9 @@ const AllQuestions = () => {
             setPage={setPage}
             type={type}
           />
-        )}
+        )} */}
       </div>
-      {result && (
-        <div>
-          <button onClick={() => setResult(false)} className="btn ml-2">
-            Back to Quizz
-          </button>
-          <Result />
-        </div>
-      )}
+
     </>
   );
 };

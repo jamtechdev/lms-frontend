@@ -1,48 +1,45 @@
-import React, { useRef, useLayoutEffect, useState } from "react";
-import parse from "html-react-parser";
+import React, { useRef, useLayoutEffect, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
-import ResponsivePagination from "react-responsive-pagination";
-import "react-responsive-pagination/themes/classic.css";
 
-const ReArrangeList = (props) => {
-  const {
-    question,
-    words,
-    onReorder,
-    setResult,
-    page,
-    setPage,
-    totalPages,
-    questions,
-  } = props;
+const ReArrangeList = ({ question, index }) => {
   const dispatch = useDispatch();
   const answersStore = useSelector((state) => state.question.attempts);
   const containerRefs = useRef({});
   const positionsRef = useRef({});
-  const [submitted, setSubmitted] = useState(false);
 
+  const [submitted, setSubmitted] = useState(false);
+  const [words, setWords] = useState([]);
+
+  // Shuffle the words only once when component mounts
+  useEffect(() => {
+    if (question?.question?.options) {
+      const shuffled = [...question.question.options].sort(() => Math.random() - 0.5);
+      setWords(shuffled);
+    }
+  }, [question]);
+
+  // Animate changes when reordering
   useLayoutEffect(() => {
     const newPositions = {};
-    words.forEach((word, index) => {
-      const key = `${word}-${index}`;
+    words.forEach((word, idx) => {
+      const key = `${word.value}-${idx}`;
       const node = containerRefs.current[key];
       if (node) newPositions[key] = node.getBoundingClientRect();
     });
 
-    words.forEach((word, index) => {
-      const key = `${word}-${index}`;
+    words.forEach((word, idx) => {
+      const key = `${word.value}-${idx}`;
       const node = containerRefs.current[key];
-      if (node && positionsRef.current[key]) {
-        const oldRect = positionsRef.current[key];
-        const newRect = newPositions[key];
-        const deltaX = oldRect.left - newRect.left;
-        const deltaY = oldRect.top - newRect.top;
-
-        if (deltaX || deltaY) {
-          node.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      const oldRect = positionsRef.current[key];
+      const newRect = newPositions[key];
+      if (node && oldRect) {
+        const dx = oldRect.left - newRect.left;
+        const dy = oldRect.top - newRect.top;
+        if (dx || dy) {
+          node.style.transform = `translate(${dx}px, ${dy}px)`;
           node.style.transition = "transform 0s";
           node.getBoundingClientRect();
           node.style.transition = "transform 300ms ease";
@@ -54,113 +51,101 @@ const ReArrangeList = (props) => {
     positionsRef.current = newPositions;
   }, [words]);
 
-  const handleDragStart = (event, index) => {
+  const handleDragStart = (e, idx) => {
     if (submitted) return;
-    event.dataTransfer.setData("text/plain", index);
+    e.dataTransfer.setData("text/plain", idx);
   };
 
-  const handleDragOver = (event) => {
-    if (!submitted) event.preventDefault();
+  const handleDrop = (e, dropIdx) => {
+    if (submitted) return;
+    e.preventDefault();
+    const dragIdx = parseInt(e.dataTransfer.getData("text/plain"), 10);
+    if (isNaN(dragIdx)) return;
+
+    const newList = [...words];
+    const [dragged] = newList.splice(dragIdx, 1);
+    newList.splice(dropIdx, 0, dragged);
+    setWords(newList);
   };
 
-  const handleDrop = (event, dropIndex) => {
-    if (submitted) return;
-    event.preventDefault();
-    const dragIndex = parseInt(event.dataTransfer.getData("text/plain"), 10);
-    if (isNaN(dragIndex)) return;
-
-    const newItems = [...words];
-    const [dragged] = newItems.splice(dragIndex, 1);
-    newItems.splice(dropIndex, 0, dragged);
-    onReorder(newItems);
+  const handleDragOver = (e) => {
+    if (!submitted) e.preventDefault();
   };
 
   const handleSubmit = async () => {
     if (submitted || words.length === 0) return;
 
+    const userAnswer = words.map(w => w.value).join(" ");
     const payload = {
-      question_id: question?.id,
-      answer: question?.question?.answer?.answer?.join(" "),
-      user_answer: words?.join(" "),
-      type: question?.question?.type,
+      question_id: question.id,
+      answer: question.question.answer.answer.join(" "),
+      user_answer: userAnswer,
+      type: question.question.type,
     };
 
     dispatch(setAttemptQuestions(payload));
 
-    const updatedAnswers = [...answersStore, payload];
-    const finalPayload = {
-      answers: updatedAnswers.map((item) => ({
-        question_id: item.question_id,
-        answer: item.user_answer,
-        type: item.type,
-      })),
-    };
+    const updatedAnswers = [...answersStore.filter(a => a.question_id !== payload.question_id), payload];
 
     try {
-      await userService.answer(finalPayload);
+      await userService.answer({
+        answers: updatedAnswers.map(({ question_id, user_answer, type }) => ({
+          question_id,
+          answer: user_answer,
+          type,
+        })),
+      });
       toast.success("Answer submitted successfully.");
       setSubmitted(true);
     } catch (error) {
-      console.error("Submission error:", error);
+      console.error("Submission failed:", error);
       toast.error("Submission failed.");
     }
   };
-  const isSubmitDisabled = submitted || words.length === 0;
+
   return (
     <div className="mt-4">
-      <div className="ques">
-        {parse(
-          typeof question?.question?.content === "string"
-            ? question.question.content
-            : ""
-        )}
-      </div>
-
-      <div className="rearrangeBox mt-4">
-        {words.map((word, index) => {
-          const key = `${word}-${index}`;
-          return (
-            <div
-              key={key}
-              ref={(node) => (containerRefs.current[key] = node)}
-              className="drop-zone flex flex-col gap-4 p-6 rounded-lg bg-gray-50 mb-8"
-              draggable={!submitted}
-              onDragStart={(e) => handleDragStart(e, index)}
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, index)}
-            >
+      <h2 className="mb-3">Question {index + 1}</h2>
+      <strong>Instruction:</strong> {question?.question?.instruction}
+      <div className="question-card mt-2">
+        <div className="rearrangeBox mt-4">
+          {words.map((word, idx) => {
+            const key = `${word.value}-${idx}`;
+            return (
               <div
-                className="draggable-item bg-purple-100 text-purple-800 p-4 rounded-xl shadow-md font-medium text-xl border border-blue-200"
-                draggable="true"
+                key={key}
+                ref={(node) => (containerRefs.current[key] = node)}
+                className="drop-zone flex flex-col gap-4 p-6 rounded-lg bg-gray-50 mb-8"
+                draggable={!submitted}
+                onDragStart={(e) => handleDragStart(e, idx)}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, idx)}
               >
-                {word}
+                <div
+                  className="draggable-item bg-purple-100 text-purple-800 p-4 rounded-xl shadow-md font-medium text-xl border border-blue-200"
+                >
+                  {word.value}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
-      <p className="mt-2">
-        Your Answer: <strong>{words.join(" ")}</strong>
-      </p>
-
-      <div className="mt-3">
-        <button
-          onClick={handleSubmit}
-          className="btn btn-primary"
-          disabled={isSubmitDisabled}
-        >
-          {submitted ? "Submitted" : "Submit"}
-        </button>
-      </div>
-      {questions?.pagination?.total_pages > 1 && (
-        <div className="mt-4 flex justify-center">
-          <ResponsivePagination
-            current={page}
-            total={questions.pagination.total_pages}
-            onPageChange={setPage}
-          />
+            );
+          })}
         </div>
-      )}
+
+        <div className="flex justify-end mt-3">
+          <button
+            onClick={handleSubmit}
+            className="btn btn-primary"
+            disabled={submitted || words.length === 0}
+          >
+            {submitted ? "Submitted" : "Submit"}
+          </button>
+        </div>
+
+        <p className="mt-2">
+          Your Answer: <strong>{words.map(w => w.value).join(" ")}</strong>
+        </p>
+      </div>
+
     </div>
   );
 };
