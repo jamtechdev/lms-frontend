@@ -1,41 +1,27 @@
 import React, { useState } from "react";
 import parse from "html-react-parser";
-import { useDispatch, useSelector } from "react-redux";
-import { setAttemptQuestions } from "../../_store/_reducers/question";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
-import ResponsivePagination from "react-responsive-pagination";
-import "react-responsive-pagination/themes/classic.css";
 
-const TrueFalseQuestions = (props) => {
-  const { question, index, } = props;
-  const dispatch = useDispatch();
-  const answersStore = useSelector((state) => state.question.attempts);
+const TrueFalseQuestions = ({ question, index }) => {
+  const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const [submittedQuestions, setSubmittedQuestions] = useState({});
-
-  const handleOptionChange = (e, question) => {
-    const payload = {
-      question_id: question?.id,
-      answer: question?.question?.answer?.choice,
-      user_answer: e?.target?.value,
-      // type: type,
-    };
-    dispatch(setAttemptQuestions(payload));
+  const handleOptionChange = (e) => {
+    setSelectedAnswer(e.target.value);
   };
 
-  const handleSubmit = async (question) => {
-    const selectedAnswer = answersStore?.find(
-      (item) => item.question_id === question.id
-    );
-
-    if (!selectedAnswer) return;
+  const handleSubmit = async () => {
+    if (!selectedAnswer) {
+      toast.error("Please select an option before submitting.");
+      return;
+    }
 
     const payload = {
       answers: [
         {
           question_id: question.id,
-          answer: selectedAnswer.user_answer,
+          answer: selectedAnswer,
           type: question?.question?.type,
         },
       ],
@@ -44,12 +30,10 @@ const TrueFalseQuestions = (props) => {
     try {
       await userService.answer(payload);
       toast.success("Answer submitted successfully.");
-      setSubmittedQuestions((prev) => ({
-        ...prev,
-        [question.id]: true,
-      }));
+      setIsSubmitted(true);
     } catch (error) {
-      console.error("Error", error);
+      console.error("Submission error:", error);
+      toast.error("Failed to submit answer.");
     }
   };
 
@@ -63,6 +47,7 @@ const TrueFalseQuestions = (props) => {
             ? parse(question.question.content)
             : ""}
         </div>
+
         {question?.question?.options?.map((opt, idx) => (
           <div key={idx}>
             <label className="kbc-option-label">
@@ -70,26 +55,28 @@ const TrueFalseQuestions = (props) => {
                 type="radio"
                 name={`question-${question.id}`}
                 value={opt?.value}
-                // disabled={isSubmitted}
-                // checked={selectedAnswer?.user_answer == opt?.value}
-                onChange={(e) => handleOptionChange(e, question)}
+                checked={selectedAnswer === opt.value}
+                disabled={isSubmitted}
+                onChange={handleOptionChange}
               />
               {opt.value}
             </label>
           </div>
         ))}
-        {true && (
+
+        {question.question.explation && isSubmitted && (
           <div className="mt-3 text-green-600">
             <strong>Explanation:</strong> {question.question.explation}
           </div>
         )}
+
         <div className="flex text-end mt-3">
           <button
-            onClick={() => handleSubmit(question)}
+            onClick={handleSubmit}
             className="btn btn-primary mt-3"
-          // disabled={!selectedAnswer || isSubmitted}
+            disabled={isSubmitted || !selectedAnswer}
           >
-            Submit
+            {isSubmitted ? "Submitted" : "Submit"}
           </button>
         </div>
       </div>

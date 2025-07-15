@@ -237,154 +237,67 @@ const AllQuestions = () => {
         {questions && questions?.questions_array?.length == 0 && (
           <p>No Questions found</p>
         )}
-        {questions &&
-          questions?.questions_array?.map((question, index) => {
-            return (
-              <div key={index}>
-                {question && question?.question?.type == "true_false" && (
-                  <TrueFalseQuestions question={question} index={index} />
-                )}
-                {question && question?.question?.type == "mcq" && (
-                  <McqQuestions question={question} index={index} />
-                )}
-                {question && question?.question?.type == "rearranging" && (
-                  <ReArrangeList question={question} index={index} />
-                )}
-                {/* {question && question?.question?.type == "linking" &&
+        {questions && questions?.questions_array?.map((question, index) => {
+          const adjustedIndex = index + (page - 1) * 10;
+          return (
+            <div key={index}>
+              {question && (question?.question?.type || question?.question?.question_type) == "true_false" &&
+                <TrueFalseQuestions
+                  question={question}
+                  index={adjustedIndex}
+                />
+              }
+              {question && (question?.question?.type || question?.question?.question_type) == "mcq" &&
+                <McqQuestions
+                  question={question}
+                  index={adjustedIndex}
+                />
+              }
+              {question && (question?.question?.type || question?.question?.question_type) == "rearranging" &&
+                <ReArrangeList
+                  question={question}
+                  index={adjustedIndex}
+                />
+              }
+              {question && (question?.question?.type || question?.question?.question_type) == "linking" &&
                 <LinkingQuestions
                   question={question}
-                  page={page}
-                  setPage={setPage}
-                  type={type}
-                  shuffledRight={shuffledRight}
-                  setShuffledRight={setShuffledRight}
-                  userMatches={userMatches}
-                  setUserMatches={setUserMatches}
+                  index={adjustedIndex}
                 />
-              } */}
-                {/* {question && (question?.question?.type || question?.question?.question_type) == "open_cloze_with_options" &&
+              }
+              {question && (question?.question?.type || question?.question?.question_type) == "open_cloze_with_options" &&
                 <OpenClozeWithOptions
                   question={question}
-                  index={index}
+                  index={adjustedIndex}
                 />
               }
               {question && (question?.question?.type || question?.question?.question_type) == "open_cloze_with_dropdown_options" &&
                 <OpenClozeWithDropdown
                   question={question}
-                  index={index}
+                  index={adjustedIndex}
                 />
               }
               {question && (question?.question?.type || question?.question?.question_type) == "comprehension" &&
                 <Comprehension
                   question={question}
-                  index={index}
+                  index={adjustedIndex}
                 />
-              } */}
-              </div>
-            );
-          })}
-        {/* {questions && type == "mcq" && (
-          <McqQuestions
-            questions={questions}
-            page={page}
-            setPage={setPage}
-            type={type}
-          />
-        )}
-        {questions && type == "true_false" && (
-          <TrueFalseQuestions
-            questions={questions}
-            page={page}
-            setPage={setPage}
-            type={type}
-          />
-        )}
-        {questions && type === "linking" && (
-          <LinkingQuestions
-            questions={questions}
-            page={page}
-            setPage={setPage}
-            type={type}
-            shuffledRight={shuffledRight}
-            setShuffledRight={setShuffledRight}
-            userMatches={userMatches}
-            setUserMatches={setUserMatches}
-          />
-        )}
-
-        {questions && type == "rearranging" && !result && (
-          <>
-            {questions?.questions_array?.map((q) => {
-              const currentWords =
-                reorderState.find((r) => r.id === q.id)?.words || [];
-              return (
-                <ReArrangeList
-                  key={q.id}
-                  question={q}
-                  page={page}
-                  words={currentWords}
-                  onReorder={(newOrder) => handleReorder(q.id, newOrder)}
-                  setPage={setPage}
-                  isFirst={questions?.pagination?.current_page === 1}
-                  isLast={page === questions?.pagination?.total}
-                  setResult={setResult}
+              }
+              {question && (question?.question?.type || question?.question?.question_type) == "editing" && (
+                <EditingQuesions
+                  question={question}
+                  index={adjustedIndex}
                 />
-              );
-            })}
-
-            {questions?.pagination?.total_pages > 1 && (
-              <div className="mt-4 flex justify-center">
-                <ResponsivePagination
-                  current={page}
-                  total={questions.pagination.total_pages}
-                  onPageChange={setPage}
+              )}
+              {question && (question?.question?.type || question?.question?.question_type) == "fill_in_the_blank" && (
+                <FillInTheBlank
+                  question={question}
+                  index={adjustedIndex}
                 />
-              </div>
-            )}
-          </>
-        )}
-
-        {questions && type == "open_cloze_with_options" && (
-          <OpenClozeWithOptions
-            questions={questions}
-            page={page}
-            setPage={setPage}
-            type={type}
-          />
-        )}
-        {questions && type == "open_cloze_with_dropdown_options" && (
-          <OpenClozeWithDropdown
-            questions={questions}
-            page={page}
-            setPage={setPage}
-            type={type}
-          />
-        )}
-        {questions && type == "comprehension" && (
-          <Comprehension
-            questions={questions}
-            page={page}
-            setPage={setPage}
-            type={type}
-          />
-        )}
-
-        {questions && type == "editing" && (
-          <EditingQuesions
-            questions={questions}
-            page={page}
-            setPage={setPage}
-            type={type}
-          />
-        )}
-        {questions && type == "fill_in_the_blank" && (
-          <FillInTheBlank
-            questions={questions}
-            page={page}
-            setPage={setPage}
-            type={type}
-          />
-        )} */}
+              )}
+            </div>
+          )
+        })}
       </div>
       <div className="mt-4 flex justify-center">
         <ResponsivePagination

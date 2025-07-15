@@ -1,19 +1,15 @@
 import React, { useRef, useLayoutEffect, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setAttemptQuestions } from "../../_store/_reducers/question";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 
 const ReArrangeList = ({ question, index }) => {
-  const dispatch = useDispatch();
-  const answersStore = useSelector((state) => state.question.attempts);
   const containerRefs = useRef({});
   const positionsRef = useRef({});
 
   const [submitted, setSubmitted] = useState(false);
   const [words, setWords] = useState([]);
 
-  // Shuffle the words only once when component mounts
+  // Shuffle once on mount
   useEffect(() => {
     if (question?.question?.options) {
       const shuffled = [...question.question.options].sort(() => Math.random() - 0.5);
@@ -21,7 +17,6 @@ const ReArrangeList = ({ question, index }) => {
     }
   }, [question]);
 
-  // Animate changes when reordering
   useLayoutEffect(() => {
     const newPositions = {};
     words.forEach((word, idx) => {
@@ -41,7 +36,7 @@ const ReArrangeList = ({ question, index }) => {
         if (dx || dy) {
           node.style.transform = `translate(${dx}px, ${dy}px)`;
           node.style.transition = "transform 0s";
-          node.getBoundingClientRect();
+          node.getBoundingClientRect(); // force reflow
           node.style.transition = "transform 300ms ease";
           node.style.transform = "";
         }
@@ -77,24 +72,17 @@ const ReArrangeList = ({ question, index }) => {
 
     const userAnswer = words.map(w => w.value).join(" ");
     const payload = {
-      question_id: question.id,
-      answer: question.question.answer.answer.join(" "),
-      user_answer: userAnswer,
-      type: question.question.type,
+      answers: [
+        {
+          question_id: question.id,
+          answer: userAnswer,
+          type: question.question.type,
+        },
+      ],
     };
 
-    dispatch(setAttemptQuestions(payload));
-
-    const updatedAnswers = [...answersStore.filter(a => a.question_id !== payload.question_id), payload];
-
     try {
-      await userService.answer({
-        answers: updatedAnswers.map(({ question_id, user_answer, type }) => ({
-          question_id,
-          answer: user_answer,
-          type,
-        })),
-      });
+      await userService.answer(payload);
       toast.success("Answer submitted successfully.");
       setSubmitted(true);
     } catch (error) {
@@ -107,6 +95,7 @@ const ReArrangeList = ({ question, index }) => {
     <div className="mt-4">
       <h2 className="mb-3">Question {index + 1}</h2>
       <strong>Instruction:</strong> {question?.question?.instruction}
+
       <div className="question-card mt-2">
         <div className="rearrangeBox mt-4">
           {words.map((word, idx) => {
@@ -121,9 +110,7 @@ const ReArrangeList = ({ question, index }) => {
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, idx)}
               >
-                <div
-                  className="draggable-item bg-purple-100 text-purple-800 p-4 rounded-xl shadow-md font-medium text-xl border border-blue-200"
-                >
+                <div className="draggable-item bg-purple-100 text-purple-800 p-4 rounded-xl shadow-md font-medium text-xl border border-blue-200">
                   {word.value}
                 </div>
               </div>
@@ -145,7 +132,6 @@ const ReArrangeList = ({ question, index }) => {
           Your Answer: <strong>{words.map(w => w.value).join(" ")}</strong>
         </p>
       </div>
-
     </div>
   );
 };
