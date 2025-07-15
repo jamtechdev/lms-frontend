@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
 
 const OpenClozeWithOptions = ({ question, index }) => {
+  const dispatch = useDispatch();
+  const answersStore = useSelector(getSelected);
   const [inputs, setInputs] = useState({});
   const [inputErrors, setInputErrors] = useState({});
   const [userAnswerJSON, setUserAnswerJSON] = useState({});
@@ -13,13 +17,7 @@ const OpenClozeWithOptions = ({ question, index }) => {
   const questionId = question.id;
   const type = questionData.question_type;
 
-  useEffect(() => {
-    setInputs({});
-    setInputErrors({});
-    setUserAnswerJSON({});
-    setSubmittedQuestions({});
-    setStoredAnswer([]);
-  }, [questionId]);
+
 
   const paragraph = questionData.paragraph;
   const blanks = questionData.questions;
@@ -87,11 +85,46 @@ const OpenClozeWithOptions = ({ question, index }) => {
         ...prev,
         [questionId]: true,
       }));
+      dispatch(setAttemptQuestions({
+        question_id: questionId,
+        answer: JSON.stringify(userAnswer),
+        type: type,
+      }));
     } catch (error) {
       console.error("Error submitting:", error);
       toast.error("Submission failed.");
     }
   };
+  useEffect(() => {
+    setInputs({});
+    setInputErrors({});
+    setUserAnswerJSON({});
+    setSubmittedQuestions({});
+    setStoredAnswer([]);
+
+    const submitted = answersStore.find(
+      (ans) => ans.question_id === questionId
+    );
+
+    if (submitted?.answer) {
+      try {
+        const parsedAnswer = JSON.parse(submitted.answer || submitted.user_answer);
+        const filledInputs = {};
+        parsedAnswer.forEach(({ blank_number, value }) => {
+          const inputId = blanks.find((q) => q.blank_number === blank_number)?.id;
+          if (inputId) filledInputs[inputId] = value;
+        });
+        setInputs(filledInputs);
+        setStoredAnswer(parsedAnswer);
+        setSubmittedQuestions((prev) => ({
+          ...prev,
+          [questionId]: true,
+        }));
+      } catch (e) {
+        console.warn("Invalid answer format", e);
+      }
+    }
+  }, [questionId, answersStore, blanks]);
 
   const renderedParagraph = paragraph
     ?.split(/(\(\d+\)_____)/g)
@@ -156,6 +189,18 @@ const OpenClozeWithOptions = ({ question, index }) => {
         <div className="px-0 py-3 options">
           <strong>{index + 1}. </strong> {renderedParagraph}
         </div>
+        {submittedQuestions[questionId] && (
+          <div className="mt-4 p-3 border rounded bg-green-100 text-green-800 font-semibold whitespace-pre-line">
+            Correct Answers:
+            <div className="mt-2">
+              {blanks.map((blank, idx) => (
+                <div key={blank.id}>
+                  {idx + 1}. ({blank.blank_number}) → {blank.correct_answer}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="flex text-end">
           <button

@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
 
 const OpenClozeWithDropdown = ({ question, index }) => {
+  const dispatch = useDispatch();
+  const answersStore = useSelector(getSelected);
   const [inputs, setInputs] = useState({});
   const [submittedQuestions, setSubmittedQuestions] = useState({});
-  const [answersStore, setAnswersStore] = useState([]);
-
-  useEffect(() => {
-    setInputs({});
-    setSubmittedQuestions({});
-    setAnswersStore([]);
-  }, [question?.id]);
+  const [answers, setAnswers] = useState([]);
 
   const questionData = question?.question || {};
   const paragraph = (questionData.paragraph || "").replace(/<[^>]+>/g, "");
@@ -30,10 +28,10 @@ const OpenClozeWithDropdown = ({ question, index }) => {
     };
 
     const updatedAnswers = [
-      ...answersStore.filter((a) => a.question_id !== questionId),
+      ...answers.filter((a) => a.question_id !== questionId),
       payload,
     ];
-    setAnswersStore(updatedAnswers);
+    setAnswers(updatedAnswers);
 
     const finalPayload = {
       answers: updatedAnswers.map((item) => ({
@@ -47,6 +45,11 @@ const OpenClozeWithDropdown = ({ question, index }) => {
       await userService.answer(finalPayload);
       toast.success("Answer submitted successfully.");
       setSubmittedQuestions((prev) => ({ ...prev, [questionId]: true }));
+      dispatch(setAttemptQuestions({
+        question_id: questionId,
+        type: questionType,
+        user_answer: JSON.stringify(inputs[questionId]),
+      }));
     } catch (error) {
       console.error("Submission error:", error);
       toast.error("Failed to submit answer.");
@@ -105,7 +108,31 @@ const OpenClozeWithDropdown = ({ question, index }) => {
     });
 
   const allAnswered = blanks.every((q) => selectedAnswers[q.blank_number]);
+  useEffect(() => {
+    setInputs({});
+    setSubmittedQuestions({});
+    setAnswers([]);
+    // ✅ Restore answer from Redux store if it exists
+    const saved = answersStore.find((ans) => ans.question_id === questionId);
 
+    if (saved?.answer || saved?.user_answer) {
+      try {
+        const parsed = JSON.parse(saved.answer || saved.user_answer);
+
+        setInputs((prev) => ({
+          ...prev,
+          [questionId]: parsed,
+        }));
+
+        setSubmittedQuestions((prev) => ({
+          ...prev,
+          [questionId]: true,
+        }));
+      } catch (err) {
+        console.warn("Invalid answer format", err);
+      }
+    }
+  }, [questionId, answersStore]);
   return (
     <div>
       <h2 className="mb-3">Question {index + 1}</h2>
@@ -127,6 +154,18 @@ const OpenClozeWithDropdown = ({ question, index }) => {
             {isSubmitted ? "Submitted" : "Submit"}
           </button>
         </div>
+        {isSubmitted && (
+          <div className="mt-4 p-3 border rounded bg-green-100 text-green-800 font-semibold whitespace-pre-line">
+            Correct Answers:
+            <div className="mt-2">
+              {blanks.map((blank, idx) => (
+                <div key={blank.id}>
+                  {idx + 1}. ({blank.blank_number}) → {blank.correct_answer}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

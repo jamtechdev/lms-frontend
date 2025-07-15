@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
 
 const TrueFalseQuestions = ({ question, index }) => {
+  const dispatch = useDispatch();
+  const answersStore = useSelector(getSelected);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -31,11 +35,28 @@ const TrueFalseQuestions = ({ question, index }) => {
       await userService.answer(payload);
       toast.success("Answer submitted successfully.");
       setIsSubmitted(true);
+      dispatch(setAttemptQuestions({
+        question_id: question.id,
+        answer: selectedAnswer,
+        type: question?.question?.type,
+      }));
     } catch (error) {
       console.error("Submission error:", error);
       toast.error("Failed to submit answer.");
     }
   };
+
+  useEffect(() => {
+    const answered = answersStore.some((ans) => ans.question_id === question?.id);
+    setIsSubmitted(answered);
+    if (answered) {
+      const existingAnswer = answersStore.find((ans) => ans.question_id === question?.id);
+      setSelectedAnswer(existingAnswer?.answer || "");
+    }
+  }, [answersStore, question?.id]);
+
+  // The correct answer from the question object
+  const correctAnswer = question?.question?.answer?.choice;
 
   return (
     <>
@@ -48,21 +69,39 @@ const TrueFalseQuestions = ({ question, index }) => {
             : ""}
         </div>
 
-        {question?.question?.options?.map((opt, idx) => (
-          <div key={idx}>
-            <label className="kbc-option-label">
-              <input
-                type="radio"
-                name={`question-${question.id}`}
-                value={opt?.value}
-                checked={selectedAnswer === opt.value}
-                disabled={isSubmitted}
-                onChange={handleOptionChange}
-              />
-              {opt.value}
-            </label>
-          </div>
-        ))}
+        {question?.question?.options?.map((opt, idx) => {
+          // Highlight selected and correct answers visually
+          const isUserSelected = selectedAnswer === opt.value;
+          const isCorrect = correctAnswer === opt.value;
+
+          return (
+            <div key={idx}>
+              <label
+                className={`kbc-option-label ${
+                  isSubmitted
+                    ? isCorrect
+                      ? "text-green-600 font-bold"
+                      : isUserSelected
+                      ? "text-red-600 line-through"
+                      : ""
+                    : ""
+                }`}
+              >
+                <input
+                  type="radio"
+                  name={`question-${question.id}`}
+                  value={opt.value}
+                  checked={selectedAnswer === opt.value}
+                  disabled={isSubmitted}
+                  onChange={handleOptionChange}
+                />
+                {opt.value}
+                {isSubmitted && isCorrect && " (Correct Answer)"}
+                {isSubmitted && isUserSelected && !isCorrect && " (Your Answer)"}
+              </label>
+            </div>
+          );
+        })}
 
         {question.question.explation && isSubmitted && (
           <div className="mt-3 text-green-600">

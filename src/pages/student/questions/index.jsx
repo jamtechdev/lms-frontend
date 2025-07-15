@@ -2,24 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getLevel,
-  getQuestion,
-  getQuestionsArray,
   getStudentType,
-  getSubject,
-  getTopic,
 } from "../../../_store/_reducers/auth";
 import userService from "../../../_services/user.service";
-import parse from "html-react-parser";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, } from "react-router-dom";
 import {
   removeAttemptQuestions,
-  setAttemptQuestions,
 } from "../../../_store/_reducers/question";
-import Result from "../../../components/students/result";
 import ReArrangeList from "../../../components/students/re-arrange";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import Xarrow from "react-xarrows";
 import McqQuestions from "../../../components/students/mcq-questions";
 import TrueFalseQuestions from "../../../components/students/true-false";
 import OpenClozeWithOptions from "../../../components/students/open-close-with-options";
@@ -32,56 +22,6 @@ import loader from "../../../assets/images/loader.gif";
 import ResponsivePagination from "react-responsive-pagination";
 import "react-responsive-pagination/themes/classic.css";
 
-const ItemTypes = {
-  LEFT_ITEM: "LEFT_ITEM",
-};
-
-const DraggableLeft = ({ item, index }) => {
-  const [{ isDragging }, dragRef] = useDrag(() => ({
-    type: ItemTypes.LEFT_ITEM,
-    item: { index },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }));
-
-  return (
-    <div
-      ref={dragRef}
-      id={`left-${index}`}
-      className="link-item"
-      style={{ opacity: isDragging ? 0.5 : 1 }}
-    >
-      <div className="selector-circle"></div>
-      {item.match_type === "text" ? (
-        <div>{item.word}</div>
-      ) : (
-        <img src={item.image_uri} alt="left" style={{ width: "100px" }} />
-      )}
-    </div>
-  );
-};
-
-const DroppableRight = ({ item, index, onDrop }) => {
-  const [, dropRef] = useDrop(() => ({
-    accept: ItemTypes.LEFT_ITEM,
-    drop: (draggedItem) => {
-      onDrop(draggedItem.index, index);
-    },
-  }));
-
-  return (
-    <div ref={dropRef} id={`right-${index}`} className="link-item">
-      {item.match_type === "text" ? (
-        <div>{item.word}</div>
-      ) : (
-        <img src={item.image_uri} alt="right" style={{ width: "100px" }} />
-      )}
-      <div className="selector-circle"></div>
-    </div>
-  );
-};
-
 const AllQuestions = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -90,21 +30,10 @@ const AllQuestions = () => {
   const topic = queryParams.get("topic");
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const answersStore = useSelector((state) => state.question.attempts);
   const [questions, setQuestions] = useState(null);
-  const [reorderState, setReorderState] = useState([]);
-  const [result, setResult] = useState(false);
   const education = useSelector(getStudentType);
   const level = useSelector(getLevel);
   const [page, setPage] = useState(1);
-  const [shuffledRight, setShuffledRight] = useState([]);
-  const [userMatches, setUserMatches] = useState({});
-  const question = useSelector(getQuestion);
-  const shuffleArray = (array) => {
-    return [...array].sort(() => Math.random() - 0.5);
-  };
-  const [inputs, setInputs] = useState({});
-  const [inputErrors, setInputErrors] = useState({});
   const fetchQuestion = async () => {
     setLoading(true);
     try {
@@ -116,24 +45,16 @@ const AllQuestions = () => {
         topic_id: topic,
       };
       const response = await userService.getAllQuestion(page, data);
-      setQuestions(response?.data);
-      if (type == "rearranging") {
-        const reordered = response?.data?.questions_array?.map((q) => {
-          const existingAnswer = getExistingAnswerFromRedux(q?.id);
-          return {
-            id: q?.id,
-            words:
-              existingAnswer || q?.question?.options?.map((opt) => opt?.value),
-          };
-        });
-        setReorderState(reordered);
+      const questionsData = response?.data;
+      if (questionsData?.questions_array?.length) {
+        const shuffledArray = [...questionsData.questions_array];
+        for (let i = shuffledArray.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+        }
+        questionsData.questions_array = shuffledArray;
       }
-      if ((type || question) === "linking") {
-        const answers =
-          response?.data?.questions_array?.[0]?.question?.answer || [];
-        const rightItems = answers.map((item) => item.right);
-        setShuffledRight(shuffleArray(rightItems));
-      }
+      setQuestions(questionsData);
     } catch (err) {
       console.log(err?.response?.data?.message || "Failed, please try again");
     } finally {
@@ -148,18 +69,6 @@ const AllQuestions = () => {
       dispatch(removeAttemptQuestions());
     };
   }, []);
-
-  const handleReorder = (questionId, newOrder) => {
-    setReorderState((prev) =>
-      prev.map((q) => (q.id === questionId ? { ...q, words: newOrder } : q))
-    );
-  };
-  const getExistingAnswerFromRedux = (questionId) => {
-    const savedAnswer = answersStore.find(
-      (answer) => answer.question_id === questionId
-    );
-    return savedAnswer ? savedAnswer.user_answer.split(" ") : null;
-  };
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {

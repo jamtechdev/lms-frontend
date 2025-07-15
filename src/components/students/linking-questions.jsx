@@ -32,6 +32,37 @@ const LinkingQuestions = ({ question, index }) => {
       setShuffledRight(shuffled);
     }
   }, [question, page]);
+  useEffect(() => {
+    if (!question?.question?.answer) return;
+
+    const rightItems = question.question.answer.map((a) => a.right);
+    const leftItems = question.question.answer.map((a) => a.left);
+    const submitted = answersStore.find((ans) => ans.question_id === question.id);
+    if (submitted) {
+      try {
+        const parsedAnswer = JSON.parse(submitted.user_answer);
+        const matches = {};
+
+        Object.entries(parsedAnswer).forEach(([leftWord, rightWord]) => {
+          const leftIndex = leftItems.findIndex((l) => l.word === leftWord);
+          const rightIndex = rightItems.findIndex((r) => r.word === rightWord);
+          if (leftIndex !== -1 && rightIndex !== -1) {
+            matches[leftIndex] = rightIndex;
+          }
+        });
+
+        setMatchesByQuestion({ [question.id]: matches });
+        setSubmittedQuestions((prev) => new Set(prev).add(question.id));
+        setShuffledRight(rightItems); // keep original order
+      } catch (e) {
+        console.error("Failed to parse saved answer", e?.response);
+      }
+    } else {
+      const shuffled = [...rightItems].sort(() => Math.random() - 0.5);
+      setShuffledRight(shuffled);
+    }
+  }, [question, answersStore]);
+
 
   if (!question || !Array.isArray(question.question.answer)) return null;
 
@@ -102,8 +133,6 @@ const LinkingQuestions = ({ question, index }) => {
       user_answer: JSON.stringify(userAnswerTextMap),
     };
 
-    dispatch(setAttemptQuestions(payload));
-
     try {
       await userService.answer({
         answers: [
@@ -115,12 +144,14 @@ const LinkingQuestions = ({ question, index }) => {
         ],
       });
       toast.success(`Answer submitted successfully.`);
+      dispatch(setAttemptQuestions(payload));
       setSubmittedQuestions((prev) => new Set(prev).add(qId));
     } catch (err) {
       console.error(err);
       toast.error("Submission failed");
     }
   };
+
 
   return (
     <div className="mb-10">
@@ -234,7 +265,17 @@ const LinkingQuestions = ({ question, index }) => {
             })}
           </div>
         </div>
-
+        {/* map(pair => `${pair.left.word} → ${pair.right.word}`).join("\n"); */}
+        {isSubmitted && (
+          <div className="mt-4 p-3 border rounded bg-green-100 text-green-800 font-semibold whitespace-pre-line">
+            Correct Answer:
+            <div className="mt-2">
+              {question?.question?.answer
+                ?.map((pair, idx) => `${idx + 1}. ${pair.left.word} → ${pair.right.word}`)
+                .join(",\n")}
+            </div>
+          </div>
+        )}
         <div className="flex justify-center mt-4">
           <button
             onClick={() => handleSubmitSingle(q)}

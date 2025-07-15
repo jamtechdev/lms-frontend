@@ -2,10 +2,14 @@ import parse from "html-react-parser";
 import { useEffect, useState } from "react";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
 
 const EditingQuesions = ({ question, index }) => {
+  const dispatch = useDispatch();
+  const answersStore = useSelector(getSelected);
   const [submitted, setSubmitted] = useState(false);
-  const [answersStore, setAnswersStore] = useState([]);
+  const [answers, setAnswers] = useState([]);
   const [inputs, setInputs] = useState({});
 
   const questionData = question?.question || {};
@@ -17,8 +21,26 @@ const EditingQuesions = ({ question, index }) => {
 
   useEffect(() => {
     setInputs({});
-    setAnswersStore([]);
-  }, [questionId]);
+    setAnswers([]);
+
+    const saved = answersStore.find((ans) => ans.question_id === questionId);
+    if (saved?.answer || saved?.user_answer) {
+      try {
+        const parsed = JSON.parse(saved.answer || saved.user_answer);
+        setInputs(parsed);
+        setAnswers([
+          {
+            question_id: questionId,
+            user_answer: JSON.stringify(parsed),
+            type: type,
+          },
+        ]);
+        setSubmitted(true);
+      } catch (err) {
+        console.warn("Invalid answer format:", err);
+      }
+    }
+  }, [questionId, answersStore]);
 
   const handleInputChange = (e, boxNumber) => {
     const value = e.target.value;
@@ -37,10 +59,10 @@ const EditingQuesions = ({ question, index }) => {
     };
 
     const updatedAnswers = [
-      ...answersStore.filter((a) => a.question_id !== questionId),
+      ...answers.filter((a) => a.question_id !== questionId),
       payload,
     ];
-    setAnswersStore(updatedAnswers);
+    setAnswers(updatedAnswers);
     setSubmitted(true);
 
     const finalPayload = {
@@ -54,6 +76,7 @@ const EditingQuesions = ({ question, index }) => {
     try {
       await userService.answer(finalPayload);
       toast.success("Answer submitted successfully.");
+      dispatch(setAttemptQuestions(finalPayload?.answers[0]));
     } catch (error) {
       console.error("Error", error);
       toast.error("Submission failed.");
@@ -66,29 +89,57 @@ const EditingQuesions = ({ question, index }) => {
       const match = part.match(/\((\d+)\)/);
       if (match) {
         const boxNumber = parseInt(match[1]);
+        const correctAnswer =
+          boxes.find((q) => q.box === boxNumber)?.correct || "";
         const inputVal = inputs[boxNumber] || "";
+        const isWrong = submitted && inputVal.trim().toLowerCase() !== correctAnswer.trim().toLowerCase();
 
         return (
-          <input
+          <span
             key={`input-${i}`}
-            type="text"
-            value={inputVal}
-            disabled={submitted}
-            placeholder={`Word ${boxNumber}`}
-            onChange={(e) => handleInputChange(e, boxNumber)}
             style={{
-              display: "inline-block",
-              verticalAlign: "middle",
-              width: "110px",
+              display: "inline-flex",
+              flexDirection: "column",
+              alignItems: "center",
               margin: "0 4px",
-              padding: "5px 8px",
-              fontSize: "15px",
-              border: "1px solid #cbd5e1",
-              borderRadius: "6px",
-              boxShadow: "0 1px 2px rgba(0, 0, 0, 0.04)",
-              outlineColor: "#2563eb",
+              verticalAlign: "middle",
             }}
-          />
+          >
+            <input
+              type="text"
+              value={inputVal}
+              disabled={submitted}
+              placeholder={`Word ${boxNumber}`}
+              onChange={(e) => handleInputChange(e, boxNumber)}
+              style={{
+                width: "100px",
+                padding: "4px 6px",
+                fontSize: "15px",
+                border: "1px solid",
+                borderColor: submitted
+                  ? isWrong
+                    ? "#dc2626"
+                    : "#22c55e"
+                  : "#cbd5e1",
+                borderRadius: "6px",
+                backgroundColor: submitted && isWrong ? "#fef2f2" : "#fff",
+                textAlign: "center",
+              }}
+            />
+            {submitted && (
+              <div
+                style={{
+                  fontSize: "11px",
+                  marginTop: "2px",
+                  color: isWrong ? "#dc2626" : "#22c55e",
+                  minHeight: "14px",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {isWrong ? `✓ ${correctAnswer}` : ""}
+              </div>
+            )}
+          </span>
         );
       } else {
         return (
@@ -114,7 +165,6 @@ const EditingQuesions = ({ question, index }) => {
           style={{
             borderRadius: "8px",
             backgroundColor: "#f8fafc",
-            marginBottom: "0px",
           }}
         >
           <div
@@ -137,8 +187,9 @@ const EditingQuesions = ({ question, index }) => {
           <button
             onClick={handleStoreData}
             disabled={submitted || !isAnyInputFilled}
-            className={`btn btn-primary mt-3 ${submitted || !isAnyInputFilled ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+            className={`btn btn-primary mt-3 ${
+              submitted || !isAnyInputFilled ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
             {submitted ? "Submitted" : "Submit"}
           </button>

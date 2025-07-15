@@ -2,11 +2,16 @@ import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import toast from "react-hot-toast";
 import { userService } from "../../_services";
+import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
+import { useDispatch, useSelector } from "react-redux";
 
 const FillInTheBlank = ({ question, index }) => {
+  const dispatch = useDispatch();
+  const answersStore = useSelector(getSelected);
   const [submitted, setSubmitted] = useState(false);
   const [inputs, setInputs] = useState({});
-  const [answersStore, setAnswersStore] = useState([]);
+  const [answers, setAnswers] = useState([]);
+  const [correctMap, setCorrectMap] = useState({});
 
   const questionId = question?.id;
   const questionData = question?.question || {};
@@ -26,15 +31,33 @@ const FillInTheBlank = ({ question, index }) => {
     }, {});
 
   useEffect(() => {
-    const prev = answersStore.find((a) => a.question_id === questionId);
-    if (prev) {
-      setInputs(JSON.parse(prev.user_answer));
-      setSubmitted(true);
-    } else {
-      setInputs({});
-      setSubmitted(false);
+    setInputs({});
+    setAnswers([]);
+    const corrects = getCorrectAnswerMap(blanks);
+    setCorrectMap(corrects);
+
+    const saved = answersStore.find((ans) => ans.question_id === questionId);
+    if (saved?.answer || saved?.user_answer) {
+      try {
+        const parsed = JSON.parse(saved.answer || saved.user_answer);
+        setInputs(parsed);
+        setSubmitted(true);
+        setAnswers([
+          {
+            question_id: questionId,
+            user_answer: JSON.stringify(parsed),
+            type: type,
+          },
+        ]);
+      } catch (err) {
+        console.warn("Invalid answer format in Redux store:", err);
+      }
     }
-  }, [questionId, answersStore]);
+  }, [questionId, blanks, answersStore]);
+
+  const handleChange = (index, value) => {
+    setInputs((prev) => ({ ...prev, [index]: value }));
+  };
 
   const handleStoreData = async () => {
     if (!isAllFilled()) {
@@ -46,14 +69,14 @@ const FillInTheBlank = ({ question, index }) => {
       question_id: questionId,
       type: type,
       user_answer: JSON.stringify(inputs),
-      answer: JSON.stringify(getCorrectAnswerMap(blanks)),
+      answer: JSON.stringify(correctMap),
     };
 
     const updatedAnswers = [
-      ...answersStore.filter((a) => a.question_id !== questionId),
+      ...answers.filter((a) => a.question_id !== questionId),
       payload,
     ];
-    setAnswersStore(updatedAnswers);
+    setAnswers(updatedAnswers);
     setSubmitted(true);
 
     try {
@@ -67,14 +90,11 @@ const FillInTheBlank = ({ question, index }) => {
 
       await userService.answer(finalPayload);
       toast.success("Answer submitted successfully.");
+      dispatch(setAttemptQuestions(finalPayload?.answers[0]));
     } catch (error) {
       console.error("Error", error);
       toast.error("Something went wrong while submitting.");
     }
-  };
-
-  const handleChange = (index, value) => {
-    setInputs((prev) => ({ ...prev, [index]: value }));
   };
 
   const renderParsedQuestion = (text = "") => {
@@ -87,22 +107,56 @@ const FillInTheBlank = ({ question, index }) => {
       replace: (domNode) => {
         if (domNode.name === "input" && domNode.attribs?.["data-index"]) {
           const index = domNode.attribs["data-index"];
+          const userVal = inputs[index] || "";
+          const correctVal = correctMap[index] || "";
+          const isCorrect = submitted && userVal.trim().toLowerCase() === correctVal.trim().toLowerCase();
+          const isIncorrect = submitted && !isCorrect;
+
           return (
-            <input
-              key={index}
-              type="text"
-              placeholder={`(${index})`}
-              value={inputs[index] || ""}
-              onChange={(e) => handleChange(index, e.target.value)}
-              disabled={submitted}
+            <span
+              key={`blank-${index}`}
               style={{
+                display: "inline-flex",
+                flexDirection: "column",
+                alignItems: "center",
                 margin: "0 4px",
-                padding: "4px",
-                width: "100px",
-                border: "none",
-                borderBottom: "1px solid #ccc",
+                verticalAlign: "middle",
               }}
-            />
+            >
+              <input
+                type="text"
+                placeholder={`(${index})`}
+                value={userVal}
+                onChange={(e) => handleChange(index, e.target.value)}
+                disabled={submitted}
+                style={{
+                  padding: "4px 6px",
+                  fontSize: "15px",
+                  width: "100px",
+                  textAlign: "center",
+                  border: "1px solid",
+                  borderColor: submitted
+                    ? isCorrect
+                      ? "#22c55e"
+                      : "#dc2626"
+                    : "#ccc",
+                  backgroundColor: submitted && isIncorrect ? "#fef2f2" : "#fff",
+                  borderRadius: "6px",
+                }}
+              />
+              {submitted && isIncorrect && (
+                <span
+                  style={{
+                    marginTop: "2px",
+                    fontSize: "11px",
+                    color: "#dc2626",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  ✓ {correctVal}
+                </span>
+              )}
+            </span>
           );
         }
       },
@@ -111,21 +165,20 @@ const FillInTheBlank = ({ question, index }) => {
 
   return (
     <>
-    <h2 className="mb-3">Question {index + 1}</h2>
+      <h2 className="mb-3">Question {index + 1}</h2>
       <strong>Instruction:</strong> {parse(instruction || "")}
-    <div className="question-card">
-      <div>{renderParsedQuestion(questionText)}</div>
-
-      <div className="flex justify-end">
-        <button
-          onClick={handleStoreData}
-          className="btn btn-primary mt-3"
-          disabled={!isAllFilled() || submitted}
-        >
-          {submitted ? "Submitted" : "Submit"}
-        </button>
+      <div className="question-card">
+        <div>{renderParsedQuestion(questionText)}</div>
+        <div className="flex justify-end">
+          <button
+            onClick={handleStoreData}
+            className="btn btn-primary mt-3"
+            disabled={!isAllFilled() || submitted}
+          >
+            {submitted ? "Submitted" : "Submit"}
+          </button>
+        </div>
       </div>
-    </div>
     </>
   );
 };
