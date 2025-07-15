@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import parentService from "../../../_services/parent.service";
 import swal from "sweetalert";
 import loader from "../../../assets/images/loader.gif";
@@ -7,6 +7,7 @@ import loader from "../../../assets/images/loader.gif";
 const AssessmentHistory = () => {
   const [loading, setLoading] = useState(true);
   const [assignments, setAssignments] = useState([]);
+  const navigate = useNavigate();
 
   const fetchAssignment = async () => {
     setLoading(true);
@@ -58,6 +59,10 @@ const AssessmentHistory = () => {
     }
   };
 
+  const handleEdit = (id) => {
+    navigate(`/parent/assessment/update/${id}`);
+  };
+
   if (loading)
     return (
       <div className="text-center mt-5">
@@ -98,7 +103,7 @@ const AssessmentHistory = () => {
             Create Assignment
           </Link>
         </div>
-        <div class="table-responsive">
+        <div className="table-responsive">
           <table className="student-table table table-bordered">
             <thead>
               <tr>
@@ -130,7 +135,11 @@ const AssessmentHistory = () => {
                     <td>{assignment.questions?.length || 0}</td>
                     <td>{assignment.created_time}</td>
                     <td style={{ textAlign: "center" }}>
-                      <button className="icon-button" title="Edit">
+                      <button
+                        className="icon-button"
+                        onClick={() => handleEdit(assignment.id)}
+                        title="Edit"
+                      >
                         <i className="ph ph-pencil-simple"></i>
                       </button>
                       <button
