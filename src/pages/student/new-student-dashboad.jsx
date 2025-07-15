@@ -125,7 +125,7 @@ const NewStudentDashboard = () => {
       <Card className="mb-4">
         <Card.Body>
           <h2 className="pb-2 border-bottom mb-3">
-            📃 This Week’s Required Papers
+            📃 This Week’s Assignment
           </h2>
           <p>You must complete at least one paper per subject this week.</p>
           <Row>
