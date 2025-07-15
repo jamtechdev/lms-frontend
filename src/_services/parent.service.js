@@ -16,6 +16,11 @@ const parentService = {
     resendVerify,
     getassignment,
     deleteAssignments,
+    createAssignment,
+    getAllSubject,
+    getAllChild,
+    getQuestions,
+    updateAssignments,
 };
 
 async function getStudentLevel() {
@@ -85,5 +90,26 @@ async function getassignment() {
 async function deleteAssignments(data) {
     return await axiosInstance.post(`api/v1/assignments/delete`, data);
 }
-
+async function createAssignment(data) {
+    return await axiosInstance.post(`/api/v1/assignments/create`,
+        data,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            }
+        }
+    );
+}
+async function getAllSubject() {
+    return await axiosInstance.get(`/api/v1/questions/subjects`)
+}
+async function getAllChild() {
+    return await axiosInstance.get(`/api/v1/parent/my-students`);
+}
+async function getQuestions() {
+    return await axiosInstance.get(`/api/v1/questions/all`);
+}
+async function updateAssignments(data) {
+    return await axiosInstance.post(`api/v1/assignments/update`, data);
+}
 export default parentService;
