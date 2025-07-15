@@ -13,6 +13,7 @@ const initialState = {
     role: null,
     avatar: null,
     fetchedQuestion: [],
+    child_id: null,
     parentBackup: null,
 };
 
@@ -29,6 +30,7 @@ const authSlice = createSlice({
             state.level = action.payload.level;
             state.role = action.payload.role;
             state.avatar = action.payload.avatar;
+            state.child_id = action.payload.child_id;
         },
         logout: (state) => {
             state.isAuthenticated = false;
@@ -41,6 +43,7 @@ const authSlice = createSlice({
             state.subject = null;
             state.role = null;
             state.avatar = null;
+            state.child_id = null;
         },
         setQuestion: (state, action) => {
             state.question = action.payload;
@@ -74,4 +77,5 @@ export const getTopic = (state) => state.auth.topic;
 export const getQuestionsArray = (state) => state.auth.fetchedQuestion;
 export const getParentBackup = (state) => state.auth.parentBackup;
 export const getAvatar = (state) => state.auth.avatar;
+export const getChildId = (state) => state.auth.child_id;
 export default authSlice.reducer;

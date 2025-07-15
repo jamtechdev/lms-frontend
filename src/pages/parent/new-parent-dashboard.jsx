@@ -70,6 +70,7 @@ const NewParentDashboard = () => {
           level: userData?.level_id,
           role: userData?.role,
           avatar: userData?.avatar,
+          child_id: selectedChildId,
         })
       );
 
