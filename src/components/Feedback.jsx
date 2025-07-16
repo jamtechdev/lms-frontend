@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 const Feedback = () => {
   const [selectedReason, setSelectedReason] = useState("");

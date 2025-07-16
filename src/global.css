@@ -1539,7 +1539,7 @@ ul.sidebar-menu .sidebar-menu__item .sidebar-menu__link span {
 input:-webkit-autofill {
   background: #fff !important;
   box-shadow: 0 0 8px rgb(0 0 0 / 20%);
-  border: 2px solid #f7941e;
+  border: 2px solid #f7941e !important;
   border-radius: 12px !important;
   margin: 0 !important;
 }
