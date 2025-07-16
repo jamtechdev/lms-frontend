@@ -46,7 +46,7 @@ function Landing() {
         <nav className="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
           <Link to="/" className="navbar-brand ml-lg-3">
             <h1 className="m-0 text-uppercase text-primary">
-              <i className="fa fa-book-reader mr-3"></i>QTN Vault
+              <img src="../assets/images/logo/logo.png"/>
             </h1>
           </Link>
           <button
