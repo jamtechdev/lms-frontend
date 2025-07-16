@@ -22,6 +22,7 @@ import NewStudentDashboard from "../pages/student/new-student-dashboad";
 import NewParentDashboard from "../pages/parent/new-parent-dashboard";
 import CreateAssignment from "../pages/parent/assessment-history/createassignment";
 import UpdateAssignment from "../pages/parent/assessment-history/update";
+import WeeklyAssignment from "../pages/assignment";
 
 
 const Login = lazy(() => import("../pages/login/index"));
@@ -68,6 +69,7 @@ const AppRouter = () => {
           <Route path="topics" element={<Topics />} />
           <Route path="question-type" element={<QuestionType />} />
           <Route path="all-questions" element={<AllQuestions />} />
+          <Route path="week-assignment/:id" element={<WeeklyAssignment />} />
         </Route>
 
         {/* Parent Routes */}

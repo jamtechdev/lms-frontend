@@ -15,7 +15,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import topicsService from "../../_services/topics.service";
 import userService from "../../_services/user.service";
-import { getLevel } from "../../_store/_reducers/auth";
+import { getChildId, getLevel } from "../../_store/_reducers/auth";
+import loader from "../../assets/images/loader.gif";
 
 const NewStudentDashboard = () => {
   const level = useSelector(getLevel);
@@ -23,12 +24,30 @@ const NewStudentDashboard = () => {
   const [subjects, setSubjects] = useState([]);
   const [topics, setTopics] = useState([]);
   const [topicsLoading, setTopicsLoading] = useState(false);
+  const [assignmentLoading, setAssignmentLoading] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const [assignments, setAssignments] = useState();
+  const childId = useSelector(getChildId);
+
+  const getAssignments = async () => {
+    setAssignmentLoading(true);
+    try {
+      const data = await userService.getStudentAssignment({
+        student_id: childId,
+      });
+      setAssignments(data?.data);
+    } catch (error) {
+      console.error("Error", error);
+    } finally {
+      setAssignmentLoading(false);
+    }
+  };
 
   useEffect(() => {
+    getAssignments();
     const fetchSubjects = async () => {
       setLoading(true);
       try {
@@ -45,6 +64,10 @@ const NewStudentDashboard = () => {
       fetchSubjects();
     }
   }, [level]);
+
+  const handleStart = (id) => {
+    navigate(`/student/week-assignment/${id}`);
+  };
 
   const handleSubjectChange = async (e) => {
     const selectedSubjectId = e.target.value;
@@ -73,6 +96,33 @@ const NewStudentDashboard = () => {
     setSelectedTopic("");
     setTopics([]);
   };
+  const AssignmentButton = ({ due_date, id }) => {
+    const dueDate = new Date(due_date);
+    dueDate.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const isEnabled = dueDate > today;
+    const status = isEnabled ? "Start" : "Completed";
+    return (
+      <div>
+        <button
+          className="dashboard-button width-fit"
+          disabled={!isEnabled}
+          onClick={() => handleStart(id)}
+        >
+          {status}
+        </button>
+      </div>
+    );
+  };
+  function formatDate(dateString) {
+    if (!dateString) return "N/A";
+    const d = new Date(dateString);
+    d.setHours(0, 0, 0, 0);
+    return `${d.getDate()} ${d.toLocaleString("en-US", {
+      month: "short",
+    })} ${d.getFullYear()}`;
+  }
 
   return (
     <Container className="my-4" fluid>
@@ -124,46 +174,36 @@ const NewStudentDashboard = () => {
 
       <Card className="mb-4">
         <Card.Body>
-          <h2 className="pb-2 border-bottom mb-3">
-            📃 This Week’s Assignment
-          </h2>
+          <h2 className="pb-2 border-bottom mb-3">📃 This Week’s Assignment</h2>
           <p>You must complete at least one paper per subject this week.</p>
           <Row>
-            {[
-              {
-                subject: "English",
-                due: "28 Apr 2025",
-                status: "Start",
-                disabled: false,
-              },
-              {
-                subject: "Math",
-                due: "28 Apr 2025",
-                status: "Completed",
-                disabled: true,
-              },
-              {
-                subject: "Science",
-                due: "28 Apr 2025",
-                status: "Start",
-                disabled: false,
-              },
-            ].map(({ subject, due, status, disabled }, i) => (
-              <Col md={4} className="mb-3" key={i}>
-                <Card className="student-card flex-row align-items-start justify-content-between m-0">
-                  <div>
-                    <h4 className="text-white">📘 {subject}</h4>
-                    <p className="text-white m-0">Due: {due}</p>
-                  </div>
-                  <button
-                    className="dashboard-button width-fit"
-                    disabled={disabled}
-                  >
-                    {status}
-                  </button>
-                </Card>
+            {assignmentLoading ? (
+              <Col className="text-center mt-3">
+                <img src={loader} width={100} alt="Loading..." />
               </Col>
-            ))}
+            ) : assignments && assignments.length > 0 ? (
+              assignments.map((assignment, i) => (
+                <Col md={4} className="mb-3" key={i}>
+                  <Card className="student-card flex-row align-items-start justify-content-between m-0">
+                    <div>
+                      <h4 className="text-white">
+                        📘 {assignment?.subject?.subject_name}
+                      </h4>
+                      <p className="text-white m-0">
+                        Due: {formatDate(assignment?.due_date)}
+                      </p>
+                    </div>
+                    <AssignmentButton due_date={assignment?.due_date} id={assignment?.id}/>
+                  </Card>
+                </Col>
+              ))
+            ) : (
+              <Col>
+                <div className="text-center text-muted py-3">
+                  💤 No assignments available for this week.
+                </div>
+              </Col>
+            )}
           </Row>
         </Card.Body>
       </Card>
@@ -304,21 +344,24 @@ const NewStudentDashboard = () => {
 
         <Modal.Footer className="pt-0">
           <div className="d-flex align-items-center justify-content-center w-100 gap-3 m-0">
-  <button className="logout-btn w-50 justify-content-center" onClick={handleCloseModal}>
-            ❌ Cancel
-          </button>
-          <button
-            className="dashboard-button w-50"
-            disabled={!selectedSubject || !selectedTopic}
-            onClick={() => {
-              navigate(
-                `/student/all-questions?sub=${selectedSubject}&topic=${selectedTopic}`
-              );
-              handleCloseModal();
-            }}
-          >
-            ✅ Start Paper
-          </button>
+            <button
+              className="logout-btn w-50 justify-content-center"
+              onClick={handleCloseModal}
+            >
+              ❌ Cancel
+            </button>
+            <button
+              className="dashboard-button w-50"
+              disabled={!selectedSubject || !selectedTopic}
+              onClick={() => {
+                navigate(
+                  `/student/all-questions?sub=${selectedSubject}&topic=${selectedTopic}`
+                );
+                handleCloseModal();
+              }}
+            >
+              ✅ Start Paper
+            </button>
           </div>
         </Modal.Footer>
       </Modal>
