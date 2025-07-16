@@ -7,6 +7,9 @@ const userService = {
     getAllQuestion,
     logout,
     answer,
+    getStudentAssignment,
+    assignmentAttempt,
+    getresult,
 };
 async function login(data) {
     return await axiosInstance.post(`/api/v1/auth/login`, data);
@@ -25,5 +28,14 @@ async function logout(data) {
 }
 async function answer(data) {
     return await axiosInstance.post(`/api/v1/questions/user-answer`, data);
+}
+async function getStudentAssignment(data) {
+    return await axiosInstance.post(`/api/v1/assignments/student-assignment`, data);
+}
+async function assignmentAttempt(data) {
+    return await axiosInstance.post(`/api/v1/assignments/attempt`, data);
+}
+async function getresult(data) {
+    return await axiosInstance.post(`/api/v1/assignments/getPastResults`, data);
 }
 export default userService;
