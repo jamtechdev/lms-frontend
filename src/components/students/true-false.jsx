@@ -4,6 +4,7 @@ import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
+import Feedback from "../Feedback";
 
 const TrueFalseQuestions = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -60,10 +61,13 @@ const TrueFalseQuestions = ({ question, index }) => {
 
   return (
     <>
-      <h2 className="mb-3">Question {index + 1}</h2>
-      <strong>Instruction:</strong> {question.question.instruction}
+      <div className="question-header">
+        <h2>Question {index + 1}</h2>
+        <p> <strong>Instruction:</strong> {question.question.instruction}</p>
+        <Feedback/>
+      </div>
       <div className="question-card mt-2">
-        <div className="question-text mb-2 font-medium">
+        <div className="question-text">
           {typeof question?.question?.content === "string"
             ? parse(question.question.content)
             : ""}
@@ -109,10 +113,10 @@ const TrueFalseQuestions = ({ question, index }) => {
           </div>
         )}
 
-        <div className="flex text-end mt-3">
+        <div className="d-flex justify-content-end mt-4">
           <button
             onClick={handleSubmit}
-            className="btn btn-primary mt-3"
+            className="dashboard-button"
             disabled={isSubmitted || !selectedAnswer}
           >
             {isSubmitted ? "Submitted" : "Submit"}

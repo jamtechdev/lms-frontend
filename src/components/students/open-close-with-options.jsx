@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
+import {
+  getSelected,
+  setAttemptQuestions,
+} from "../../_store/_reducers/question";
+import Feedback from "../Feedback";
 
 const OpenClozeWithOptions = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -16,8 +20,6 @@ const OpenClozeWithOptions = ({ question, index }) => {
   const questionData = question.question;
   const questionId = question.id;
   const type = questionData.question_type;
-
-
 
   const paragraph = questionData.paragraph;
   const blanks = questionData.questions;
@@ -44,7 +46,9 @@ const OpenClozeWithOptions = ({ question, index }) => {
     if (isValid) {
       setUserAnswerJSON((prev) => {
         const updated = [...(prev[questionId] || [])];
-        const idx = updated.findIndex((item) => item.blank_number === blank_number);
+        const idx = updated.findIndex(
+          (item) => item.blank_number === blank_number
+        );
 
         if (idx !== -1) {
           updated[idx] = { blank_number, value };
@@ -85,11 +89,13 @@ const OpenClozeWithOptions = ({ question, index }) => {
         ...prev,
         [questionId]: true,
       }));
-      dispatch(setAttemptQuestions({
-        question_id: questionId,
-        answer: JSON.stringify(userAnswer),
-        type: type,
-      }));
+      dispatch(
+        setAttemptQuestions({
+          question_id: questionId,
+          answer: JSON.stringify(userAnswer),
+          type: type,
+        })
+      );
     } catch (error) {
       console.error("Error submitting:", error);
       toast.error("Submission failed.");
@@ -108,10 +114,14 @@ const OpenClozeWithOptions = ({ question, index }) => {
 
     if (submitted?.answer) {
       try {
-        const parsedAnswer = JSON.parse(submitted.answer || submitted.user_answer);
+        const parsedAnswer = JSON.parse(
+          submitted.answer || submitted.user_answer
+        );
         const filledInputs = {};
         parsedAnswer.forEach(({ blank_number, value }) => {
-          const inputId = blanks.find((q) => q.blank_number === blank_number)?.id;
+          const inputId = blanks.find(
+            (q) => q.blank_number === blank_number
+          )?.id;
           if (inputId) filledInputs[inputId] = value;
         });
         setInputs(filledInputs);
@@ -136,7 +146,8 @@ const OpenClozeWithOptions = ({ question, index }) => {
 
         const inputValue =
           inputs[blank.id] ||
-          storedAnswer.find((item) => item.blank_number === blankNumber)?.value ||
+          storedAnswer.find((item) => item.blank_number === blankNumber)
+            ?.value ||
           "";
 
         const hasError = inputErrors[blank.id];
@@ -168,10 +179,13 @@ const OpenClozeWithOptions = ({ question, index }) => {
     });
 
   return (
-    <div>
-      <h2 className="mb-3">Question {index + 1}</h2>
-      <strong>Instruction:</strong> {questionData.instruction}
-      <div className="question-card mt-2">
+    <>
+      <div className="question-header">
+        <h2>Question {index + 1}</h2>
+        <p><strong>Instruction:</strong> {questionData.instruction}</p>
+        <Feedback/>
+      </div>
+      <div className="question-card">
         <div
           style={{
             marginTop: "5px",
@@ -202,17 +216,17 @@ const OpenClozeWithOptions = ({ question, index }) => {
           </div>
         )}
 
-        <div className="flex text-end">
+        <div className="d-flex justify-content-end mt-4">
           <button
             onClick={() => handlePaperSubmit(questionId)}
-            className="btn btn-primary mt-3"
+            className="dashboard-button"
             disabled={submittedQuestions[questionId]}
           >
             {submittedQuestions[questionId] ? "Submitted" : "Submit"}
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

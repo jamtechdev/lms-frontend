@@ -3,7 +3,11 @@ import parse from "html-react-parser";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
+import {
+  getSelected,
+  setAttemptQuestions,
+} from "../../_store/_reducers/question";
+import Feedback from "../Feedback";
 
 const Comprehension = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -104,9 +108,12 @@ const Comprehension = ({ question, index }) => {
 
   return (
     <>
-      <h2 className="mb-3">Question {index + 1}</h2>
-      <strong>Instruction:</strong> {question.question.instruction}
-      <div className="question-card max75">
+      <div className="question-header">
+        <h2>Question {index + 1}</h2>
+        <p><strong>Instruction:</strong> {question.question.instruction}</p>
+        <Feedback/>
+      </div>
+      <div className="question-card">
         <div
           style={{
             padding: "15px",
@@ -121,15 +128,17 @@ const Comprehension = ({ question, index }) => {
 
         {subquestions.map((subq, subIndex) => {
           const prefilled = getPrefilled(subq);
-          const parsedQuestion = typeof subq?.question === "string" ? parse(subq.question) : "";
+          const parsedQuestion =
+            typeof subq?.question === "string" ? parse(subq.question) : "";
           const inputName = `input-${questionId}-${subIndex}`;
           const correctAnswer = subq?.answer;
 
           if (subq.type === "mcq" || subq.type === "true_false") {
-            const options = subq.type === "mcq" ? subq.options : ["True", "False"];
+            const options =
+              subq.type === "mcq" ? subq.options : ["True", "False"];
             return (
               <div key={subIndex} className="mb-3">
-                <div className="question-text mt-2">
+                <div className="question-text">
                   {subIndex + 1}. {parsedQuestion}
                 </div>
                 {options.map((opt, i) => {
@@ -155,12 +164,19 @@ const Comprehension = ({ question, index }) => {
                           value={opt}
                           checked={isUserSelected}
                           onChange={(e) =>
-                            handleChange(subq.question, e.target.value, subq.type)
+                            handleChange(
+                              subq.question,
+                              e.target.value,
+                              subq.type
+                            )
                           }
                         />
                         {opt}
                         {isSubmitted && isCorrect && " (Correct Answer)"}
-                        {isSubmitted && isUserSelected && !isCorrect && " (Your Answer)"}
+                        {isSubmitted &&
+                          isUserSelected &&
+                          !isCorrect &&
+                          " (Your Answer)"}
                       </label>
                     </div>
                   );
@@ -172,7 +188,7 @@ const Comprehension = ({ question, index }) => {
           if (subq.type === "fill_blank") {
             return (
               <div key={subIndex} className="mb-3">
-                <div className="question-text mt-2">
+                <div className="question-text">
                   {subIndex + 1}. {parsedQuestion}
                 </div>
                 <input
@@ -196,7 +212,7 @@ const Comprehension = ({ question, index }) => {
           if (subq.type === "open_ended") {
             return (
               <div key={subIndex} className="comprehension-subq mb-4">
-                <div className="question-text mt-2">
+                <div className="question-text">
                   {subIndex + 1}. {parsedQuestion}
                 </div>
                 <textarea
@@ -228,7 +244,7 @@ const Comprehension = ({ question, index }) => {
 
         <button
           onClick={handlePaperSubmit}
-          className="btn btn-primary mt-3"
+          className="dashboard-button"
           disabled={isSubmitted || subquestions.length === 0}
         >
           {isSubmitted ? "Submitted" : "Submit"}

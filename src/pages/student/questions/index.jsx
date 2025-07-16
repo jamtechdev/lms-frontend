@@ -92,7 +92,7 @@ const AllQuestions = () => {
 
   return (
     <>
-      <div className="dashboard-body">
+      <div>
         {/* <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
           <div className="breadcrumb mb-24">
             <ul className="flex-align gap-4">
@@ -149,7 +149,7 @@ const AllQuestions = () => {
         {questions && questions?.questions_array?.map((question, index) => {
           const adjustedIndex = index + (page - 1) * 10;
           return (
-            <div key={index}>
+            <div key={index} className="question-list">
               {question && (question?.question?.type || question?.question?.question_type) == "true_false" &&
                 <TrueFalseQuestions
                   question={question}

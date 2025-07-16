@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import toast from "react-hot-toast";
 import { userService } from "../../_services";
-import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
+import {
+  getSelected,
+  setAttemptQuestions,
+} from "../../_store/_reducers/question";
 import { useDispatch, useSelector } from "react-redux";
+import Feedback from "../Feedback";
 
 const FillInTheBlank = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -109,7 +113,9 @@ const FillInTheBlank = ({ question, index }) => {
           const index = domNode.attribs["data-index"];
           const userVal = inputs[index] || "";
           const correctVal = correctMap[index] || "";
-          const isCorrect = submitted && userVal.trim().toLowerCase() === correctVal.trim().toLowerCase();
+          const isCorrect =
+            submitted &&
+            userVal.trim().toLowerCase() === correctVal.trim().toLowerCase();
           const isIncorrect = submitted && !isCorrect;
 
           return (
@@ -140,7 +146,8 @@ const FillInTheBlank = ({ question, index }) => {
                       ? "#22c55e"
                       : "#dc2626"
                     : "#ccc",
-                  backgroundColor: submitted && isIncorrect ? "#fef2f2" : "#fff",
+                  backgroundColor:
+                    submitted && isIncorrect ? "#fef2f2" : "#fff",
                   borderRadius: "6px",
                 }}
               />
@@ -165,14 +172,17 @@ const FillInTheBlank = ({ question, index }) => {
 
   return (
     <>
-      <h2 className="mb-3">Question {index + 1}</h2>
-      <strong>Instruction:</strong> {parse(instruction || "")}
+      <div className="question-header">
+        <h2>Question {index + 1}</h2>
+        <p><strong>Instruction:</strong> {parse(instruction || "")}</p>
+        <Feedback/>
+      </div>
       <div className="question-card">
         <div>{renderParsedQuestion(questionText)}</div>
-        <div className="flex justify-end">
+        <div className="d-flex justify-content-end mt-4">
           <button
             onClick={handleStoreData}
-            className="btn btn-primary mt-3"
+            className="dashboard-button"
             disabled={!isAllFilled() || submitted}
           >
             {submitted ? "Submitted" : "Submit"}

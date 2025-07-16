@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
+import {
+  getSelected,
+  setAttemptQuestions,
+} from "../../_store/_reducers/question";
+import Feedback from "../Feedback";
 
 const EditingQuesions = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -83,83 +87,86 @@ const EditingQuesions = ({ question, index }) => {
     }
   };
 
-  const renderedParagraph = paragraph
-    .split(/(\(\d+\))/g)
-    .map((part, i) => {
-      const match = part.match(/\((\d+)\)/);
-      if (match) {
-        const boxNumber = parseInt(match[1]);
-        const correctAnswer =
-          boxes.find((q) => q.box === boxNumber)?.correct || "";
-        const inputVal = inputs[boxNumber] || "";
-        const isWrong = submitted && inputVal.trim().toLowerCase() !== correctAnswer.trim().toLowerCase();
+  const renderedParagraph = paragraph.split(/(\(\d+\))/g).map((part, i) => {
+    const match = part.match(/\((\d+)\)/);
+    if (match) {
+      const boxNumber = parseInt(match[1]);
+      const correctAnswer =
+        boxes.find((q) => q.box === boxNumber)?.correct || "";
+      const inputVal = inputs[boxNumber] || "";
+      const isWrong =
+        submitted &&
+        inputVal.trim().toLowerCase() !== correctAnswer.trim().toLowerCase();
 
-        return (
-          <span
-            key={`input-${i}`}
+      return (
+        <span
+          key={`input-${i}`}
+          style={{
+            display: "inline-flex",
+            flexDirection: "column",
+            alignItems: "center",
+            margin: "0 4px",
+            verticalAlign: "middle",
+          }}
+        >
+          <input
+            type="text"
+            value={inputVal}
+            disabled={submitted}
+            placeholder={`Word ${boxNumber}`}
+            onChange={(e) => handleInputChange(e, boxNumber)}
             style={{
-              display: "inline-flex",
-              flexDirection: "column",
-              alignItems: "center",
-              margin: "0 4px",
-              verticalAlign: "middle",
+              width: "100px",
+              padding: "4px 6px",
+              fontSize: "15px",
+              border: "1px solid",
+              borderColor: submitted
+                ? isWrong
+                  ? "#dc2626"
+                  : "#22c55e"
+                : "#cbd5e1",
+              borderRadius: "6px",
+              backgroundColor: submitted && isWrong ? "#fef2f2" : "#fff",
+              textAlign: "center",
             }}
-          >
-            <input
-              type="text"
-              value={inputVal}
-              disabled={submitted}
-              placeholder={`Word ${boxNumber}`}
-              onChange={(e) => handleInputChange(e, boxNumber)}
+          />
+          {submitted && (
+            <div
               style={{
-                width: "100px",
-                padding: "4px 6px",
-                fontSize: "15px",
-                border: "1px solid",
-                borderColor: submitted
-                  ? isWrong
-                    ? "#dc2626"
-                    : "#22c55e"
-                  : "#cbd5e1",
-                borderRadius: "6px",
-                backgroundColor: submitted && isWrong ? "#fef2f2" : "#fff",
-                textAlign: "center",
+                fontSize: "11px",
+                marginTop: "2px",
+                color: isWrong ? "#dc2626" : "#22c55e",
+                minHeight: "14px",
+                whiteSpace: "nowrap",
               }}
-            />
-            {submitted && (
-              <div
-                style={{
-                  fontSize: "11px",
-                  marginTop: "2px",
-                  color: isWrong ? "#dc2626" : "#22c55e",
-                  minHeight: "14px",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {isWrong ? `✓ ${correctAnswer}` : ""}
-              </div>
-            )}
-          </span>
-        );
-      } else {
-        return (
-          <span
-            key={`text-${i}`}
-            style={{
-              display: "inline-flex",
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            {parse(part)}
-          </span>
-        );
-      }
-    });
+            >
+              {isWrong ? `✓ ${correctAnswer}` : ""}
+            </div>
+          )}
+        </span>
+      );
+    } else {
+      return (
+        <span
+          key={`text-${i}`}
+          style={{
+            display: "inline-flex",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          {parse(part)}
+        </span>
+      );
+    }
+  });
 
   return (
     <>
-      <h2 className="mb-3">Question {index + 1}</h2>
-      <strong>Instruction:</strong> {instruction}
+      <div className="question-header">
+        <h2>Question {index + 1}</h2>
+        <p><strong>Instruction:</strong> {instruction}</p>
+        <Feedback/>
+      </div>
       <div className="question-card">
         <div
           style={{
@@ -183,12 +190,14 @@ const EditingQuesions = ({ question, index }) => {
             {renderedParagraph}
           </div>
         </div>
-        <div className="flex justify-end">
+        <div className="d-flex justify-content-end mt-4">
           <button
             onClick={handleStoreData}
             disabled={submitted || !isAnyInputFilled}
-            className={`btn btn-primary mt-3 ${
-              submitted || !isAnyInputFilled ? "opacity-50 cursor-not-allowed" : ""
+            className={`dashboard-button ${
+              submitted || !isAnyInputFilled
+                ? "opacity-50 cursor-not-allowed"
+                : ""
             }`}
           >
             {submitted ? "Submitted" : "Submit"}

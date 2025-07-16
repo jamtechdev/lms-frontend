@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAttemptQuestions } from "../../_store/_reducers/question";
 import { userService } from "../../_services";
 import toast from "react-hot-toast";
+import Feedback from "../Feedback";
 
 const LinkingQuestions = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -37,7 +38,9 @@ const LinkingQuestions = ({ question, index }) => {
 
     const rightItems = question.question.answer.map((a) => a.right);
     const leftItems = question.question.answer.map((a) => a.left);
-    const submitted = answersStore.find((ans) => ans.question_id === question.id);
+    const submitted = answersStore.find(
+      (ans) => ans.question_id === question.id
+    );
     if (submitted) {
       try {
         const parsedAnswer = JSON.parse(submitted.user_answer);
@@ -62,7 +65,6 @@ const LinkingQuestions = ({ question, index }) => {
       setShuffledRight(shuffled);
     }
   }, [question, answersStore]);
-
 
   if (!question || !Array.isArray(question.question.answer)) return null;
 
@@ -152,15 +154,15 @@ const LinkingQuestions = ({ question, index }) => {
     }
   };
 
-
   return (
-    <div className="mb-10">
-      <div>
-        <h2 className="mb-3">Question {index + 1}</h2>
-        <strong>Instruction:</strong> {q.question.instruction}
+    <>
+      <div className="question-header">
+        <h2>Question {index + 1}</h2>
+        <p><strong>Instruction:</strong> {q.question.instruction}</p>
+        <Feedback/>
       </div>
       <div className="question-card mb-0">
-        <h2 className="question-text mb-4">{parse(q.question.content)}</h2>
+        <h2 className="question-text">{parse(q.question.content)}</h2>
 
         <div className="flex justify-center">
           <div
@@ -183,9 +185,9 @@ const LinkingQuestions = ({ question, index }) => {
                   <div
                     key={i}
                     id={`left-${qId}-${i}`}
-                    className={`link-item ${isConnected ? "connected" : ""
-                      } ${isSelected ? "selected" : ""} ${isSubmitted ? "disabled" : ""
-                      }`}
+                    className={`link-item ${isConnected ? "connected" : ""} ${
+                      isSelected ? "selected" : ""
+                    } ${isSubmitted ? "disabled" : ""}`}
                     onClick={() => handleLeftClick(qId, i)}
                   >
                     <div className="selector-circle" />
@@ -211,9 +213,9 @@ const LinkingQuestions = ({ question, index }) => {
                   <div
                     key={i}
                     id={`right-${qId}-${i}`}
-                    className={`link-item ${isConnected ? "connected" : ""
-                      } ${isSelected ? "selected" : ""} ${isSubmitted ? "disabled" : ""
-                      }`}
+                    className={`link-item ${isConnected ? "connected" : ""} ${
+                      isSelected ? "selected" : ""
+                    } ${isSubmitted ? "disabled" : ""}`}
                     onClick={() => handleRightClick(qId, i)}
                   >
                     <div className="selector-circle" />
@@ -229,40 +231,42 @@ const LinkingQuestions = ({ question, index }) => {
               })}
             </div>
 
-            {Object.entries(currentMatches).map(([leftIndex, rightIndex], i) => {
-              const colors = [
-                "#a637f7",
-                "#d10d0d",
-                "#FF8C00",
-                "#00008B",
-                "#006400",
-                "#9B870C",
-                "#8B008B",
-                "#0dd8d8",
-                "#3B3B3B",
-                "#4B3621",
-                "#191970",
-                "#800000",
-                "#5F9EA0",
-                "#483D8B",
-                "#556B2F",
-              ];
-              return (
-                <Xarrow
-                  key={`${qId}-${i}`}
-                  start={`left-${qId}-${leftIndex}`}
-                  end={`right-${qId}-${rightIndex}`}
-                  startAnchor="right"
-                  endAnchor="left"
-                  strokeWidth={3}
-                  curveness={0.5}
-                  path="smooth"
-                  animateDrawing
-                  headSize={4}
-                  color={colors[i % colors.length]}
-                />
-              );
-            })}
+            {Object.entries(currentMatches).map(
+              ([leftIndex, rightIndex], i) => {
+                const colors = [
+                  "#a637f7",
+                  "#d10d0d",
+                  "#FF8C00",
+                  "#00008B",
+                  "#006400",
+                  "#9B870C",
+                  "#8B008B",
+                  "#0dd8d8",
+                  "#3B3B3B",
+                  "#4B3621",
+                  "#191970",
+                  "#800000",
+                  "#5F9EA0",
+                  "#483D8B",
+                  "#556B2F",
+                ];
+                return (
+                  <Xarrow
+                    key={`${qId}-${i}`}
+                    start={`left-${qId}-${leftIndex}`}
+                    end={`right-${qId}-${rightIndex}`}
+                    startAnchor="right"
+                    endAnchor="left"
+                    strokeWidth={3}
+                    curveness={0.5}
+                    path="smooth"
+                    animateDrawing
+                    headSize={4}
+                    color={colors[i % colors.length]}
+                  />
+                );
+              }
+            )}
           </div>
         </div>
         {/* map(pair => `${pair.left.word} → ${pair.right.word}`).join("\n"); */}
@@ -271,22 +275,25 @@ const LinkingQuestions = ({ question, index }) => {
             Correct Answer:
             <div className="mt-2">
               {question?.question?.answer
-                ?.map((pair, idx) => `${idx + 1}. ${pair.left.word} → ${pair.right.word}`)
+                ?.map(
+                  (pair, idx) =>
+                    `${idx + 1}. ${pair.left.word} → ${pair.right.word}`
+                )
                 .join(",\n")}
             </div>
           </div>
         )}
-        <div className="flex justify-center mt-4">
+        <div className="d-flex justify-content-end mt-4">
           <button
             onClick={() => handleSubmitSingle(q)}
-            className="btn btn-primary"
+            className="dashboard-button"
             disabled={isSubmitted || isButtonDisabled}
           >
             {isSubmitted ? "Submitted" : "Submit"}
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

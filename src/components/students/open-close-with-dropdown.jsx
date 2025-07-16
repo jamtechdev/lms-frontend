@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
+import {
+  getSelected,
+  setAttemptQuestions,
+} from "../../_store/_reducers/question";
+import Feedback from "../Feedback";
 
 const OpenClozeWithDropdown = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -45,11 +49,13 @@ const OpenClozeWithDropdown = ({ question, index }) => {
       await userService.answer(finalPayload);
       toast.success("Answer submitted successfully.");
       setSubmittedQuestions((prev) => ({ ...prev, [questionId]: true }));
-      dispatch(setAttemptQuestions({
-        question_id: questionId,
-        type: questionType,
-        user_answer: JSON.stringify(inputs[questionId]),
-      }));
+      dispatch(
+        setAttemptQuestions({
+          question_id: questionId,
+          type: questionType,
+          user_answer: JSON.stringify(inputs[questionId]),
+        })
+      );
     } catch (error) {
       console.error("Submission error:", error);
       toast.error("Failed to submit answer.");
@@ -134,21 +140,21 @@ const OpenClozeWithDropdown = ({ question, index }) => {
     }
   }, [questionId, answersStore]);
   return (
-    <div>
-      <h2 className="mb-3">Question {index + 1}</h2>
-      <div>
-        <strong>Instruction:</strong> {questionData.instruction}
+    <>
+      <div className="question-header">
+        <h2>Question {index + 1}</h2>
+        <p> <strong>Instruction:</strong> {questionData.instruction}</p>
+        <Feedback/>
       </div>
-
-      <div className="question-card mt-2">
+      <div className="question-card">
         <div>
           <strong>{index + 1}.</strong> {renderedParagraph}
         </div>
 
-        <div className="flex text-end mt-4">
+        <div className="d-flex justify-content-end mt-4">
           <button
             onClick={handleStoreData}
-            className="btn btn-primary mt-3"
+            className="dashboard-button"
             disabled={!allAnswered || isSubmitted}
           >
             {isSubmitted ? "Submitted" : "Submit"}
@@ -167,7 +173,7 @@ const OpenClozeWithDropdown = ({ question, index }) => {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

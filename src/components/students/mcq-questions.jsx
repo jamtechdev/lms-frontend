@@ -3,7 +3,11 @@ import parse from "html-react-parser";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
+import {
+  getSelected,
+  setAttemptQuestions,
+} from "../../_store/_reducers/question";
+import Feedback from "../Feedback";
 
 const McqQuestions = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -36,11 +40,13 @@ const McqQuestions = ({ question, index }) => {
       await userService.answer(payload);
       toast.success("Answer submitted successfully.");
       setIsSubmitted(true);
-      dispatch(setAttemptQuestions({
-        question_id: question.id,
-        answer: selectedAnswer,
-        type: question?.question?.type || "mcq",
-      }));
+      dispatch(
+        setAttemptQuestions({
+          question_id: question.id,
+          answer: selectedAnswer,
+          type: question?.question?.type || "mcq",
+        })
+      );
     } catch (error) {
       console.error("Submission error:", error);
       toast.error("Failed to submit answer.");
@@ -48,10 +54,14 @@ const McqQuestions = ({ question, index }) => {
   };
 
   useEffect(() => {
-    const answered = answersStore.some((ans) => ans.question_id === question?.id);
+    const answered = answersStore.some(
+      (ans) => ans.question_id === question?.id
+    );
     setIsSubmitted(answered);
     if (answered) {
-      const existingAnswer = answersStore.find((ans) => ans.question_id === question?.id);
+      const existingAnswer = answersStore.find(
+        (ans) => ans.question_id === question?.id
+      );
       setSelectedAnswer(existingAnswer?.answer || "");
     }
   }, [answersStore, question?.id]);
@@ -61,11 +71,13 @@ const McqQuestions = ({ question, index }) => {
 
   return (
     <>
-      <h2 className="mb-3">Question {index + 1}</h2>
-      <strong>Instruction:</strong> {question.question.instruction}
-
-      <div className="question-card mt-2">
-        <div className="question-text mb-2 font-medium">
+      <div className="question-header">
+        <h2>Question {index + 1}</h2>
+        <p><strong>Instruction:</strong> {question.question.instruction}</p>
+        <Feedback/>
+      </div>
+      <div className="question-card">
+        <div className="question-text">
           {typeof question?.question?.content === "string"
             ? parse(question.question.content)
             : ""}
@@ -99,7 +111,10 @@ const McqQuestions = ({ question, index }) => {
                   />
                   {opt.value}
                   {isSubmitted && isCorrect && " (Correct Answer)"}
-                  {isSubmitted && isUserSelected && !isCorrect && " (Your Answer)"}
+                  {isSubmitted &&
+                    isUserSelected &&
+                    !isCorrect &&
+                    " (Your Answer)"}
                 </label>
               </div>
             );
@@ -111,9 +126,9 @@ const McqQuestions = ({ question, index }) => {
             Correct Answer: <span>{correctAnswerText}</span>
           </div>
         )} */}
-        <div className="flex text-end mt-3">
+        <div className="d-flex justify-content-end mt-4">
           <button
-            className="btn btn-primary mt-3"
+            className="dashboard-button"
             onClick={handleSubmit}
             disabled={!selectedAnswer || isSubmitted}
           >
