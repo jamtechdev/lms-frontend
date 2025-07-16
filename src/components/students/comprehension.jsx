@@ -110,8 +110,10 @@ const Comprehension = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-        <p><strong>Instruction:</strong> {question.question.instruction}</p>
-        <Feedback/>
+        <p>
+          <strong>Instruction:</strong> {question.question.instruction}
+        </p>
+        <Feedback />
       </div>
       <div className="question-card">
         <div
@@ -242,13 +244,15 @@ const Comprehension = ({ question, index }) => {
           return null;
         })}
 
-        <button
-          onClick={handlePaperSubmit}
-          className="dashboard-button"
-          disabled={isSubmitted || subquestions.length === 0}
-        >
-          {isSubmitted ? "Submitted" : "Submit"}
-        </button>
+        <div className="d-flex justify-content-end mt-4">
+          <button
+            onClick={handlePaperSubmit}
+            className="dashboard-button"
+            disabled={isSubmitted || subquestions.length === 0}
+          >
+            {isSubmitted ? "Submitted" : "Submit"}
+          </button>
+        </div>
       </div>
     </>
   );

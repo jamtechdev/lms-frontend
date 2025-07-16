@@ -2251,3 +2251,20 @@ label.kbc-option-label:has(input:checked)::after {
   color: #fff;
   width: 100%;
 }
+
+.bg-theme{
+  background-color: #f7941e !important;
+}
+
+.bg-theme-light{
+  background-color: #ffebd2 !important;
+}
+
+@media screen and (max-width:768px) {
+  .jumbotron{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: auto !important;
+  }
+}
