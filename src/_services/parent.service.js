@@ -101,14 +101,14 @@ async function createAssignment(data) {
         }
     );
 }
-async function getAllSubject() {
-    return await axiosInstance.get(`/api/v1/questions/subjects`)
+async function getAllSubject(id) {
+    return await axiosInstance.get(`/api/v1/questions/subjects?level_id=${id}`)
 }
 async function getAllChild() {
     return await axiosInstance.get(`/api/v1/parent/my-students`);
 }
-async function getQuestions() {
-    return await axiosInstance.get(`/api/v1/questions/all`);
+async function getQuestions(id) {
+    return await axiosInstance.get(`/api/v1/questions/all?subject_id=${id}`);
 }
 async function updateById(data) {
     return await axiosInstance.post(`api/v1/assignments/assignmentById`, data);

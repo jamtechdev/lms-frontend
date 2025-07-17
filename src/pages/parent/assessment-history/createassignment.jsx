@@ -13,6 +13,8 @@ const CreateAssignment = () => {
   const [subjects, setSubjects] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState("");
+  const [selectedSubjectId, setSelectedSubjectId] = useState("");
 
   const initialValues = {
     title: "",
@@ -40,24 +42,54 @@ const CreateAssignment = () => {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchStudents = async () => {
       try {
-        const [subjectRes, studentRes, questionRes] = await Promise.all([
-          parentService.getAllSubject(),
-          parentService.getAllChild(),
-          parentService.getQuestions(),
-        ]);
-
-        setSubjects(subjectRes.data);
-        setStudents(studentRes.data);
-        setQuestions(questionRes.data.questions_array);
+        const res = await parentService.getAllChild();
+        setStudents(res.data);
       } catch (error) {
-        console.error("Error loading data:", error);
+        console.error("Error loading students:", error);
+      }
+    };
+    fetchStudents();
+  }, []);
+
+  useEffect(() => {
+    const fetchSubjectsByLevel = async (level) => {
+      try {
+        const res = await parentService.getAllSubject(level);
+        setSubjects(res.data);
+      } catch (error) {
+        console.error("Error loading subjects:", error);
+        setSubjects([]);
       }
     };
 
-    fetchData();
-  }, []);
+    if (selectedStudentId) {
+      const student = students.find(
+        (s) => s.id.toString() === selectedStudentId.toString()
+      );
+      if (student?.student_level) {
+        console.log("Student Level:", student.student_level);
+        fetchSubjectsByLevel(student.student_level);
+      }
+    }
+  }, [selectedStudentId, students]);
+
+  useEffect(() => {
+    const fetchQuestions = async (subjectId) => {
+      try {
+        const res = await parentService.getQuestions(subjectId);
+        setQuestions(res.data.questions_array);
+      } catch (error) {
+        console.error("Error loading questions:", error);
+        setQuestions([]);
+      }
+    };
+
+    if (selectedSubjectId) {
+      fetchQuestions(selectedSubjectId);
+    }
+  }, [selectedSubjectId]);
 
   const handleSubmit = async (values) => {
     setCreating(true);
@@ -118,7 +150,20 @@ const CreateAssignment = () => {
                 <label htmlFor="student_id" className="form-label mb-8 h6">
                   Select Student
                 </label>
-                <Field as="select" name="student_id" className="form-control">
+                <Field
+                  as="select"
+                  name="student_id"
+                  className="form-control"
+                  onChange={(e) => {
+                    const studentId = e.target.value;
+                    setFieldValue("student_id", studentId);
+                    setSelectedStudentId(studentId);
+                    setFieldValue("subject_id", "");
+                    setSubjects([]);
+                    setFieldValue("question_ids", []);
+                    setQuestions([]);
+                  }}
+                >
                   <option value="">Select student</option>
                   {students.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -137,7 +182,18 @@ const CreateAssignment = () => {
                 <label htmlFor="subject_id" className="form-label mb-8 h6">
                   Select Subject
                 </label>
-                <Field as="select" name="subject_id" className="form-control">
+                <Field
+                  as="select"
+                  name="subject_id"
+                  className="form-control"
+                  onChange={(e) => {
+                    const subjectId = e.target.value;
+                    setFieldValue("subject_id", subjectId);
+                    setSelectedSubjectId(subjectId);
+                    setFieldValue("question_ids", []);
+                    setQuestions([]);
+                  }}
+                >
                   <option value="">Select subject</option>
                   {subjects.map((subj) => (
                     <option key={subj.id} value={subj.id}>
