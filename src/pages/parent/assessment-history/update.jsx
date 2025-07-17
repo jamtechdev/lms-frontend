@@ -355,9 +355,8 @@ const UpdateAssignment = () => {
                               <label
                                 className="form-check-label"
                                 htmlFor={`q-${q.id}`}
-                              >
-                                {clean}
-                              </label>
+                                dangerouslySetInnerHTML={{ __html: raw }}
+                              ></label>
                             </div>
                           );
                         })

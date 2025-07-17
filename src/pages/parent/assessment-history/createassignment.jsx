@@ -329,9 +329,8 @@ const CreateAssignment = () => {
                               <label
                                 className="form-check-label"
                                 htmlFor={`q-${q.id}`}
-                              >
-                                {cleanText}
-                              </label>
+                                dangerouslySetInnerHTML={{ __html: rawContent }}
+                              ></label>
                             </div>
                           );
                         })
