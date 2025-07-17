@@ -159,7 +159,7 @@ const LinkingQuestions = ({ question, index }) => {
       <div className="question-header">
         <h2>Question {index + 1}</h2>
         <p><strong>Instruction:</strong> {q.question.instruction}</p>
-        <Feedback/>
+        <Feedback question_id={question?.id}/>
       </div>
       <div className="question-card mb-0">
         <h2 className="question-text">{parse(q.question.content)}</h2>

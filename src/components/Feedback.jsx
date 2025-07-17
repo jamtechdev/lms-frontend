@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
+import axios from "axios";
+import { userService } from "../_services";
+import toast from "react-hot-toast";
 
 const Feedback = (props) => {
   const { question_id } = props;
-  console.log(question_id, ">>>>>>>>>>>")
   const [selectedReason, setSelectedReason] = useState("");
   const [showFeedbackBox, setShowFeedbackBox] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleItemClick = (reason) => {
     setSelectedReason(reason);
@@ -16,14 +20,45 @@ const Feedback = (props) => {
   const handleToggle = (isOpen) => {
     setIsDropdownOpen(isOpen);
     if (!isOpen) {
-      setSelectedReason("");
-      setShowFeedbackBox(false);
+      resetFeedback();
+    }
+  };
+
+  const resetFeedback = () => {
+    setSelectedReason("");
+    setShowFeedbackBox(false);
+    setFeedbackMessage("");
+  };
+
+  const handleSubmit = async () => {
+    if (!feedbackMessage.trim()) {
+      alert("Please enter feedback before submitting.");
+      return;
+    }
+
+    const payload = {
+      question_id,
+      type: selectedReason.toLowerCase().replace(/\s+/g, "_"),
+      message: feedbackMessage.trim(),
+    };
+
+    try {
+      setIsSubmitting(true);
+      const response = await userService.feedback(payload);
+      toast.success("Feedback submitted successfully!");
+      resetFeedback();
+      setIsDropdownOpen(false);
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      toast.error("There was an error submitting your feedback.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const reasons = [
     "No Solution",
-    "Answer Text Error ",
+    "Answer Text Error",
     "Question Text Error",
     "Other",
   ];
@@ -41,7 +76,7 @@ const Feedback = (props) => {
       <Dropdown.Menu className="p-3">
         <h6 className="text-center">Flag Question</h6>
 
-        {!showFeedbackBox && (
+        {!showFeedbackBox ? (
           <ul>
             {reasons.map((reason) => (
               <li key={reason} onClick={() => handleItemClick(reason)}>
@@ -49,15 +84,20 @@ const Feedback = (props) => {
               </li>
             ))}
           </ul>
-        )}
-
-        {showFeedbackBox && (
+        ) : (
           <div className="feedback-box mt-3">
             <div className="feedback-header mb-2">
               <span>{selectedReason}</span>
             </div>
-            <textarea rows={3}></textarea>
-            <button>Submit</button>
+            <textarea
+              rows={3}
+              value={feedbackMessage}
+              onChange={(e) => setFeedbackMessage(e.target.value)}
+              placeholder="Enter your feedback here..."
+            ></textarea>
+            <button onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </button>
           </div>
         )}
       </Dropdown.Menu>

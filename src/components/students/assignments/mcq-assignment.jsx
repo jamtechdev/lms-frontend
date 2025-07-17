@@ -33,7 +33,7 @@ const McqAssignment = ({ question, index }) => {
         <p>
           <strong>Instruction:</strong> {question.question.instruction}
         </p>
-        <Feedback />
+     <Feedback question_id={question?.id}/>
       </div>
       <div className="question-card">
         <div className="question-text">

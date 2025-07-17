@@ -3,7 +3,10 @@ import parse from "html-react-parser";
 import userService from "../../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { getAssignmentsQuestion, setAssignmentsQuestion, } from "../../../_store/_reducers/question";
+import {
+  getAssignmentsQuestion,
+  setAssignmentsQuestion,
+} from "../../../_store/_reducers/question";
 import Feedback from "../../Feedback";
 
 const TrueFalseAssignment = ({ question, index }) => {
@@ -34,8 +37,11 @@ const TrueFalseAssignment = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-        <p> <strong>Instruction:</strong> {question.question.instruction}</p>
-        <Feedback />
+        <p>
+          {" "}
+          <strong>Instruction:</strong> {question.question.instruction}
+        </p>
+        <Feedback question_id={question?.id} />
       </div>
       <div className="question-card mt-2">
         <div className="question-text">
@@ -45,12 +51,9 @@ const TrueFalseAssignment = ({ question, index }) => {
         </div>
 
         {question?.question?.options?.map((opt, idx) => {
-
           return (
             <div key={idx}>
-              <label
-                className={`kbc-option-label`}
-              >
+              <label className={`kbc-option-label`}>
                 <input
                   type="radio"
                   name={`question-${question.id}`}

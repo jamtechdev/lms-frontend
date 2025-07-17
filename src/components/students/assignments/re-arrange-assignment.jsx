@@ -92,7 +92,7 @@ const ReArrangeListAssignment = ({ question, index }) => {
         <p>
           <strong>Instruction:</strong> {question?.question?.instruction}
         </p>
-        <Feedback />
+      <Feedback question_id={question?.id}/>
       </div>
       <div className="question-card mt-2">
         <div className="rearrangeBox mt-4">
