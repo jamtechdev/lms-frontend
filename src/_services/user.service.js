@@ -10,6 +10,7 @@ const userService = {
     getStudentAssignment,
     assignmentAttempt,
     getresult,
+    feedback,
 };
 async function login(data) {
     return await axiosInstance.post(`/api/v1/auth/login`, data);
@@ -37,5 +38,8 @@ async function assignmentAttempt(data) {
 }
 async function getresult(data) {
     return await axiosInstance.post(`/api/v1/assignments/getPastResults`, data);
+}
+async function feedback(data) {
+    return await axiosInstance.post(`api/v1/feedback`, data);
 }
 export default userService;
