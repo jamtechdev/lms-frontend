@@ -79,7 +79,8 @@ const CreateAssignment = () => {
     const fetchQuestions = async (subjectId) => {
       try {
         const res = await parentService.getQuestions(subjectId);
-        setQuestions(res.data.questions_array);
+        setQuestions(res.data);
+        console.log(res.data, "lllllllllllllll");
       } catch (error) {
         console.error("Error loading questions:", error);
         setQuestions([]);
@@ -292,32 +293,53 @@ const CreateAssignment = () => {
                       ></button>
                     </div>
                     <div className="modal-body">
-                      {questions.map((q) => (
-                        <div className="form-check" key={q.id}>
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id={`q-${q.id}`}
-                            value={q.id}
-                            checked={values.question_ids.includes(q.id)}
-                            onChange={(e) => {
-                              const value = parseInt(e.target.value);
-                              const updated = e.target.checked
-                                ? [...values.question_ids, value]
-                                : values.question_ids.filter(
-                                    (id) => id !== value
-                                  );
-                              setFieldValue("question_ids", updated);
-                            }}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor={`q-${q.id}`}
-                          >
-                            {q.question.content}
-                          </label>
-                        </div>
-                      ))}
+                      {questions.length === 0 ? (
+                        <p>No questions available or still loading...</p>
+                      ) : (
+                        questions.map((q) => {
+                          const rawContent =
+                            q.question?.content ||
+                            q.question?.paragraph ||
+                            q.question?.passage ||
+                            q.question?.question_text ||
+                            q.question?.instruction ||
+                            "Untitled question";
+
+                          // Remove HTML <p> tags
+                          const cleanText = rawContent
+                            .replace(/<\/?p>/g, "")
+                            .trim();
+
+                          return (
+                            <div className="form-check mb-2" key={q.id}>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id={`q-${q.id}`}
+                                value={q.id}
+                                checked={values.question_ids.includes(
+                                  Number(q.id)
+                                )}
+                                onChange={(e) => {
+                                  const value = Number(e.target.value);
+                                  const updated = e.target.checked
+                                    ? [...values.question_ids, value]
+                                    : values.question_ids.filter(
+                                        (id) => id !== value
+                                      );
+                                  setFieldValue("question_ids", updated);
+                                }}
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor={`q-${q.id}`}
+                              >
+                                {cleanText}
+                              </label>
+                            </div>
+                          );
+                        })
+                      )}
                     </div>
                     <div className="modal-footer">
                       <button
