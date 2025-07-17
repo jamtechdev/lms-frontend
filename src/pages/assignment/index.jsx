@@ -78,7 +78,6 @@ const WeeklyAssignment = () => {
 
   return (
     <>
-      <div>Week Assignments</div>
       {questions &&
         questions?.questions?.map((question, index) => {
           return (
