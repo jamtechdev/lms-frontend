@@ -82,6 +82,7 @@ const ReArrangeListAssignment = ({ question, index }) => {
       type: question.question.type,
     };
     dispatch(setAssignmentsQuestion(payload));
+    toast.success("Answer submitted successfully.");
   };
 
   return (

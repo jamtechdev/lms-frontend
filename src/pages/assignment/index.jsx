@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import userService from "../../_services/user.service";
 import { getChildId } from "../../_store/_reducers/auth";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getAssignmentsQuestion } from "../../_store/_reducers/question";
+import { useDispatch, useSelector } from "react-redux";
+import { data, useParams } from "react-router-dom";
+import { getAssignmentsQuestion, removeAssignmentsQuestion } from "../../_store/_reducers/question";
 import TrueFalseAssignment from "../../components/students/assignments/true-false-assignment";
 import McqAssignment from "../../components/students/assignments/mcq-assignment";
 import ReArrangeListAssignment from "../../components/students/assignments/re-arrange-assignment";
@@ -13,9 +13,11 @@ import OpenClozeWithDropdownAssignment from "../../components/students/assignmen
 import ComprehensionAssignment from "../../components/students/assignments/comprehension-assignment";
 import EditingAssignment from "../../components/students/assignments/editing-assignment";
 import FillInTheBlankAssignment from "../../components/students/assignments/fill-in-the-blank-assignment";
+import toast from "react-hot-toast";
 
 const WeeklyAssignment = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const childId = useSelector(getChildId);
   const assignmentAnswer = useSelector(getAssignmentsQuestion);
   console.log(assignmentAnswer, '============')
@@ -32,15 +34,19 @@ const WeeklyAssignment = () => {
     }
   };
   const fetchAttempt = async () => {
-    try {
-      const data = await userService.assignmentAttempt({
-        assignment_id: id,
-        answers: assignmentAnswer,
-      });
-      console.log(data, "===============");
-    } catch (error) {
-      console.error("Error", error);
+    if (assignmentAnswer && assignmentAnswer?.length <= 0) {
+      return toast.error("Please answer at least one question before submitting.");
     }
+    await userService.assignmentAttempt({
+      assignment_id: id,
+      answers: assignmentAnswer,
+    }).then((data) => {
+      console.log(data?.data, '=======');
+      toast.success("Assignment submitted successfully.");
+    }).catch((error) => {
+      console.error("Error", error);
+    });
+
   };
   const fetchresults = async () => {
     try {
@@ -51,6 +57,23 @@ const WeeklyAssignment = () => {
   };
   useEffect(() => {
     getAssignments();
+  }, []);
+  useEffect(() => {
+    return () => {
+      dispatch(removeAssignmentsQuestion());
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      const confirmationMessage = "Are you sure you want to reload the page?";
+      event.returnValue = confirmationMessage;
+      return confirmationMessage;
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
   }, []);
 
   return (
@@ -92,34 +115,34 @@ const WeeklyAssignment = () => {
                     index={index}
                   />
                 )}
-              
+
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) ==
-                  "open_cloze_with_dropdown_options" && (
+                "open_cloze_with_dropdown_options" && (
                   <OpenClozeWithDropdownAssignment
                     question={question}
                     index={index}
                   />
                 )}
-               
+
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) == "comprehension" && (
                   <ComprehensionAssignment question={question} index={index} />
                 )}
-                
+
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) == "editing" && (
                   <EditingAssignment question={question} index={index} />
                 )}
-                
+
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) == "fill_in_the_blank" && (
                   <FillInTheBlankAssignment question={question} index={index} />
-                )} 
+                )}
             </div>
           );
         })}

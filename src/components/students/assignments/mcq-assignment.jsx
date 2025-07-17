@@ -24,6 +24,7 @@ const McqAssignment = ({ question, index }) => {
       type: question?.question?.type || "mcq",
     };
     dispatch(setAssignmentsQuestion(payload));
+    toast.success("Answer submitted successfully.");
   };
   return (
     <>

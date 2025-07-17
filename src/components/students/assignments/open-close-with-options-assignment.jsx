@@ -76,8 +76,8 @@ const OpenClozeWithOptionsAssignment = ({ question, index }) => {
       user_answer: JSON.stringify(userAnswer),
       type: type,
     };
-    toast.success("Answer submitted successfully.");
     dispatch(setAssignmentsQuestion(payload));
+    toast.success("Answer submitted successfully.");
   };
   useEffect(() => {
     setInputs({});
