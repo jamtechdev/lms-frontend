@@ -9,7 +9,7 @@ const userService = {
     answer,
     getStudentAssignment,
     assignmentAttempt,
-    getresult,
+    getresult, 
     feedback,
 };
 async function login(data) {
