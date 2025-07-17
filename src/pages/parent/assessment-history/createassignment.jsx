@@ -294,7 +294,7 @@ const CreateAssignment = () => {
                     </div>
                     <div className="modal-body">
                       {questions.length === 0 ? (
-                        <p>No questions available or still loading...</p>
+                        <p>No questions available...</p>
                       ) : (
                         questions.map((q) => {
                           const rawContent =
