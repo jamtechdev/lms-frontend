@@ -304,8 +304,6 @@ const CreateAssignment = () => {
                             q.question?.question_text ||
                             q.question?.instruction ||
                             "Untitled question";
-
-                          // Remove HTML <p> tags
                           const cleanText = rawContent
                             .replace(/<\/?p>/g, "")
                             .trim();

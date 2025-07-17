@@ -24,6 +24,8 @@ const UpdateAssignment = () => {
   const [questions, setQuestions] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [initialValues, setInitialValues] = useState(null);
+  const [selectedStudentId, setSelectedStudentId] = useState("");
+  const [selectedSubjectId, setSelectedSubjectId] = useState("");
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
@@ -44,17 +46,13 @@ const UpdateAssignment = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [subjectRes, studentRes, questionRes, assignmentRes] =
-          await Promise.all([
-            parentService.getAllSubject(),
-            parentService.getAllChild(),
-            parentService.getQuestions(),
-            parentService.updateById({ assignment_id: id }),
-          ]);
+        const [studentRes, assignmentRes] = await Promise.all([
+          parentService.getAllChild(),
+          parentService.updateById({ assignment_id: id }),
+        ]);
 
-        setSubjects(subjectRes.data);
-        setStudents(studentRes.data);
-        setQuestions(questionRes.data.questions_array);
+        const studentsData = studentRes.data;
+        setStudents(studentsData);
 
         const assignment = assignmentRes.data;
         const questionIds = assignment.questions.map((q) => q.id);
@@ -69,14 +67,54 @@ const UpdateAssignment = () => {
             ? formatDateForInput(assignment.due_date)
             : "",
         });
+
+        setSelectedStudentId(assignment.student_id?.toString() || "");
+        setSelectedSubjectId(assignment.subject?.id?.toString() || "");
       } catch (error) {
-        console.error("Error loading data:", error);
+        console.error("Error loading assignment:", error);
         toast.error("Failed to load assignment.");
       }
     };
 
     fetchData();
   }, [id]);
+
+  useEffect(() => {
+    const fetchSubjectsByLevel = async (level) => {
+      try {
+        const res = await parentService.getAllSubject(level);
+        setSubjects(res.data);
+      } catch (error) {
+        console.error("Error fetching subjects:", error);
+        setSubjects([]);
+      }
+    };
+
+    if (selectedStudentId) {
+      const student = students.find(
+        (s) => s.id.toString() === selectedStudentId
+      );
+      if (student?.student_level) {
+        fetchSubjectsByLevel(student.student_level);
+      }
+    }
+  }, [selectedStudentId, students]);
+
+  useEffect(() => {
+    const fetchQuestions = async (subjectId) => {
+      try {
+        const res = await parentService.getQuestions(subjectId);
+        setQuestions(res.data);
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+        setQuestions([]);
+      }
+    };
+
+    if (selectedSubjectId) {
+      fetchQuestions(selectedSubjectId);
+    }
+  }, [selectedSubjectId]);
 
   const handleSubmit = async (values) => {
     setCreating(true);
@@ -106,12 +144,13 @@ const UpdateAssignment = () => {
 
   const getFullName = (student) => `${student.first_name} ${student.last_name}`;
 
-  if (!initialValues)
+  if (!initialValues) {
     return (
       <div className="text-center mt-5">
-        <img src={loader} width={100} />
+        <img src={loader} width={100} alt="Loading..." />
       </div>
     );
+  }
 
   return (
     <Card className="p-4">
@@ -146,7 +185,20 @@ const UpdateAssignment = () => {
                 <label htmlFor="student_id" className="form-label h6">
                   Select Student
                 </label>
-                <Field as="select" name="student_id" className="form-control">
+                <Field
+                  as="select"
+                  name="student_id"
+                  className="form-control"
+                  onChange={(e) => {
+                    const studentId = e.target.value;
+                    setFieldValue("student_id", studentId);
+                    setSelectedStudentId(studentId);
+                    setFieldValue("subject_id", "");
+                    setSubjects([]);
+                    setFieldValue("question_ids", []);
+                    setQuestions([]);
+                  }}
+                >
                   <option value="">Select student</option>
                   {students.map((s) => (
                     <option key={s.id} value={s.id.toString()}>
@@ -165,7 +217,18 @@ const UpdateAssignment = () => {
                 <label htmlFor="subject_id" className="form-label h6">
                   Select Subject
                 </label>
-                <Field as="select" name="subject_id" className="form-control">
+                <Field
+                  as="select"
+                  name="subject_id"
+                  className="form-control"
+                  onChange={(e) => {
+                    const subjectId = e.target.value;
+                    setFieldValue("subject_id", subjectId);
+                    setSelectedSubjectId(subjectId);
+                    setFieldValue("question_ids", []);
+                    setQuestions([]);
+                  }}
+                >
                   <option value="">Select subject</option>
                   {subjects.map((subj) => (
                     <option key={subj.id} value={subj.id.toString()}>
@@ -182,22 +245,20 @@ const UpdateAssignment = () => {
 
               <Col xl={6}>
                 <label className="form-label h6">Select Questions</label>
-                <div>
-                  <button
-                    type="button"
-                    className="form-control text-start"
-                    onClick={() => setShowModal(true)}
-                  >
-                    {values.question_ids.length > 0
-                      ? `${values.question_ids.length} question(s) selected`
-                      : "Click to select questions"}
-                  </button>
-                  <ErrorMessage
-                    name="question_ids"
-                    component="div"
-                    className="text-danger"
-                  />
-                </div>
+                <button
+                  type="button"
+                  className="form-control text-start"
+                  onClick={() => setShowModal(true)}
+                >
+                  {values.question_ids.length > 0
+                    ? `${values.question_ids.length} question(s) selected`
+                    : "Click to select questions"}
+                </button>
+                <ErrorMessage
+                  name="question_ids"
+                  component="div"
+                  className="text-danger"
+                />
               </Col>
 
               <Col xl={12}>
@@ -218,19 +279,19 @@ const UpdateAssignment = () => {
               </Col>
 
               <Col xl={6}>
-                <label htmlFor="due_date" className="form-label mb-8 h6">
+                <label htmlFor="due_date" className="form-label h6">
                   Due Date
                 </label>
                 <Field
                   name="due_date"
                   type="date"
-                  className="form-control py-11"
+                  className="form-control"
                   min={new Date().toISOString().split("T")[0]}
                 />
                 <ErrorMessage
                   name="due_date"
                   component="div"
-                  className="text-danger text-13"
+                  className="text-danger"
                 />
               </Col>
 
@@ -258,34 +319,49 @@ const UpdateAssignment = () => {
                       ></button>
                     </div>
                     <div className="modal-body">
-                      {questions.map((q) => (
-                        <div className="form-check" key={q.id}>
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id={`q-${q.id}`}
-                            value={q.id.toString()}
-                            checked={values.question_ids.includes(
-                              q.id.toString()
-                            )}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              const updated = e.target.checked
-                                ? [...values.question_ids, value]
-                                : values.question_ids.filter(
-                                    (id) => id !== value
-                                  );
-                              setFieldValue("question_ids", updated);
-                            }}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor={`q-${q.id}`}
-                          >
-                            {q.question.content}
-                          </label>
-                        </div>
-                      ))}
+                      {questions.length === 0 ? (
+                        <p>No questions available...</p>
+                      ) : (
+                        questions.map((q) => {
+                          const raw =
+                            q.question?.content ||
+                            q.question?.paragraph ||
+                            q.question?.passage ||
+                            q.question?.question_text ||
+                            q.question?.instruction ||
+                            "Untitled question";
+                          const clean = raw.replace(/<\/?p>/g, "").trim();
+
+                          return (
+                            <div className="form-check" key={q.id}>
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id={`q-${q.id}`}
+                                value={q.id.toString()}
+                                checked={values.question_ids.includes(
+                                  q.id.toString()
+                                )}
+                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  const updated = e.target.checked
+                                    ? [...values.question_ids, value]
+                                    : values.question_ids.filter(
+                                        (id) => id !== value
+                                      );
+                                  setFieldValue("question_ids", updated);
+                                }}
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor={`q-${q.id}`}
+                              >
+                                {clean}
+                              </label>
+                            </div>
+                          );
+                        })
+                      )}
                     </div>
                     <div className="modal-footer">
                       <button
