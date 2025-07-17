@@ -15,7 +15,12 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import topicsService from "../../_services/topics.service";
 import userService from "../../_services/user.service";
-import { getChildId, getLevel } from "../../_store/_reducers/auth";
+import {
+  getChildId,
+  getFirstName,
+  getLastName,
+  getLevel,
+} from "../../_store/_reducers/auth";
 import loader from "../../assets/images/loader.gif";
 
 const NewStudentDashboard = () => {
@@ -31,6 +36,8 @@ const NewStudentDashboard = () => {
   const navigate = useNavigate();
   const [assignments, setAssignments] = useState();
   const childId = useSelector(getChildId);
+  const firstname = useSelector(getFirstName);
+  const lastname = useSelector(getLastName);
 
   const getAssignments = async () => {
     setAssignmentLoading(true);
@@ -130,9 +137,11 @@ const NewStudentDashboard = () => {
         <Col md={9}>
           <Card className="h-100 text-left">
             <Card.Body>
-              <h1>Hi Sophie! 👋</h1>
+              <h1>
+                Hi {firstname} {lastname} 👋
+              </h1>
               <Card.Text className="mb-3">
-                You’re doing great in P3. Let’s keep learning!
+                You’re doing great. Let’s keep learning!
               </Card.Text>
               <div className="text-muted alert alert-warning">
                 💡 Tip: Stay curious and ask questions — it's the best way to
@@ -160,7 +169,7 @@ const NewStudentDashboard = () => {
         </Col>
       </Row>
 
-      <Card className="mb-4">
+      {/* <Card className="mb-4">
         <Card.Body>
           <h2 className="pb-2 border-bottom mb-3">
             🧑 Weekly Assignment Target
@@ -170,7 +179,7 @@ const NewStudentDashboard = () => {
           </h5>
           <ProgressBar label={`1 of 3 completed`} now={33} />
         </Card.Body>
-      </Card>
+      </Card> */}
 
       <Card className="mb-4">
         <Card.Body>
@@ -193,7 +202,10 @@ const NewStudentDashboard = () => {
                         Due: {formatDate(assignment?.due_date)}
                       </p>
                     </div>
-                    <AssignmentButton due_date={assignment?.due_date} id={assignment?.id}/>
+                    <AssignmentButton
+                      due_date={assignment?.due_date}
+                      id={assignment?.id}
+                    />
                   </Card>
                 </Col>
               ))
@@ -209,7 +221,7 @@ const NewStudentDashboard = () => {
       </Card>
 
       <Row className="mb-4">
-        <Col md={6}>
+        {/* <Col md={6}>
           <Card>
             <Card.Body>
               <h2 className="pb-2 border-bottom mb-3">📅 Daily Challenge</h2>
@@ -225,7 +237,7 @@ const NewStudentDashboard = () => {
               </Card>
             </Card.Body>
           </Card>
-        </Col>
+        </Col> */}
 
         <Col md={6}>
           <Card className="h-100">
@@ -243,46 +255,48 @@ const NewStudentDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
+        <Col md={6}>
+          <Card className="h-100">
+            <Card.Body>
+              <h2 className="pb-2 border-bottom mb-3">
+                📃 Your Past Assessments
+              </h2>
+              <Table responsive>
+                <thead>
+                  <tr>
+                    <th>Subject</th>
+                    <th>Date</th>
+                    <th>Score</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>English</td>
+                    <td>20 Apr 2025</td>
+                    <td>90%</td>
+                    <td>
+                      <Button variant="link" size="sm">
+                        Review
+                      </Button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Math</td>
+                    <td>15 Apr 2025</td>
+                    <td>85%</td>
+                    <td>
+                      <Button variant="link" size="sm">
+                        Review
+                      </Button>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            </Card.Body>
+          </Card>
+        </Col>
       </Row>
-
-      <Card className="mb-4">
-        <Card.Body>
-          <h2 className="pb-2 border-bottom mb-3">📃 Your Past Assessments</h2>
-          <Table responsive>
-            <thead>
-              <tr>
-                <th>Subject</th>
-                <th>Date</th>
-                <th>Score</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>English</td>
-                <td>20 Apr 2025</td>
-                <td>90%</td>
-                <td>
-                  <Button variant="link" size="sm">
-                    Review
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>Math</td>
-                <td>15 Apr 2025</td>
-                <td>85%</td>
-                <td>
-                  <Button variant="link" size="sm">
-                    Review
-                  </Button>
-                </td>
-              </tr>
-            </tbody>
-          </Table>
-        </Card.Body>
-      </Card>
-
       <Alert variant="warning" className="d-flex align-items-center">
         😊{" "}
         <span className="ms-2">
