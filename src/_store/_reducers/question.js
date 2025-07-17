@@ -11,7 +11,6 @@ const questionSlice = createSlice({
     reducers: {
         setAttemptQuestions: (state, action) => {
             const { question_id, answer, user_answer, type } = action.payload;
-            // Check if question_id already exists
             const existingIndex = state.attempts.findIndex(
                 (q) => q.question_id === question_id
             );
@@ -26,7 +25,6 @@ const questionSlice = createSlice({
         },
         setAssignmentsQuestion: (state, action) => {
             const { question_id, user_answer, type } = action.payload;
-            // Check if question_id already exists
             const existingIndex = state.attempts.findIndex(
                 (q) => q.question_id === question_id
             );
