@@ -1,13 +1,14 @@
 import parse from "html-react-parser";
 import { useEffect, useState } from "react";
-import userService from "../../_services/user.service";
+import userService from "../../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getSelected,
+  setAssignmentsQuestion,
   setAttemptQuestions,
-} from "../../_store/_reducers/question";
-import Feedback from "../Feedback";
+} from "../../../_store/_reducers/question";
+import Feedback from "../../Feedback";
 
 const EditingAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -61,30 +62,8 @@ const EditingAssignment = ({ question, index }) => {
       type: type,
       user_answer: JSON.stringify(inputs),
     };
-
-    const updatedAnswers = [
-      ...answers.filter((a) => a.question_id !== questionId),
-      payload,
-    ];
-    setAnswers(updatedAnswers);
-    setSubmitted(true);
-
-    const finalPayload = {
-      answers: updatedAnswers.map((item) => ({
-        question_id: item.question_id,
-        answer: item.user_answer,
-        type: item?.type,
-      })),
-    };
-
-    try {
-      await userService.answer(finalPayload);
-      toast.success("Answer submitted successfully.");
-      dispatch(setAttemptQuestions(finalPayload?.answers[0]));
-    } catch (error) {
-      console.error("Error", error);
-      toast.error("Submission failed.");
-    }
+    dispatch(setAssignmentsQuestion(payload));
+    toast.success("Answer submitted successfully.");
   };
 
   const renderedParagraph = paragraph.split(/(\(\d+\))/g).map((part, i) => {
@@ -165,7 +144,7 @@ const EditingAssignment = ({ question, index }) => {
       <div className="question-header">
         <h2>Question {index + 1}</h2>
         <p><strong>Instruction:</strong> {instruction}</p>
-        <Feedback/>
+        <Feedback />
       </div>
       <div className="question-card">
         <div
@@ -194,11 +173,10 @@ const EditingAssignment = ({ question, index }) => {
           <button
             onClick={handleStoreData}
             disabled={submitted || !isAnyInputFilled}
-            className={`dashboard-button ${
-              submitted || !isAnyInputFilled
-                ? "opacity-50 cursor-not-allowed"
-                : ""
-            }`}
+            className={`dashboard-button ${submitted || !isAnyInputFilled
+              ? "opacity-50 cursor-not-allowed"
+              : ""
+              }`}
           >
             {submitted ? "Submitted" : "Submit"}
           </button>

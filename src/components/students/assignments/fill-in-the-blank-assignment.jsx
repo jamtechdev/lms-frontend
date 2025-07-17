@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import toast from "react-hot-toast";
-import { userService } from "../../_services";
 import {
   getSelected,
-  setAttemptQuestions,
-} from "../../_store/_reducers/question";
+  setAssignmentsQuestion,
+} from "../../../_store/_reducers/question";
 import { useDispatch, useSelector } from "react-redux";
-import Feedback from "../Feedback";
+import Feedback from "../../Feedback";
 
 const FillInTheBlankAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -68,37 +67,14 @@ const FillInTheBlankAssignment = ({ question, index }) => {
       toast.error("Please fill all blanks before submitting.");
       return;
     }
-
     const payload = {
       question_id: questionId,
       type: type,
       user_answer: JSON.stringify(inputs),
-      answer: JSON.stringify(correctMap),
     };
+    dispatch(setAssignmentsQuestion(payload));
+    toast.success("Answer submitted successfully.");
 
-    const updatedAnswers = [
-      ...answers.filter((a) => a.question_id !== questionId),
-      payload,
-    ];
-    setAnswers(updatedAnswers);
-    setSubmitted(true);
-
-    try {
-      const finalPayload = {
-        answers: updatedAnswers.map((item) => ({
-          question_id: item.question_id,
-          answer: item.user_answer,
-          type: item?.type,
-        })),
-      };
-
-      await userService.answer(finalPayload);
-      toast.success("Answer submitted successfully.");
-      dispatch(setAttemptQuestions(finalPayload?.answers[0]));
-    } catch (error) {
-      console.error("Error", error);
-      toast.error("Something went wrong while submitting.");
-    }
   };
 
   const renderParsedQuestion = (text = "") => {
@@ -175,7 +151,7 @@ const FillInTheBlankAssignment = ({ question, index }) => {
       <div className="question-header">
         <h2>Question {index + 1}</h2>
         <p><strong>Instruction:</strong> {parse(instruction || "")}</p>
-        <Feedback/>
+        <Feedback />
       </div>
       <div className="question-card">
         <div>{renderParsedQuestion(questionText)}</div>

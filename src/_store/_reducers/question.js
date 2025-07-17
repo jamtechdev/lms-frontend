@@ -25,7 +25,7 @@ const questionSlice = createSlice({
         },
         setAssignmentsQuestion: (state, action) => {
             const { question_id, user_answer, type } = action.payload;
-            const existingIndex = state.attempts.findIndex(
+            const existingIndex = state.assignments.findIndex(
                 (q) => q.question_id === question_id
             );
             if (existingIndex !== -1) {
@@ -42,7 +42,7 @@ const questionSlice = createSlice({
 
 export const { setAttemptQuestions, removeAttemptQuestions, setAssignmentsQuestion, removeAssignmentsQuestion } = questionSlice.actions;
 export const getSelected = (state) => state.question.attempts;
-export const getAssignments = (state) => state.question.assignments;
+export const getAssignmentsQuestion = (state) => state.question.assignments;
 
 
 export default questionSlice.reducer;

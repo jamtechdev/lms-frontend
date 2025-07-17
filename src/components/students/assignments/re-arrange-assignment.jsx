@@ -1,16 +1,11 @@
 import React, { useRef, useLayoutEffect, useState, useEffect } from "react";
-import userService from "../../../_services/user.service";
 import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getSelected,
-  setAttemptQuestions,
-} from "../../../_store/_reducers/question";
+import { useDispatch, } from "react-redux";
+import { setAssignmentsQuestion } from "../../../_store/_reducers/question";
 import Feedback from "../../Feedback";
 
 const ReArrangeListAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
-  const answersStore = useSelector(getSelected);
   const containerRefs = useRef({});
   const positionsRef = useRef({});
 
@@ -83,38 +78,11 @@ const ReArrangeListAssignment = ({ question, index }) => {
     const userAnswer = words.map((w) => w.value).join(" ");
     const payload = {
       question_id: question.id,
-      answer: userAnswer,
+      user_answer: userAnswer,
       type: question.question.type,
     };
-    dispatch(setAttemptQuestions(payload));
-    try {
-      // await userService.answer(payload);
-      // toast.success("Answer submitted successfully.");
-      // setSubmitted(true);
-    } catch (error) {
-      console.error("Submission failed:", error);
-      toast.error("Submission failed.");
-    }
+    dispatch(setAssignmentsQuestion(payload));
   };
-  useEffect(() => {
-    const existingAnswer = answersStore.find(
-      (a) => a.question_id === question.id
-    );
-    if (existingAnswer) {
-      const answerWords = (existingAnswer?.answer || "")
-        .split(" ")
-        .map((val) => ({ value: val }));
-
-      setWords(answerWords);
-      setSubmitted(true);
-    } else if (question?.question?.options) {
-      const shuffled = [...question?.question?.options].sort(
-        () => Math.random() - 0.5
-      );
-      setWords(shuffled);
-      setSubmitted(false);
-    }
-  }, [question, answersStore]);
 
   return (
     <>
@@ -146,12 +114,7 @@ const ReArrangeListAssignment = ({ question, index }) => {
             );
           })}
         </div>
-        {submitted && (
-          <div className="mt-4 p-3 border rounded bg-green-100 text-green-800 font-semibold">
-            Correct Answer:{" "}
-            <span>{question?.question?.answer?.answer?.join(" ")}</span>
-          </div>
-        )}
+
         <p className="mt-2">
           Your Answer: <strong>{words.map((w) => w.value).join(" ")}</strong>
         </p>

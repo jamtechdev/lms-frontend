@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
-import userService from "../../_services/user.service";
+import userService from "../../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getSelected,
+  setAssignmentsQuestion,
   setAttemptQuestions,
-} from "../../_store/_reducers/question";
-import Feedback from "../Feedback";
+} from "../../../_store/_reducers/question";
+import Feedback from "../../Feedback";
 
 const ComprehensionAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -77,20 +78,12 @@ const ComprehensionAssignment = ({ question, index }) => {
     const payload = {
       answers: answers?.map((item) => ({
         question_id: item.question_id,
-        answer: item.user_answer,
+        user_answer: item.user_answer,
         type: item?.type,
       })),
     };
-
-    try {
-      await userService.answer(payload);
-      toast.success("Answer submitted successfully.");
-      setIsSubmitted(true);
-      dispatch(setAttemptQuestions(payload?.answers[0]));
-    } catch (error) {
-      console.error("Submit error:", error);
-      toast.error("Failed to submit answers.");
-    }
+    dispatch(setAssignmentsQuestion(payload?.answers[0]));
+    toast.success("Answer submitted successfully.");
   };
 
   const getPrefilled = (subq) => {

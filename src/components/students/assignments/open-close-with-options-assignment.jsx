@@ -4,9 +4,10 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getSelected,
+  setAssignmentsQuestion,
   setAttemptQuestions,
-} from "../../_store/_reducers/question";
-import Feedback from "../Feedback";
+} from "../../../_store/_reducers/question";
+import Feedback from "../../Feedback";
 
 const OpenClozeWithOptionsAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -66,40 +67,17 @@ const OpenClozeWithOptionsAssignment = ({ question, index }) => {
 
   const handlePaperSubmit = async (questionId) => {
     const userAnswer = userAnswerJSON[questionId] || [];
-
     if (userAnswer.length !== blanks.length) {
       toast.error("Please fill all blanks correctly.");
       return;
     }
-
     const payload = {
-      answers: [
-        {
-          question_id: questionId,
-          answer: JSON.stringify(userAnswer),
-          type: type,
-        },
-      ],
+      question_id: questionId,
+      user_answer: JSON.stringify(userAnswer),
+      type: type,
     };
-
-    try {
-      await userService.answer(payload);
-      toast.success("Answer submitted successfully.");
-      setSubmittedQuestions((prev) => ({
-        ...prev,
-        [questionId]: true,
-      }));
-      dispatch(
-        setAttemptQuestions({
-          question_id: questionId,
-          answer: JSON.stringify(userAnswer),
-          type: type,
-        })
-      );
-    } catch (error) {
-      console.error("Error submitting:", error);
-      toast.error("Submission failed.");
-    }
+    toast.success("Answer submitted successfully.");
+    dispatch(setAssignmentsQuestion(payload));
   };
   useEffect(() => {
     setInputs({});
@@ -107,33 +85,6 @@ const OpenClozeWithOptionsAssignment = ({ question, index }) => {
     setUserAnswerJSON({});
     setSubmittedQuestions({});
     setStoredAnswer([]);
-
-    const submitted = answersStore.find(
-      (ans) => ans.question_id === questionId
-    );
-
-    if (submitted?.answer) {
-      try {
-        const parsedAnswer = JSON.parse(
-          submitted.answer || submitted.user_answer
-        );
-        const filledInputs = {};
-        parsedAnswer.forEach(({ blank_number, value }) => {
-          const inputId = blanks.find(
-            (q) => q.blank_number === blank_number
-          )?.id;
-          if (inputId) filledInputs[inputId] = value;
-        });
-        setInputs(filledInputs);
-        setStoredAnswer(parsedAnswer);
-        setSubmittedQuestions((prev) => ({
-          ...prev,
-          [questionId]: true,
-        }));
-      } catch (e) {
-        console.warn("Invalid answer format", e);
-      }
-    }
   }, [questionId, answersStore, blanks]);
 
   const renderedParagraph = paragraph
@@ -183,7 +134,7 @@ const OpenClozeWithOptionsAssignment = ({ question, index }) => {
       <div className="question-header">
         <h2>Question {index + 1}</h2>
         <p><strong>Instruction:</strong> {questionData.instruction}</p>
-        <Feedback/>
+        <Feedback />
       </div>
       <div className="question-card">
         <div

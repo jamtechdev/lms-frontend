@@ -3,16 +3,22 @@ import userService from "../../_services/user.service";
 import { getChildId } from "../../_store/_reducers/auth";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getSelected } from "../../_store/_reducers/question";
+import { getAssignmentsQuestion } from "../../_store/_reducers/question";
 import TrueFalseAssignment from "../../components/students/assignments/true-false-assignment";
 import McqAssignment from "../../components/students/assignments/mcq-assignment";
 import ReArrangeListAssignment from "../../components/students/assignments/re-arrange-assignment";
+import LinkingAssignment from "../../components/students/assignments/linking-assignment";
+import OpenClozeWithOptionsAssignment from "../../components/students/assignments/open-close-with-options-assignment";
+import OpenClozeWithDropdownAssignment from "../../components/students/assignments/open-close-with-dropdown-assignment";
+import ComprehensionAssignment from "../../components/students/assignments/comprehension-assignment";
+import EditingAssignment from "../../components/students/assignments/editing-assignment";
+import FillInTheBlankAssignment from "../../components/students/assignments/fill-in-the-blank-assignment";
 
 const WeeklyAssignment = () => {
   const { id } = useParams();
   const childId = useSelector(getChildId);
-  const answersStore = useSelector(getSelected);
-  console.log(answersStore, "================");
+  const assignmentAnswer = useSelector(getAssignmentsQuestion);
+  console.log(assignmentAnswer, '============')
   const [questions, setQuestions] = useState();
 
   const getAssignments = async () => {
@@ -27,13 +33,9 @@ const WeeklyAssignment = () => {
   };
   const fetchAttempt = async () => {
     try {
-      const updatedAnswers = answersStore.map((item) => {
-        const { answer, ...rest } = item;
-        return { ...rest, user_answer: answer };
-      });
       const data = await userService.assignmentAttempt({
         assignment_id: id,
-        answers: updatedAnswers,
+        answers: assignmentAnswer,
       });
       console.log(data, "===============");
     } catch (error) {
@@ -58,61 +60,66 @@ const WeeklyAssignment = () => {
         questions?.questions?.map((question, index) => {
           return (
             <div key={index}>
-              {/* {question &&
+              {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) == "true_false" && (
                   <TrueFalseAssignment question={question} index={index} />
-                )} */}
+                )}
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) == "mcq" && (
                   <McqAssignment question={question} index={index} />
                 )}
 
-              {/* {question &&
+              {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) == "rearranging" && (
                   <ReArrangeListAssignment question={question} index={index} />
-                )} */}
-              {/*
+                )}
+
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) == "linking" && (
-                  <LinkingQuestions question={question} index={adjustedIndex} />
+                  <LinkingAssignment question={question} index={index} />
                 )}
+
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) ==
-                  "open_cloze_with_options" && (
-                  <OpenClozeWithOptions
+                "open_cloze_with_options" && (
+                  <OpenClozeWithOptionsAssignment
                     question={question}
-                    index={adjustedIndex}
+                    index={index}
                   />
                 )}
+              
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) ==
                   "open_cloze_with_dropdown_options" && (
-                  <OpenClozeWithDropdown
+                  <OpenClozeWithDropdownAssignment
                     question={question}
-                    index={adjustedIndex}
+                    index={index}
                   />
                 )}
+               
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) == "comprehension" && (
-                  <Comprehension question={question} index={adjustedIndex} />
+                  <ComprehensionAssignment question={question} index={index} />
                 )}
+                
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) == "editing" && (
-                  <EditingQuesions question={question} index={adjustedIndex} />
+                  <EditingAssignment question={question} index={index} />
                 )}
+                
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) == "fill_in_the_blank" && (
-                  <FillInTheBlank question={question} index={adjustedIndex} />
-                )} */}
+                  <FillInTheBlankAssignment question={question} index={index} />
+                )} 
             </div>
           );
         })}

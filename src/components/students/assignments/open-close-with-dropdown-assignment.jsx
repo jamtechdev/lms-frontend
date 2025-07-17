@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
-import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getSelected,
-  setAttemptQuestions,
-} from "../../_store/_reducers/question";
-import Feedback from "../Feedback";
+import { useDispatch } from "react-redux";
+import { setAssignmentsQuestion } from "../../../_store/_reducers/question";
+import Feedback from "../../Feedback";
 
 const OpenClozeWithDropdownAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
-  const answersStore = useSelector(getSelected);
   const [inputs, setInputs] = useState({});
   const [submittedQuestions, setSubmittedQuestions] = useState({});
   const [answers, setAnswers] = useState([]);
@@ -30,36 +25,8 @@ const OpenClozeWithDropdownAssignment = ({ question, index }) => {
       type: questionType,
       user_answer: JSON.stringify(inputs[questionId]),
     };
-
-    const updatedAnswers = [
-      ...answers.filter((a) => a.question_id !== questionId),
-      payload,
-    ];
-    setAnswers(updatedAnswers);
-
-    const finalPayload = {
-      answers: updatedAnswers.map((item) => ({
-        question_id: item.question_id,
-        answer: item.user_answer,
-        type: item.type,
-      })),
-    };
-
-    try {
-      await userService.answer(finalPayload);
-      toast.success("Answer submitted successfully.");
-      setSubmittedQuestions((prev) => ({ ...prev, [questionId]: true }));
-      dispatch(
-        setAttemptQuestions({
-          question_id: questionId,
-          type: questionType,
-          user_answer: JSON.stringify(inputs[questionId]),
-        })
-      );
-    } catch (error) {
-      console.error("Submission error:", error);
-      toast.error("Failed to submit answer.");
-    }
+    dispatch(setAssignmentsQuestion(payload));
+    toast.success("Answer submitted successfully.");
   };
 
   const handleSelectChange = (blankNumber, selectedOption) => {
@@ -118,33 +85,14 @@ const OpenClozeWithDropdownAssignment = ({ question, index }) => {
     setInputs({});
     setSubmittedQuestions({});
     setAnswers([]);
-    // ✅ Restore answer from Redux store if it exists
-    const saved = answersStore.find((ans) => ans.question_id === questionId);
+  }, [questionId]);
 
-    if (saved?.answer || saved?.user_answer) {
-      try {
-        const parsed = JSON.parse(saved.answer || saved.user_answer);
-
-        setInputs((prev) => ({
-          ...prev,
-          [questionId]: parsed,
-        }));
-
-        setSubmittedQuestions((prev) => ({
-          ...prev,
-          [questionId]: true,
-        }));
-      } catch (err) {
-        console.warn("Invalid answer format", err);
-      }
-    }
-  }, [questionId, answersStore]);
   return (
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
         <p> <strong>Instruction:</strong> {questionData.instruction}</p>
-        <Feedback/>
+        <Feedback />
       </div>
       <div className="question-card">
         <div>
@@ -160,18 +108,7 @@ const OpenClozeWithDropdownAssignment = ({ question, index }) => {
             {isSubmitted ? "Submitted" : "Submit"}
           </button>
         </div>
-        {isSubmitted && (
-          <div className="mt-4 p-3 border rounded bg-green-100 text-green-800 font-semibold whitespace-pre-line">
-            Correct Answers:
-            <div className="mt-2">
-              {blanks.map((blank, idx) => (
-                <div key={blank.id}>
-                  {idx + 1}. ({blank.blank_number}) → {blank.correct_answer}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+
       </div>
     </>
   );

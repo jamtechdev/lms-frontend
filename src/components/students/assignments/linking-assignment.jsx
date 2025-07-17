@@ -2,10 +2,10 @@ import parse from "html-react-parser";
 import { useState, useEffect } from "react";
 import Xarrow from "react-xarrows";
 import { useDispatch, useSelector } from "react-redux";
-import { setAttemptQuestions } from "../../_store/_reducers/question";
-import { userService } from "../../_services";
+import { setAssignmentsQuestion, setAttemptQuestions } from "../../../_store/_reducers/question";
+import { userService } from "../../../_services";
 import toast from "react-hot-toast";
-import Feedback from "../Feedback";
+import Feedback from "../../Feedback";
 
 const LinkingAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -33,38 +33,7 @@ const LinkingAssignment = ({ question, index }) => {
       setShuffledRight(shuffled);
     }
   }, [question, page]);
-  useEffect(() => {
-    if (!question?.question?.answer) return;
 
-    const rightItems = question.question.answer.map((a) => a.right);
-    const leftItems = question.question.answer.map((a) => a.left);
-    const submitted = answersStore.find(
-      (ans) => ans.question_id === question.id
-    );
-    if (submitted) {
-      try {
-        const parsedAnswer = JSON.parse(submitted.user_answer);
-        const matches = {};
-
-        Object.entries(parsedAnswer).forEach(([leftWord, rightWord]) => {
-          const leftIndex = leftItems.findIndex((l) => l.word === leftWord);
-          const rightIndex = rightItems.findIndex((r) => r.word === rightWord);
-          if (leftIndex !== -1 && rightIndex !== -1) {
-            matches[leftIndex] = rightIndex;
-          }
-        });
-
-        setMatchesByQuestion({ [question.id]: matches });
-        setSubmittedQuestions((prev) => new Set(prev).add(question.id));
-        setShuffledRight(rightItems); // keep original order
-      } catch (e) {
-        console.error("Failed to parse saved answer", e?.response);
-      }
-    } else {
-      const shuffled = [...rightItems].sort(() => Math.random() - 0.5);
-      setShuffledRight(shuffled);
-    }
-  }, [question, answersStore]);
 
   if (!question || !Array.isArray(question.question.answer)) return null;
 
@@ -135,23 +104,8 @@ const LinkingAssignment = ({ question, index }) => {
       user_answer: JSON.stringify(userAnswerTextMap),
     };
 
-    try {
-      await userService.answer({
-        answers: [
-          {
-            question_id: payload.question_id,
-            answer: payload.user_answer,
-            type: payload.type,
-          },
-        ],
-      });
-      toast.success(`Answer submitted successfully.`);
-      dispatch(setAttemptQuestions(payload));
-      setSubmittedQuestions((prev) => new Set(prev).add(qId));
-    } catch (err) {
-      console.error(err);
-      toast.error("Submission failed");
-    }
+    dispatch(setAssignmentsQuestion(payload));
+    toast.success(`Answer submitted successfully.`);
   };
 
   return (
@@ -159,7 +113,7 @@ const LinkingAssignment = ({ question, index }) => {
       <div className="question-header">
         <h2>Question {index + 1}</h2>
         <p><strong>Instruction:</strong> {q.question.instruction}</p>
-        <Feedback/>
+        <Feedback />
       </div>
       <div className="question-card mb-0">
         <h2 className="question-text">{parse(q.question.content)}</h2>
@@ -185,9 +139,8 @@ const LinkingAssignment = ({ question, index }) => {
                   <div
                     key={i}
                     id={`left-${qId}-${i}`}
-                    className={`link-item ${isConnected ? "connected" : ""} ${
-                      isSelected ? "selected" : ""
-                    } ${isSubmitted ? "disabled" : ""}`}
+                    className={`link-item ${isConnected ? "connected" : ""} ${isSelected ? "selected" : ""
+                      } ${isSubmitted ? "disabled" : ""}`}
                     onClick={() => handleLeftClick(qId, i)}
                   >
                     <div className="selector-circle" />
@@ -213,9 +166,8 @@ const LinkingAssignment = ({ question, index }) => {
                   <div
                     key={i}
                     id={`right-${qId}-${i}`}
-                    className={`link-item ${isConnected ? "connected" : ""} ${
-                      isSelected ? "selected" : ""
-                    } ${isSubmitted ? "disabled" : ""}`}
+                    className={`link-item ${isConnected ? "connected" : ""} ${isSelected ? "selected" : ""
+                      } ${isSubmitted ? "disabled" : ""}`}
                     onClick={() => handleRightClick(qId, i)}
                   >
                     <div className="selector-circle" />
