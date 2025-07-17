@@ -218,14 +218,19 @@ const UpdateAssignment = () => {
               </Col>
 
               <Col xl={6}>
-                <label htmlFor="due_date" className="form-label h6">
+                <label htmlFor="due_date" className="form-label mb-8 h6">
                   Due Date
                 </label>
-                <Field name="due_date" type="date" className="form-control" />
+                <Field
+                  name="due_date"
+                  type="date"
+                  className="form-control py-11"
+                  min={new Date().toISOString().split("T")[0]}
+                />
                 <ErrorMessage
                   name="due_date"
                   component="div"
-                  className="text-danger"
+                  className="text-danger text-13"
                 />
               </Col>
 
