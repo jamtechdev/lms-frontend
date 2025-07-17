@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 
-const Feedback = () => {
+const Feedback = (props) => {
+  const { question_id } = props;
+  console.log(question_id, ">>>>>>>>>>>")
   const [selectedReason, setSelectedReason] = useState("");
   const [showFeedbackBox, setShowFeedbackBox] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
