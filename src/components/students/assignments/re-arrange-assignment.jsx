@@ -123,9 +123,9 @@ const ReArrangeListAssignment = ({ question, index }) => {
           <button
             onClick={handleSubmit}
             className="dashboard-button"
-            disabled={submitted || words.length === 0}
+            disabled={question?.is_attempt || words.length === 0}
           >
-            {submitted ? "Submitted" : "Submit"}
+            {question?.is_attempt ? "Attempted" : "Submit"}
           </button>
         </div>
       </div>

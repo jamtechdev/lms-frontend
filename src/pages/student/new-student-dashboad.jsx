@@ -103,13 +103,13 @@ const NewStudentDashboard = () => {
     setSelectedTopic("");
     setTopics([]);
   };
-  const AssignmentButton = ({ due_date, id }) => {
+  const AssignmentButton = ({ due_date, id, status }) => {
     const dueDate = new Date(due_date);
     dueDate.setHours(0, 0, 0, 0);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const isEnabled = dueDate > today;
-    const status = isEnabled ? "Start" : "Completed";
+    // const status = isEnabled ? "Start" : "Completed";
     return (
       <div>
         <button
@@ -205,6 +205,7 @@ const NewStudentDashboard = () => {
                     <AssignmentButton
                       due_date={assignment?.due_date}
                       id={assignment?.id}
+                      status={assignment?.assignment_status}
                     />
                   </Card>
                 </Col>

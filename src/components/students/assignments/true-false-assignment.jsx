@@ -72,9 +72,9 @@ const TrueFalseAssignment = ({ question, index }) => {
           <button
             onClick={handleSubmit}
             className="dashboard-button"
-            disabled={isSubmitted || !selectedAnswer}
+            disabled={question?.is_attempt || !selectedAnswer}
           >
-            {isSubmitted ? "Submitted" : "Submit"}
+            {question?.is_attempt ? "Attempted" : "Submit"}
           </button>
         </div>
       </div>

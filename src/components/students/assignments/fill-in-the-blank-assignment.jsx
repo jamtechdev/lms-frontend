@@ -159,9 +159,9 @@ const FillInTheBlankAssignment = ({ question, index }) => {
           <button
             onClick={handleStoreData}
             className="dashboard-button"
-            disabled={!isAllFilled() || submitted}
+            disabled={question?.is_attempt || !isAllFilled() || submitted}
           >
-            {submitted ? "Submitted" : "Submit"}
+            {(question?.is_attempt || submitted) ? "Attempted" : "Submit"}
           </button>
         </div>
       </div>

@@ -171,9 +171,9 @@ const OpenClozeWithOptionsAssignment = ({ question, index }) => {
           <button
             onClick={() => handlePaperSubmit(questionId)}
             className="dashboard-button"
-            disabled={submittedQuestions[questionId]}
+            disabled={question?.is_attempt || submittedQuestions[questionId]}
           >
-            {submittedQuestions[questionId] ? "Submitted" : "Submit"}
+            {(question?.is_attempt || submittedQuestions[questionId]) ? "Attempted" : "Submit"}
           </button>
         </div>
       </div>

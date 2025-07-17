@@ -103,9 +103,9 @@ const OpenClozeWithDropdownAssignment = ({ question, index }) => {
           <button
             onClick={handleStoreData}
             className="dashboard-button"
-            disabled={!allAnswered || isSubmitted}
+            disabled={question?.is_attempt || !allAnswered || isSubmitted}
           >
-            {isSubmitted ? "Submitted" : "Submit"}
+            {(question?.is_attempt || isSubmitted) ? "Attempted" : "Submit"}
           </button>
         </div>
 

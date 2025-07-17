@@ -66,8 +66,9 @@ const McqAssignment = ({ question, index }) => {
           <button
             className="dashboard-button"
             onClick={handleSubmit}
+            disabled={question?.is_attempt}
           >
-            Submit
+            {question?.is_attempt ? "Attempted" : "Submit"}
           </button>
         </div>
       </div>

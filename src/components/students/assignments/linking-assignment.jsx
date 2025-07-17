@@ -113,7 +113,7 @@ const LinkingAssignment = ({ question, index }) => {
       <div className="question-header">
         <h2>Question {index + 1}</h2>
         <p><strong>Instruction:</strong> {q.question.instruction}</p>
- <Feedback question_id={question?.id}/>
+        <Feedback question_id={question?.id} />
       </div>
       <div className="question-card mb-0">
         <h2 className="question-text">{parse(q.question.content)}</h2>
@@ -239,9 +239,9 @@ const LinkingAssignment = ({ question, index }) => {
           <button
             onClick={() => handleSubmitSingle(q)}
             className="dashboard-button"
-            disabled={isSubmitted || isButtonDisabled}
+            disabled={question?.is_attempt || isSubmitted || isButtonDisabled}
           >
-            {isSubmitted ? "Submitted" : "Submit"}
+            {(question?.is_attempt || isSubmitted) ? "Attempted" : "Submit"}
           </button>
         </div>
       </div>

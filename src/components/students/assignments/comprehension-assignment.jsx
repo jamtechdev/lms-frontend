@@ -104,7 +104,7 @@ const ComprehensionAssignment = ({ question, index }) => {
       <div className="question-header">
         <h2>Question {index + 1}</h2>
         <p><strong>Instruction:</strong> {question.question.instruction}</p>
-      <Feedback question_id={question?.id}/>
+        <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
         <div
@@ -140,15 +140,14 @@ const ComprehensionAssignment = ({ question, index }) => {
                   return (
                     <div key={i}>
                       <label
-                        className={`kbc-option-label ${
-                          isSubmitted
+                        className={`kbc-option-label ${isSubmitted
                             ? isCorrect
                               ? "text-green-600 font-bold"
                               : isUserSelected
-                              ? "text-red-600 line-through"
-                              : ""
+                                ? "text-red-600 line-through"
+                                : ""
                             : ""
-                        }`}
+                          }`}
                       >
                         <input
                           type="radio"
@@ -238,9 +237,9 @@ const ComprehensionAssignment = ({ question, index }) => {
         <button
           onClick={handlePaperSubmit}
           className="dashboard-button"
-          disabled={isSubmitted || subquestions.length === 0}
+          disabled={question?.is_attempt || isSubmitted || subquestions.length === 0}
         >
-          {isSubmitted ? "Submitted" : "Submit"}
+          {(question?.is_attempt || isSubmitted) ? "Attempted" : "Submit"}
         </button>
       </div>
     </>

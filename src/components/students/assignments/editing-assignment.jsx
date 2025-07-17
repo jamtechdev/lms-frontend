@@ -144,7 +144,7 @@ const EditingAssignment = ({ question, index }) => {
       <div className="question-header">
         <h2>Question {index + 1}</h2>
         <p><strong>Instruction:</strong> {instruction}</p>
-       <Feedback question_id={question?.id}/>
+        <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
         <div
@@ -172,13 +172,13 @@ const EditingAssignment = ({ question, index }) => {
         <div className="d-flex justify-content-end mt-4">
           <button
             onClick={handleStoreData}
-            disabled={submitted || !isAnyInputFilled}
+            disabled={question?.is_attempt || submitted || !isAnyInputFilled}
             className={`dashboard-button ${submitted || !isAnyInputFilled
               ? ""
               : ""
               }`}
           >
-            {submitted ? "Submitted" : "Submit"}
+            {(question?.is_attempt || submitted) ? "Attempted" : "Submit"}
           </button>
         </div>
       </div>
