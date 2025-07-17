@@ -14,7 +14,6 @@ const Feedback = () => {
   const handleToggle = (isOpen) => {
     setIsDropdownOpen(isOpen);
     if (!isOpen) {
-      // Reset when dropdown closes
       setSelectedReason("");
       setShowFeedbackBox(false);
     }
@@ -22,10 +21,9 @@ const Feedback = () => {
 
   const reasons = [
     "No Solution",
-    "Solution Error",
-    "No Image",
-    "Image Error",
+    "Answer Text Error ",
     "Question Text Error",
+    "Other",
   ];
 
   return (
