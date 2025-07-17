@@ -174,7 +174,7 @@ const EditingAssignment = ({ question, index }) => {
             onClick={handleStoreData}
             disabled={submitted || !isAnyInputFilled}
             className={`dashboard-button ${submitted || !isAnyInputFilled
-              ? "opacity-50 cursor-not-allowed"
+              ? ""
               : ""
               }`}
           >
