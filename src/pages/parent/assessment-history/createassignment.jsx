@@ -69,7 +69,6 @@ const CreateAssignment = () => {
         (s) => s.id.toString() === selectedStudentId.toString()
       );
       if (student?.student_level) {
-        console.log("Student Level:", student.student_level);
         fetchSubjectsByLevel(student.student_level);
       }
     }
@@ -80,7 +79,6 @@ const CreateAssignment = () => {
       try {
         const res = await parentService.getQuestions(subjectId);
         setQuestions(res.data);
-        console.log(res.data, "lllllllllllllll");
       } catch (error) {
         console.error("Error loading questions:", error);
         setQuestions([]);

@@ -38,6 +38,8 @@ const NewStudentDashboard = () => {
   const childId = useSelector(getChildId);
   const firstname = useSelector(getFirstName);
   const lastname = useSelector(getLastName);
+  const [results, setResults] = useState([]);
+  const [resultsLoading, setResultsLoading] = useState(false);
 
   const getAssignments = async () => {
     setAssignmentLoading(true);
@@ -103,6 +105,24 @@ const NewStudentDashboard = () => {
     setSelectedTopic("");
     setTopics([]);
   };
+
+  const fetchResults = async () => {
+    setResultsLoading(true);
+    try {
+      const data = await userService.getresult({
+        student_id: childId,
+      });
+      setResults(data?.data);
+    } catch (error) {
+      console.error("Error fetching results:", error);
+    } finally {
+      setResultsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchResults();
+  }, []);
+
   const AssignmentButton = ({ due_date, id, status }) => {
     const dueDate = new Date(due_date);
     dueDate.setHours(0, 0, 0, 0);
@@ -266,32 +286,43 @@ const NewStudentDashboard = () => {
                 <thead>
                   <tr>
                     <th>Subject</th>
-                    <th>Date</th>
                     <th>Score</th>
-                    <th>Action</th>
+                    <th>Submitted At</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>English</td>
-                    <td>20 Apr 2025</td>
-                    <td>90%</td>
-                    <td>
-                      <Button variant="link" size="sm">
-                        Review
-                      </Button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Math</td>
-                    <td>15 Apr 2025</td>
-                    <td>85%</td>
-                    <td>
-                      <Button variant="link" size="sm">
-                        Review
-                      </Button>
-                    </td>
-                  </tr>
+                  {resultsLoading ? (
+                    <tr>
+                      <td colSpan="3" className="text-center py-4">
+                        <img src={loader} width={50} alt="Loading..." />
+                      </td>
+                    </tr>
+                  ) : results.length > 0 ? (
+                    results.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.assignment_subject || "N/A"}</td>
+                        <td>{item.score}%</td>
+                        <td>
+                          {item.submitted_at
+                            ? new Date(item.submitted_at).toLocaleDateString(
+                                "en-GB",
+                                {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                }
+                              )
+                            : "N/A"}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3" className="text-center">
+                        No assessments found
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
             </Card.Body>

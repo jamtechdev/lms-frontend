@@ -47,7 +47,6 @@ const AssessmentHistory = () => {
   const handleDeleteConfirm = async (payload) => {
     try {
       const data = await parentService.deleteAssignments(payload);
-      console.log(data);
       await swal(
         "Deleted",
         "Assignment has been deleted successfully!",

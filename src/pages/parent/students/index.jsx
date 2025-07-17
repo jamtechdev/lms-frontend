@@ -41,7 +41,6 @@ const StudentList = () => {
     await parentService
       .updateLockCode(student?.id, payload)
       .then(async (data) => {
-        console.log(data);
         await fetchStudents();
       })
       .catch((error) => {
@@ -74,7 +73,6 @@ const StudentList = () => {
     await parentService
       .deleteStudentByParent(id)
       .then(async (data) => {
-        console.log(data);
         await swal("Deleted", "Student has been successfully!", "success");
         await fetchStudents();
       })

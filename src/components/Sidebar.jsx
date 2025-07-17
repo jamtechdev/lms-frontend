@@ -35,7 +35,7 @@ const Sidebar = () => {
       fetchSubjects();
     }
   }, [level]);
-  console.log();
+  
   const topicsBySubject = async (subject) => {
     const isCurrentlyExpanded = expandedKey === subject?.subject_name;
 

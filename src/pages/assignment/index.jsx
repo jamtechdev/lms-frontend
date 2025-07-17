@@ -20,7 +20,6 @@ const WeeklyAssignment = () => {
   const dispatch = useDispatch();
   const childId = useSelector(getChildId);
   const assignmentAnswer = useSelector(getAssignmentsQuestion);
-  console.log(assignmentAnswer, '============')
   const [questions, setQuestions] = useState();
 
   const getAssignments = async () => {
@@ -41,20 +40,13 @@ const WeeklyAssignment = () => {
       assignment_id: id,
       answers: assignmentAnswer,
     }).then((data) => {
-      console.log(data?.data, '=======');
       toast.success("Assignment submitted successfully.");
     }).catch((error) => {
       console.error("Error", error);
     });
 
   };
-  const fetchresults = async () => {
-    try {
-      const data = await userService.getresult({});
-    } catch (error) {
-      console.error("Error", error);
-    }
-  };
+
   useEffect(() => {
     getAssignments();
   }, []);
