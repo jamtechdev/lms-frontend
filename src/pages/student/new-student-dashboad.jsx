@@ -170,7 +170,7 @@ const NewStudentDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={3}>
+        <Col md={3} className="mt-4 mt-md-0">
           <Card className="h-100">
             <Card.Body>
               <div className="d-flex align-items-center justify-content-between">
@@ -276,7 +276,7 @@ const NewStudentDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={6}>
+        <Col md={6} className="mt-4 mt-md-0">
           <Card className="h-100">
             <Card.Body>
               <h2 className="pb-2 border-bottom mb-3">
