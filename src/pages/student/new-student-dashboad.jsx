@@ -319,7 +319,7 @@ const NewStudentDashboard = () => {
                   ) : (
                     <tr>
                       <td colSpan="3" className="text-center">
-                        No assessments found
+                        💤 No assessments found
                       </td>
                     </tr>
                   )}
