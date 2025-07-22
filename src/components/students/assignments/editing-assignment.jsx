@@ -52,9 +52,10 @@ const EditingAssignment = ({ question, index }) => {
     setInputs((prev) => ({ ...prev, [boxNumber]: value }));
   };
 
-  const isAnyInputFilled = Object.values(inputs).some(
-    (val) => val.trim() !== ""
-  );
+    const isAnyInputFilled = boxes.every(
+  (box) => inputs[box.box] && inputs[box.box].trim() !== ""
+);
+
 
   const handleStoreData = async () => {
     const payload = {
