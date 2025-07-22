@@ -164,12 +164,14 @@ const Nav = () => {
           )}
           {permission === "child" && (
             <div className="d-flex align-items-center gap-5">
-              <button onClick={handleShow} className="logout-btn">
-                <span className="text-2xl text-primary-600 d-flex">
-                  <i className="ph ph-user-switch"></i>
-                </span>
-                <span className="text">Switch to Parent</span>
-              </button>
+              {path === "/student" && (
+                <button onClick={handleShow} className="logout-btn">
+                  <span className="text-2xl text-primary-600 d-flex">
+                    <i className="ph ph-user-switch"></i>
+                  </span>
+                  <span className="text">Switch to Parent</span>
+                </button>
+              )}
 
               <span className="position-relative avatar-image">
                 <img
@@ -181,6 +183,7 @@ const Nav = () => {
               </span>
             </div>
           )}
+
           {permission === "parent" && (
             <button onClick={handleLogout} className="logout-btn">
               <span className="text-2xl text-danger-600 d-flex">
