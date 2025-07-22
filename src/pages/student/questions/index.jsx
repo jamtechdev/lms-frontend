@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getLevel,
-  getStudentType,
-} from "../../../_store/_reducers/auth";
+import { getLevel, getStudentType } from "../../../_store/_reducers/auth";
 import userService from "../../../_services/user.service";
-import { useLocation, } from "react-router-dom";
-import {
-  removeAttemptQuestions,
-} from "../../../_store/_reducers/question";
+import { useLocation } from "react-router-dom";
+import { removeAttemptQuestions } from "../../../_store/_reducers/question";
 import ReArrangeList from "../../../components/students/re-arrange";
 import McqQuestions from "../../../components/students/mcq-questions";
 import TrueFalseQuestions from "../../../components/students/true-false";
@@ -50,7 +45,10 @@ const AllQuestions = () => {
         const shuffledArray = [...questionsData.questions_array];
         for (let i = shuffledArray.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
-          [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+          [shuffledArray[i], shuffledArray[j]] = [
+            shuffledArray[j],
+            shuffledArray[i],
+          ];
         }
         questionsData.questions_array = shuffledArray;
       }
@@ -146,67 +144,77 @@ const AllQuestions = () => {
         {questions && questions?.questions_array?.length == 0 && (
           <p>No Questions found</p>
         )}
-        {questions && questions?.questions_array?.map((question, index) => {
-          const adjustedIndex = index + (page - 1) * 10;
-          return (
-            <div key={index} className="question-list">
-              {question && (question?.question?.type || question?.question?.question_type) == "true_false" &&
-                <TrueFalseQuestions
-                  question={question}
-                  index={adjustedIndex}
-                />
-              }
-              {question && (question?.question?.type || question?.question?.question_type) == "mcq" &&
-                <McqQuestions
-                  question={question}
-                  index={adjustedIndex}
-                />
-              }
-              {question && (question?.question?.type || question?.question?.question_type) == "rearranging" &&
-                <ReArrangeList
-                  question={question}
-                  index={adjustedIndex}
-                />
-              }
-              {question && (question?.question?.type || question?.question?.question_type) == "linking" &&
-                <LinkingQuestions
-                  question={question}
-                  index={adjustedIndex}
-                />
-              }
-              {question && (question?.question?.type || question?.question?.question_type) == "open_cloze_with_options" &&
-                <OpenClozeWithOptions
-                  question={question}
-                  index={adjustedIndex}
-                />
-              }
-              {question && (question?.question?.type || question?.question?.question_type) == "open_cloze_with_dropdown_options" &&
-                <OpenClozeWithDropdown
-                  question={question}
-                  index={adjustedIndex}
-                />
-              }
-              {question && (question?.question?.type || question?.question?.question_type) == "comprehension" &&
-                <Comprehension
-                  question={question}
-                  index={adjustedIndex}
-                />
-              }
-              {question && (question?.question?.type || question?.question?.question_type) == "editing" && (
-                <EditingQuesions
-                  question={question}
-                  index={adjustedIndex}
-                />
-              )}
-              {question && (question?.question?.type || question?.question?.question_type) == "fill_in_the_blank" && (
-                <FillInTheBlank
-                  question={question}
-                  index={adjustedIndex}
-                />
-              )}
-            </div>
-          )
-        })}
+        {questions &&
+          questions?.questions_array?.map((question, index) => {
+            const adjustedIndex = index + (page - 1);
+            return (
+              <div key={index} className="question-list">
+                {question &&
+                  (question?.question?.type ||
+                    question?.question?.question_type) == "true_false" && (
+                    <TrueFalseQuestions
+                      question={question}
+                      index={adjustedIndex}
+                    />
+                  )}
+                {question &&
+                  (question?.question?.type ||
+                    question?.question?.question_type) == "mcq" && (
+                    <McqQuestions question={question} index={adjustedIndex} />
+                  )}
+                {question &&
+                  (question?.question?.type ||
+                    question?.question?.question_type) == "rearranging" && (
+                    <ReArrangeList question={question} index={adjustedIndex} />
+                  )}
+                {question &&
+                  (question?.question?.type ||
+                    question?.question?.question_type) == "linking" && (
+                    <LinkingQuestions
+                      question={question}
+                      index={adjustedIndex}
+                    />
+                  )}
+                {question &&
+                  (question?.question?.type ||
+                    question?.question?.question_type) ==
+                    "open_cloze_with_options" && (
+                    <OpenClozeWithOptions
+                      question={question}
+                      index={adjustedIndex}
+                    />
+                  )}
+                {question &&
+                  (question?.question?.type ||
+                    question?.question?.question_type) ==
+                    "open_cloze_with_dropdown_options" && (
+                    <OpenClozeWithDropdown
+                      question={question}
+                      index={adjustedIndex}
+                    />
+                  )}
+                {question &&
+                  (question?.question?.type ||
+                    question?.question?.question_type) == "comprehension" && (
+                    <Comprehension question={question} index={adjustedIndex} />
+                  )}
+                {question &&
+                  (question?.question?.type ||
+                    question?.question?.question_type) == "editing" && (
+                    <EditingQuesions
+                      question={question}
+                      index={adjustedIndex}
+                    />
+                  )}
+                {question &&
+                  (question?.question?.type ||
+                    question?.question?.question_type) ==
+                    "fill_in_the_blank" && (
+                    <FillInTheBlank question={question} index={adjustedIndex} />
+                  )}
+              </div>
+            );
+          })}
       </div>
       <div className="mt-4 flex justify-center">
         <ResponsivePagination

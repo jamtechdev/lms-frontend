@@ -182,8 +182,10 @@ const OpenClozeWithOptions = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-        <p><strong>Instruction:</strong> {questionData.instruction}</p>
-        <Feedback question_id={question?.id}/>
+        <p>
+          <strong>Instruction:</strong> {questionData.instruction}
+        </p>
+        <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
         <div
@@ -200,9 +202,7 @@ const OpenClozeWithOptions = ({ question, index }) => {
             </div>
           )}
         </div>
-        <div className="px-0 py-3 options">
-          <strong>{index + 1}. </strong> {renderedParagraph}
-        </div>
+        <div className="px-0 py-3 options">{renderedParagraph}</div>
         {submittedQuestions[questionId] && (
           <div className="mt-4 p-3 border rounded bg-green-100 text-green-800 font-semibold whitespace-pre-line">
             Correct Answers:

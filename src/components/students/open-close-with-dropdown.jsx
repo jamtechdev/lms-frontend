@@ -143,13 +143,14 @@ const OpenClozeWithDropdown = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-        <p> <strong>Instruction:</strong> {questionData.instruction}</p>
-        <Feedback question_id={question?.id}/>
+        <p>
+          {" "}
+          <strong>Instruction:</strong> {questionData.instruction}
+        </p>
+        <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
-        <div>
-          <strong>{index + 1}.</strong> {renderedParagraph}
-        </div>
+        <div>{renderedParagraph}</div>
 
         <div className="d-flex justify-content-end mt-4">
           <button
