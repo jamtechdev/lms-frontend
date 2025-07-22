@@ -110,12 +110,12 @@ const Comprehension = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
+        <Feedback question_id={question?.id} />
+      </div>
+      <div className="question-card">
         <p>
           <strong>Instruction:</strong> {question.question.instruction}
         </p>
-        <Feedback question_id={question?.id}/>
-      </div>
-      <div className="question-card">
         <div
           style={{
             padding: "15px",

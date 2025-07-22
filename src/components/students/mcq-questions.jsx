@@ -66,17 +66,18 @@ const McqQuestions = ({ question, index }) => {
     }
   }, [answersStore, question?.id]);
 
-  // Get correct answer text
   const correctAnswerText = question?.question?.answer?.answer;
 
   return (
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-        <p><strong>Instruction:</strong> {question.question.instruction}</p>
-       <Feedback question_id={question?.id}/>
+        <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
+        <p>
+          <strong>Instruction:</strong> {question.question.instruction}
+        </p>
         <div className="question-text">
           {typeof question?.question?.content === "string"
             ? parse(question.question.content)

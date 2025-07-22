@@ -182,12 +182,12 @@ const OpenClozeWithOptions = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-        <p>
-          <strong>Instruction:</strong> {questionData.instruction}
-        </p>
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
+        <p>
+          <strong>Instruction:</strong> {questionData.instruction}
+        </p>
         <div
           style={{
             marginTop: "5px",

@@ -164,10 +164,12 @@ const EditingQuesions = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-        <p><strong>Instruction:</strong> {instruction}</p>
-        <Feedback question_id={question?.id}/>
+        <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
+        <p>
+          <strong>Instruction:</strong> {instruction}
+        </p>
         <div
           style={{
             borderRadius: "8px",
@@ -195,9 +197,7 @@ const EditingQuesions = ({ question, index }) => {
             onClick={handleStoreData}
             disabled={submitted || !isAnyInputFilled}
             className={`dashboard-button ${
-              submitted || !isAnyInputFilled
-                ? ""
-                : ""
+              submitted || !isAnyInputFilled ? "" : ""
             }`}
           >
             {submitted ? "Submitted" : "Submit"}

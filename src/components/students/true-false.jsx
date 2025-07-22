@@ -3,7 +3,10 @@ import parse from "html-react-parser";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelected, setAttemptQuestions } from "../../_store/_reducers/question";
+import {
+  getSelected,
+  setAttemptQuestions,
+} from "../../_store/_reducers/question";
 import Feedback from "../Feedback";
 
 const TrueFalseQuestions = ({ question, index }) => {
@@ -36,11 +39,13 @@ const TrueFalseQuestions = ({ question, index }) => {
       await userService.answer(payload);
       toast.success("Answer submitted successfully.");
       setIsSubmitted(true);
-      dispatch(setAttemptQuestions({
-        question_id: question.id,
-        answer: selectedAnswer,
-        type: question?.question?.type,
-      }));
+      dispatch(
+        setAttemptQuestions({
+          question_id: question.id,
+          answer: selectedAnswer,
+          type: question?.question?.type,
+        })
+      );
     } catch (error) {
       console.error("Submission error:", error);
       toast.error("Failed to submit answer.");
@@ -48,25 +53,31 @@ const TrueFalseQuestions = ({ question, index }) => {
   };
 
   useEffect(() => {
-    const answered = answersStore.some((ans) => ans.question_id === question?.id);
+    const answered = answersStore.some(
+      (ans) => ans.question_id === question?.id
+    );
     setIsSubmitted(answered);
     if (answered) {
-      const existingAnswer = answersStore.find((ans) => ans.question_id === question?.id);
+      const existingAnswer = answersStore.find(
+        (ans) => ans.question_id === question?.id
+      );
       setSelectedAnswer(existingAnswer?.answer || "");
     }
   }, [answersStore, question?.id]);
 
-  // The correct answer from the question object
   const correctAnswer = question?.question?.answer?.choice;
 
   return (
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-        <p> <strong>Instruction:</strong> {question.question.instruction}</p>
-        <Feedback question_id={question?.id}/>
+        <Feedback question_id={question?.id} />
       </div>
       <div className="question-card mt-2">
+        <p>
+          {" "}
+          <strong>Instruction:</strong> {question.question.instruction}
+        </p>
         <div className="question-text">
           {typeof question?.question?.content === "string"
             ? parse(question.question.content)
@@ -74,7 +85,6 @@ const TrueFalseQuestions = ({ question, index }) => {
         </div>
 
         {question?.question?.options?.map((opt, idx) => {
-          // Highlight selected and correct answers visually
           const isUserSelected = selectedAnswer === opt.value;
           const isCorrect = correctAnswer === opt.value;
 
@@ -101,7 +111,10 @@ const TrueFalseQuestions = ({ question, index }) => {
                 />
                 {opt.value}
                 {isSubmitted && isCorrect && " (Correct Answer)"}
-                {isSubmitted && isUserSelected && !isCorrect && " (Your Answer)"}
+                {isSubmitted &&
+                  isUserSelected &&
+                  !isCorrect &&
+                  " (Your Answer)"}
               </label>
             </div>
           );
