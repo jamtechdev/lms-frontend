@@ -172,7 +172,16 @@ const Nav = () => {
                   <span className="text">Switch to Parent</span>
                 </button>
               )}
-
+              {(path === "/student/all-questions" ||
+                path.startsWith("/student/week-assignment")) && (
+                <button
+                  className="logout-btn d-flex align-items-center justify-content-center gap-2"
+                  onClick={() => navigate("/student")}
+                >
+                  <i className="ph ph-arrow-left"></i>
+                  Back
+                </button>
+              )}
               <span className="position-relative avatar-image">
                 <img
                   src={childImage}

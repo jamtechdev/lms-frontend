@@ -1014,6 +1014,7 @@ ul.pagination {
   align-items: center;
   margin-top: 18px;
   justify-content: center !important;
+  flex-wrap: wrap;
 }
 
 ul.pagination li.active a {

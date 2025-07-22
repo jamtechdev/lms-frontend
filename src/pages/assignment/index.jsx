@@ -3,7 +3,10 @@ import userService from "../../_services/user.service";
 import { getChildId } from "../../_store/_reducers/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { data, useParams } from "react-router-dom";
-import { getAssignmentsQuestion, removeAssignmentsQuestion } from "../../_store/_reducers/question";
+import {
+  getAssignmentsQuestion,
+  removeAssignmentsQuestion,
+} from "../../_store/_reducers/question";
 import TrueFalseAssignment from "../../components/students/assignments/true-false-assignment";
 import McqAssignment from "../../components/students/assignments/mcq-assignment";
 import ReArrangeListAssignment from "../../components/students/assignments/re-arrange-assignment";
@@ -14,6 +17,7 @@ import ComprehensionAssignment from "../../components/students/assignments/compr
 import EditingAssignment from "../../components/students/assignments/editing-assignment";
 import FillInTheBlankAssignment from "../../components/students/assignments/fill-in-the-blank-assignment";
 import toast from "react-hot-toast";
+import loader from "../../assets/images/loader.gif";
 
 const WeeklyAssignment = () => {
   const { id } = useParams();
@@ -21,7 +25,7 @@ const WeeklyAssignment = () => {
   const childId = useSelector(getChildId);
   const assignmentAnswer = useSelector(getAssignmentsQuestion);
   const [questions, setQuestions] = useState();
-
+  const [loading, setLoading] = useState(true);
   const getAssignments = async () => {
     try {
       const data = await userService.getStudentAssignment({
@@ -30,21 +34,27 @@ const WeeklyAssignment = () => {
       setQuestions(data?.data?.find((item) => item?.id == id));
     } catch (error) {
       console.error("Error", error);
+    } finally {
+      setLoading(false);
     }
   };
   const fetchAttempt = async () => {
     if (assignmentAnswer && assignmentAnswer?.length <= 0) {
-      return toast.error("Please answer at least one question before submitting.");
+      return toast.error(
+        "Please answer at least one question before submitting."
+      );
     }
-    await userService.assignmentAttempt({
-      assignment_id: id,
-      answers: assignmentAnswer,
-    }).then((data) => {
-      toast.success("Assignment submitted successfully.");
-    }).catch((error) => {
-      console.error("Error", error);
-    });
-
+    await userService
+      .assignmentAttempt({
+        assignment_id: id,
+        answers: assignmentAnswer,
+      })
+      .then((data) => {
+        toast.success("Assignment submitted successfully.");
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
   };
 
   useEffect(() => {
@@ -68,6 +78,13 @@ const WeeklyAssignment = () => {
     };
   }, []);
 
+  if (loading) {
+    return (
+      <div className="text-center mt-3">
+        <img src={loader} width={100} alt="Loading..." />
+      </div>
+    );
+  }
   return (
     <>
       {questions &&
@@ -100,7 +117,7 @@ const WeeklyAssignment = () => {
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) ==
-                "open_cloze_with_options" && (
+                  "open_cloze_with_options" && (
                   <OpenClozeWithOptionsAssignment
                     question={question}
                     index={index}
@@ -110,7 +127,7 @@ const WeeklyAssignment = () => {
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) ==
-                "open_cloze_with_dropdown_options" && (
+                  "open_cloze_with_dropdown_options" && (
                   <OpenClozeWithDropdownAssignment
                     question={question}
                     index={index}
