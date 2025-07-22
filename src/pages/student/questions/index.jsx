@@ -91,56 +91,6 @@ const AllQuestions = () => {
   return (
     <>
       <div>
-        {/* <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
-          <div className="breadcrumb mb-24">
-            <ul className="flex-align gap-4">
-              <li>
-                <Link
-                  to="/student/subjects"
-                  className="text-gray-200 fw-normal text-15 hover-text-main-600"
-                >
-                  Back to Subjects
-                </Link>
-              </li>
-              <li>
-                <span className="text-gray-500 fw-normal d-flex">
-                  <i className="ph ph-caret-right"></i>
-                </span>
-              </li>
-              <li>
-                <Link
-                  to="/student/topics"
-                  className="text-gray-200 fw-normal text-15 hover-text-main-600"
-                >
-                  Topics
-                </Link>
-              </li>
-              <li>
-                <span className="text-gray-500 fw-normal d-flex">
-                  <i className="ph ph-caret-right"></i>
-                </span>
-              </li>
-              <li>
-                <Link
-                  to="/student/question-type"
-                  className="text-gray-200 fw-normal text-15 hover-text-main-600"
-                >
-                  Question Type
-                </Link>
-              </li>
-              <li>
-                <span className="text-gray-500 fw-normal d-flex">
-                  <i className="ph ph-caret-right"></i>
-                </span>
-              </li>
-              <li>
-                <span className="text-main-600 fw-normal text-15">
-                  Questions
-                </span>
-              </li>
-            </ul>
-          </div>
-        </div> */}
         {questions && questions?.questions_array?.length == 0 && (
           <p>No Questions found</p>
         )}
