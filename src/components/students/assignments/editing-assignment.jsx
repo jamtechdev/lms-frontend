@@ -147,7 +147,7 @@ const EditingAssignment = ({ question, index }) => {
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
-         <p><strong>Instruction:</strong> {instruction}</p>
+         <p className="instruction-text"><strong>Instruction:</strong> {instruction}</p>
         <div
           style={{
             borderRadius: "8px",

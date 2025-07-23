@@ -153,7 +153,7 @@ const FillInTheBlankAssignment = ({ question, index }) => {
        <Feedback question_id={question?.id}/>
       </div>
       <div className="question-card">
-          <p><strong>Instruction:</strong> {parse(instruction || "")}</p>
+          <p className="instruction-text"><strong>Instruction:</strong> {parse(instruction || "")}</p>
         <div>{renderParsedQuestion(questionText)}</div>
         <div className="d-flex justify-content-end mt-4">
           <button

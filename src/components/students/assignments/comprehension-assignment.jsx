@@ -106,7 +106,7 @@ const ComprehensionAssignment = ({ question, index }) => {
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
-         <p><strong>Instruction:</strong> {question.question.instruction}</p>
+         <p className="instruction-text"><strong>Instruction:</strong> {question.question.instruction}</p>
         <div
           style={{
             padding: "15px",

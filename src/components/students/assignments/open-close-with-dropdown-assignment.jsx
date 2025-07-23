@@ -94,7 +94,7 @@ const OpenClozeWithDropdownAssignment = ({ question, index }) => {
      <Feedback question_id={question?.id}/>
       </div>
       <div className="question-card">
-        <p> <strong>Instruction:</strong> {questionData.instruction}</p>
+        <p className="instruction-text"> <strong>Instruction:</strong> {questionData.instruction}</p>
         <div>
           <strong>{index + 1}.</strong> {renderedParagraph}
         </div>

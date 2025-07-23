@@ -136,7 +136,7 @@ const OpenClozeWithOptionsAssignment = ({ question, index }) => {
    <Feedback question_id={question?.id}/>
       </div>
       <div className="question-card">
-          <p><strong>Instruction:</strong> {questionData.instruction}</p>
+          <p className="instruction-text"><strong>Instruction:</strong> {questionData.instruction}</p>
         <div
           style={{
             marginTop: "5px",

@@ -2063,6 +2063,7 @@ input[type="file"]::-webkit-file-upload-button {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-height: calc(100Vh - 280px);
 }
 
 .question-list > .question-header > * {
@@ -2074,7 +2075,7 @@ input[type="file"]::-webkit-file-upload-button {
   flex-direction: column;
   gap: 6px;
   position: relative;
-  padding-right: 60px;
+  padding: 0 60px 20px 0;
 }
 
 .question-list > .question-header p {
