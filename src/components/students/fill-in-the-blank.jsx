@@ -177,7 +177,7 @@ const FillInTheBlank = ({ question, index }) => {
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
-        <p>
+        <p className="instruction-text">
           <strong>Instruction:</strong> {parse(instruction || "")}
         </p>
         <div>{renderParsedQuestion(questionText)}</div>

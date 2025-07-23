@@ -921,10 +921,11 @@ table#assignmentTable td {
 .linking-container {
   display: flex;
   justify-content: space-between;
-  gap: 4rem !important;
+  gap: 15rem !important;
   padding: 0rem;
   position: relative;
-  max-width: 750px !important;
+  max-width: 1250px !important;
+  margin: auto;
 }
 
 /* Left and right sides */
@@ -2066,6 +2067,10 @@ input[type="file"]::-webkit-file-upload-button {
   min-height: calc(100Vh - 280px);
 }
 
+.question-list.assignment-question{
+  min-height: auto;
+}
+
 .question-list > .question-header > * {
   margin: 0;
 }
@@ -2089,9 +2094,9 @@ input[type="file"]::-webkit-file-upload-button {
 
 .question-list input,
 .question-list select {
-  padding: 4px !important;
+  padding: 4px 6px !important;
   border: 1px solid rgb(204, 204, 204) !important;
-  border-radius: 4px !important;
+  border-radius: 8px !important;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -2260,6 +2265,34 @@ label.kbc-option-label:has(input:checked)::after {
 
 .bg-theme-light{
   background-color: #ffebd2 !important;
+}
+
+.instruction-text {
+    color: #000;
+    margin: 0 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.instruction-text::before {
+    content: "\e2ce";
+    font-family: "Phosphor" !important;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1;
+}
+
+.option-tag {
+    display: flex;
+    gap: 10px;
+}
+
+.option-tag > *:not(strong) {
+    background: #f7941e;
+    padding: 2px 12px;
+    border-radius: 50px;
+    color: #000;
 }
 
 @media screen and (max-width:768px) {

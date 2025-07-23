@@ -90,7 +90,7 @@ const WeeklyAssignment = () => {
       {questions &&
         questions?.questions?.map((question, index) => {
           return (
-            <div className="question-list" key={index}>
+            <div className="question-list assignment-question" key={index}>
               {question &&
                 (question?.question?.type ||
                   question?.question?.question_type) == "true_false" && (

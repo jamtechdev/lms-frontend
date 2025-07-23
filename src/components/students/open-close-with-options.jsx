@@ -185,20 +185,17 @@ const OpenClozeWithOptions = ({ question, index }) => {
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
-        <p>
+        <p className="instruction-text">
           <strong>Instruction:</strong> {questionData.instruction}
         </p>
         <div
-          style={{
-            marginTop: "5px",
-            padding: "5px",
-            border: "1px solid #ccc",
-            background: "#f9f9f9",
-          }}
         >
           {options.length > 0 && (
-            <div>
-              <strong>Options:</strong> {options.join(", ")}
+            <div className="option-tag">
+              <strong>Options:</strong>
+              {options.map((option, index) => (
+                <div key={index}>{option}</div>
+              ))}
             </div>
           )}
         </div>

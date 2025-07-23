@@ -74,7 +74,7 @@ const TrueFalseQuestions = ({ question, index }) => {
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card mt-2">
-        <p>
+        <p className="instruction-text">
           {" "}
           <strong>Instruction:</strong> {question.question.instruction}
         </p>

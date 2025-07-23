@@ -406,7 +406,7 @@ const NewStudentDashboard = () => {
                 handleCloseModal();
               }}
             >
-              ✅ Start Paper
+              ✅ Start Practice
             </button>
           </div>
         </Modal.Footer>

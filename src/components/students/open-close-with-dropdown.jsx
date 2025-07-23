@@ -146,7 +146,7 @@ const OpenClozeWithDropdown = ({ question, index }) => {
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
-        <p>
+        <p className="instruction-text">
           {" "}
           <strong>Instruction:</strong> {questionData.instruction}
         </p>

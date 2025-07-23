@@ -179,7 +179,7 @@ const AllQuestions = () => {
           Prev
         </button> */}
         <button
-          className="logout-btn d-flex align-items-center justify-content-center gap-2"
+          className="logout-btn d-flex align-items-center justify-content-center gap-2 mx-auto"
           onClick={() => {
             if (page < questions?.pagination?.total_pages) {
               setPage(page + 1);
