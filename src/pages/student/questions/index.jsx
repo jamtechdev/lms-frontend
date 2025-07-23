@@ -167,6 +167,28 @@ const AllQuestions = () => {
           })}
       </div>
       <div className="mt-4 flex justify-center">
+        {/* <button
+          className="logout-btn d-flex align-items-center justify-content-center gap-2"
+          onClick={() => {
+            if (page > 1) {
+              setPage(page - 1);
+            }
+          }}
+          disabled={page <= 1}
+        >
+          Prev
+        </button> */}
+        <button
+          className="logout-btn d-flex align-items-center justify-content-center gap-2"
+          onClick={() => {
+            if (page < questions?.pagination?.total_pages) {
+              setPage(page + 1);
+            }
+          }}
+          disabled={page >= questions?.pagination?.total_pages}
+        >
+          Next
+        </button>
         <ResponsivePagination
           current={page}
           total={questions?.pagination?.total_pages}
