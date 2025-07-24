@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLevel, getStudentType } from "../../../_store/_reducers/auth";
 import userService from "../../../_services/user.service";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { removeAttemptQuestions } from "../../../_store/_reducers/question";
 import ReArrangeList from "../../../components/students/re-arrange";
 import McqQuestions from "../../../components/students/mcq-questions";
@@ -16,6 +16,7 @@ import Comprehension from "../../../components/students/comprehension";
 import loader from "../../../assets/images/loader.gif";
 import ResponsivePagination from "react-responsive-pagination";
 import "react-responsive-pagination/themes/classic.css";
+import toast from "react-hot-toast";
 
 const AllQuestions = () => {
   const location = useLocation();
@@ -29,6 +30,8 @@ const AllQuestions = () => {
   const education = useSelector(getStudentType);
   const level = useSelector(getLevel);
   const [page, setPage] = useState(1);
+  
+  const navigate = useNavigate();
   const fetchQuestion = async () => {
     setLoading(true);
     try {
@@ -183,11 +186,14 @@ const AllQuestions = () => {
           onClick={() => {
             if (page < questions?.pagination?.total_pages) {
               setPage(page + 1);
+            } else {
+              toast.success("You have finished the practice test!");
+              navigate("/student");
             }
           }}
-          disabled={page >= questions?.pagination?.total_pages}
+          disabled={false}
         >
-          Next
+          {page < questions?.pagination?.total_pages ? "Next" : "Finished"}
         </button>
         {/* <ResponsivePagination
           current={page}
