@@ -87,8 +87,8 @@ const WeeklyAssignment = () => {
   }
   return (
     <>
-      {questions &&
-        questions?.questions?.map((question, index) => {
+      {questions?.questions?.length > 0 ? (
+        questions.questions.map((question, index) => {
           return (
             <div className="question-list assignment-question" key={index}>
               {question &&
@@ -153,7 +153,10 @@ const WeeklyAssignment = () => {
                 )}
             </div>
           );
-        })}
+        })
+      ) : (
+        <p>No Questions found</p>
+      )}
       <button onClick={fetchAttempt} className="dashboard-button">
         Final Submit
       </button>
