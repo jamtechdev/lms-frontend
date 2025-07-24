@@ -334,12 +334,9 @@ const EditStudent = () => {
                         id="address"
                         name="address"
                         type="text"
-                        className="form-control py-11 ps-40"
+                        className="form-control py-11"
                         placeholder="Type your address"
                       />
-                      <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
-                        <i className="ph ph-user"></i>
-                      </span>
                     </div>
                     <ErrorMessage
                       name="address"
