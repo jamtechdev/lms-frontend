@@ -131,12 +131,12 @@ const ReArrangeList = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
+          <p className="instruction-text">
+          <strong>Instruction:</strong> {question?.question?.instruction}
+        </p>
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card mt-2">
-        <p className="instruction-text">
-          <strong>Instruction:</strong> {question?.question?.instruction}
-        </p>
         <div className="rearrangeBox mt-4">
           {words.map((word, idx) => {
             const key = `${word.value}-${idx}`;

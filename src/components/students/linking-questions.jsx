@@ -158,12 +158,12 @@ const LinkingQuestions = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
+         <p className="instruction-text">
+          <strong>Instruction:</strong> {q.question.instruction}
+        </p>
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card mb-0">
-        <p className="instruction-text">
-          <strong>Instruction:</strong> {q.question.instruction}
-        </p>
         <h2 className="question-text">{parse(q.question.content)}</h2>
 
         <div className="flex justify-center">

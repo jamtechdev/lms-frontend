@@ -851,7 +851,7 @@ button > * {
 }
 
 input:checked + .slider {
-  background-color: #0d6efd;
+  background-color: #f7941e;
 }
 
 input:checked + .slider:before {
@@ -2078,9 +2078,13 @@ input[type="file"]::-webkit-file-upload-button {
 .question-list > .question-header {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 12px;
   position: relative;
-  padding: 0 60px 20px 0;
+  padding: 20px 60px 20px 20px;
+  border-radius: 12px;
+    border: none;
+    background: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 
 .question-list > .question-header p {
@@ -2145,8 +2149,8 @@ label.kbc-option-label:has(input:checked)::after {
 
 .feedback-dropdown {
   position: absolute !important;
-  right: 0;
-  top: 0;
+  right: 15px;
+  top: 15px;
 }
 
 .feedback-dropdown-btn,
@@ -2268,18 +2272,23 @@ label.kbc-option-label:has(input:checked)::after {
 }
 
 .instruction-text {
-    color: #000;
-    margin: 0 0 24px;
+    color: #3e80f9 !important;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
+    font-weight: 600;
+    background: #ebf2fd;
+    border-radius: 50px;
+    padding: 2px 12px 2px 2px;
+    width: fit-content;
+    font-size: 14px;
 }
 
 .instruction-text::before {
     content: "\e2ce";
     font-family: "Phosphor" !important;
     font-weight: 400;
-    font-size: 30px;
+    font-size: 24px;
     line-height: 1;
 }
 
@@ -2302,4 +2311,9 @@ label.kbc-option-label:has(input:checked)::after {
     background-repeat: no-repeat;
     min-height: auto !important;
   }
+}
+
+.moving-button > button {
+    max-width: 220px;
+    width: 100%;
 }

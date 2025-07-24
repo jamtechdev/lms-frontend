@@ -166,8 +166,8 @@ const AllQuestions = () => {
             );
           })}
       </div>
-      <div className="mt-4 flex justify-center">
-        {/* <button
+      <div className="mt-4 d-flex gap-5 justify-content-center moving-button">
+        <button
           className="logout-btn d-flex align-items-center justify-content-center gap-2"
           onClick={() => {
             if (page > 1) {
@@ -177,9 +177,9 @@ const AllQuestions = () => {
           disabled={page <= 1}
         >
           Prev
-        </button> */}
+        </button>
         <button
-          className="logout-btn d-flex align-items-center justify-content-center gap-2 mx-auto"
+          className="logout-btn d-flex align-items-center justify-content-center gap-2"
           onClick={() => {
             if (page < questions?.pagination?.total_pages) {
               setPage(page + 1);
@@ -189,11 +189,11 @@ const AllQuestions = () => {
         >
           Next
         </button>
-        <ResponsivePagination
+        {/* <ResponsivePagination
           current={page}
           total={questions?.pagination?.total_pages}
           onPageChange={setPage}
-        />
+        /> */}
       </div>
     </>
   );

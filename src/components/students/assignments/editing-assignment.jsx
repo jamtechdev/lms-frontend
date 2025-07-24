@@ -144,10 +144,11 @@ const EditingAssignment = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
+          <p className="instruction-text"><strong>Instruction:</strong> {instruction}</p>
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
-         <p className="instruction-text"><strong>Instruction:</strong> {instruction}</p>
+       
         <div
           style={{
             borderRadius: "8px",

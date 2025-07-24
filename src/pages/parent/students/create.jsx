@@ -171,7 +171,7 @@ const CreateStudent = () => {
                         placeholder="Type your email"
                       />
                       <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
-                        <i className="ph ph-user"></i>
+                        <i className="ph ph-envelope"></i>
                       </span>
                     </div>
                     <ErrorMessage
@@ -195,7 +195,7 @@ const CreateStudent = () => {
                         placeholder="Type your phone"
                       />
                       <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
-                        <i className="ph ph-user"></i>
+                        <i className="ph ph-device-mobile"></i>
                       </span>
                     </div>
                     <ErrorMessage
