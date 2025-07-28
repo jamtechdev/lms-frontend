@@ -106,7 +106,7 @@ const Subscription = () => {
           <div className="row gy-4 d-flex">
             {trialPlan && (
               <div className="col-md-4 col-sm-6">
-                <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative h-100">
+                <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative">
                   <span className="plan-badge py-1 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-xs">
                     Free Trial
                   </span>
@@ -139,7 +139,7 @@ const Subscription = () => {
             )}
 
             <div className="col-md-4 col-sm-6">
-              <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative h-100">
+              <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative">
                 <span className="plan-badge py-1 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-xs">
                   Recommended
                 </span>
@@ -195,7 +195,7 @@ const Subscription = () => {
             </div>
 
             <div className="col-md-4 col-sm-6">
-              <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative h-100">
+              <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative">
                 <span className="plan-badge py-1 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-xs">
                   Best Value
                 </span>
