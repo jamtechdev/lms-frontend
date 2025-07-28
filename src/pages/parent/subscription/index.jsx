@@ -2,11 +2,13 @@ import { Link } from "react-router-dom";
 import loader from "../../../assets/images/loader.gif";
 import { useEffect, useState } from "react";
 import parentService from "../../../_services/parent.service";
+import toast from "react-hot-toast";
 
 const Subscription = () => {
   const [plans, setPlans] = useState({ trial: [], monthly: [], annually: [] });
   const [loading, setLoading] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedMonthlyPlan, setSelectedMonthlyPlan] = useState(null);
+  const [selectedAnnualPlan, setSelectedAnnualPlan] = useState(null);
 
   const fetchSubscription = async () => {
     setLoading(true);
@@ -14,15 +16,50 @@ const Subscription = () => {
       const response = await parentService.getSubscribe();
       setPlans(response.data);
     } catch (error) {
-      console.log("Error", error);
+      toast.error("Error fetching subscription plans");
     } finally {
       setLoading(false);
     }
   };
 
+  const CreateSubscription = async (planId) => {
+    try {
+      const response = await parentService.createSubscribe({ plan_id: planId });
+      const checkoutUrl = response.data?.checkout_url;
+      if (checkoutUrl) {
+        toast.success("Subscription created! Redirecting to payment page...");
+        window.open(checkoutUrl, "_blank");
+      } else {
+        console.log("No checkout URL available");
+      }
+    } catch (error) {
+      toast.error("Error creating subscription");
+    }
+  };
+
+  const trialPlan = plans.trial[0];
+  const monthlyPlans = plans.monthly;
+  const annualPlans = plans.annually;
+
   useEffect(() => {
     fetchSubscription();
   }, []);
+
+  const handleMonthlyGetStarted = () => {
+    if (selectedMonthlyPlan) {
+      CreateSubscription(selectedMonthlyPlan);
+    } else {
+      toast.error("Please select a monthly plan");
+    }
+  };
+
+  const handleAnnualGetStarted = () => {
+    if (selectedAnnualPlan) {
+      CreateSubscription(selectedAnnualPlan);
+    } else {
+      toast.error("Please select an annual plan");
+    }
+  };
 
   if (loading) {
     return (
@@ -31,14 +68,6 @@ const Subscription = () => {
       </div>
     );
   }
-
-  const trialPlan = plans.trial[0];
-  const monthlyPlans = plans.monthly;
-  const annualPlans = plans.annually;
-
-  const handlePlanSelect = (planId) => {
-    setSelectedPlan(planId);
-  };
 
   return (
     <div>
@@ -78,12 +107,19 @@ const Subscription = () => {
             {trialPlan && (
               <div className="col-md-4 col-sm-6 d-flex">
                 <div className="plan-item rounded-16 border border-gray-100 p-3 h-100 w-100 d-flex flex-column">
+                  <span className="plan-badge py-4 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-15">
+                    Trial Plan
+                  </span>
                   <h3 className="mb-4">{trialPlan.name}</h3>
                   <p className="text-gray-600 flex-grow-1">
                     {trialPlan.description}
                   </p>
                   <h2 className="h1 fw-medium text-main mb-32 mt-16">Free</h2>
-                  <Link to="#" className="dashboard-button mt-auto">
+                  <Link
+                    to="#"
+                    className="dashboard-button mt-auto"
+                    onClick={() => CreateSubscription(trialPlan.id)}
+                  >
                     Get Started
                   </Link>
                 </div>
@@ -92,6 +128,9 @@ const Subscription = () => {
 
             <div className="col-md-4 col-sm-6 d-flex">
               <div className="plan-item rounded-16 border border-gray-100 p-3 h-100 w-100 d-flex flex-column">
+                <span className="plan-badge py-4 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-15">
+                  Recommended
+                </span>
                 <h3 className="mb-4">Monthly Plans</h3>
                 <p className="text-gray-600">
                   Starting from ${monthlyPlans[0]?.price}/month
@@ -101,16 +140,24 @@ const Subscription = () => {
                     <div key={plan.id} className="mb-2">
                       <label className="d-flex align-items-center gap-2">
                         <input
-                          type="checkbox"
-                          checked={selectedPlan === plan.id}
-                          onChange={() => handlePlanSelect(plan.id)}
+                          type="radio"
+                          name="monthly-plan"
+                          checked={selectedMonthlyPlan === plan.id}
+                          onChange={() => {
+                            setSelectedMonthlyPlan(plan.id);
+                            setSelectedAnnualPlan(null);
+                          }}
                         />
                         {plan.name} - ${plan.price}/month
                       </label>
                     </div>
                   ))}
                 </div>
-                <Link to="#" className="dashboard-button mt-auto">
+                <Link
+                  to="#"
+                  className="dashboard-button mt-auto"
+                  onClick={handleMonthlyGetStarted}
+                >
                   Get Started
                 </Link>
               </div>
@@ -118,6 +165,9 @@ const Subscription = () => {
 
             <div className="col-md-4 col-sm-6 d-flex">
               <div className="plan-item rounded-16 border border-gray-100 p-3 h-100 w-100 d-flex flex-column">
+                <span className="plan-badge py-4 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-15">
+                  Best Value
+                </span>
                 <h3 className="mb-4">Annual Plans</h3>
                 <p className="text-gray-600">
                   Starting from ${annualPlans[0]?.price}/year
@@ -127,16 +177,24 @@ const Subscription = () => {
                     <div key={plan.id} className="mb-2">
                       <label className="d-flex align-items-center gap-2">
                         <input
-                          type="checkbox"
-                          checked={selectedPlan === plan.id}
-                          onChange={() => handlePlanSelect(plan.id)}
+                          type="radio"
+                          name="annual-plan"
+                          checked={selectedAnnualPlan === plan.id}
+                          onChange={() => {
+                            setSelectedAnnualPlan(plan.id);
+                            setSelectedMonthlyPlan(null);
+                          }}
                         />
                         {plan.name} - ${plan.price}/year
                       </label>
                     </div>
                   ))}
                 </div>
-                <Link to="#" className="dashboard-button mt-auto">
+                <Link
+                  to="#"
+                  className="dashboard-button mt-auto"
+                  onClick={handleAnnualGetStarted}
+                >
                   Get Started
                 </Link>
               </div>

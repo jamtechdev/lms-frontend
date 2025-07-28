@@ -23,6 +23,7 @@ const parentService = {
     updateAssignments,
     updateById,
     getSubscribe,
+    createSubscribe,
 };
 
 async function getStudentLevel() {
@@ -119,5 +120,8 @@ async function updateAssignments(data) {
 }
 async function getSubscribe() {
     return await axiosInstance.get(`/api/v1/subscription/subscription-plans`);
+}
+async function createSubscribe(data) {
+    return await axiosInstance.post(`/api/v1/subscription/create`, data);
 }
 export default parentService;
