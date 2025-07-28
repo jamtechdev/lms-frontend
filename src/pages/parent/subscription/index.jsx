@@ -103,11 +103,11 @@ const Subscription = () => {
         </div>
 
         <div className="card-body">
-          <div className="row gy-4 d-flex align-items-stretch">
+          <div className="row gy-4 d-flex">
             {trialPlan && (
-              <div className="col-md-4 col-sm-6 d-flex">
-                <div className="plan-item rounded-16 border border-gray-100 p-3 h-100 w-100 d-flex flex-column">
-                  <span className="plan-badge py-4 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-15">
+              <div className="col-md-4 col-sm-6">
+                <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative">
+                  <span className="plan-badge py-1 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-xs">
                     Trial Plan
                   </span>
                   <h3 className="mb-4">{trialPlan.name}</h3>
@@ -127,7 +127,6 @@ const Subscription = () => {
                       <strong>Subject Limit:</strong> {trialPlan.subject_limit}
                     </li>
                   </ul>
-                  <h2 className="h1 fw-medium text-main mb-32 mt-16">Free</h2>
                   <Link
                     to="#"
                     className="dashboard-button mt-auto"
@@ -139,9 +138,9 @@ const Subscription = () => {
               </div>
             )}
 
-            <div className="col-md-4 col-sm-6 d-flex">
-              <div className="plan-item rounded-16 border border-gray-100 p-3 h-100 w-100 d-flex flex-column">
-                <span className="plan-badge py-4 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-15">
+            <div className="col-md-4 col-sm-6">
+              <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative">
+                <span className="plan-badge py-1 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-xs">
                   Recommended
                 </span>
                 <h3 className="mb-4">Monthly Plans</h3>
@@ -150,7 +149,7 @@ const Subscription = () => {
                 </p>
                 <div className="mt-3 flex-grow-1">
                   {monthlyPlans.map((plan) => (
-                    <div key={plan.id} className="mb-2">
+                    <div key={plan.id} className="mb-2 plan-accordion-content">
                       <label className="d-flex align-items-center gap-2 plan-container">
                         <input
                           type="radio"
@@ -195,9 +194,9 @@ const Subscription = () => {
               </div>
             </div>
 
-            <div className="col-md-4 col-sm-6 d-flex">
-              <div className="plan-item rounded-16 border border-gray-100 p-3 h-100 w-100 d-flex flex-column">
-                <span className="plan-badge py-4 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-15">
+            <div className="col-md-4 col-sm-6">
+              <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative">
+                <span className="plan-badge py-1 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-xs">
                   Best Value
                 </span>
                 <h3 className="mb-4">Annual Plans</h3>
@@ -206,7 +205,7 @@ const Subscription = () => {
                 </p>
                 <div className="mt-3 flex-grow-1">
                   {annualPlans.map((plan) => (
-                    <div key={plan.id} className="mb-2">
+                    <div key={plan.id} className="mb-2 plan-accordion-content">
                       <label className="d-flex align-items-center gap-2 plan-container">
                         <input
                           type="radio"

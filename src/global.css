@@ -2323,32 +2323,47 @@ label.kbc-option-label:has(input:checked)::after {
   color: #dc3545 !important;
 }
 
-.plan-container {
+.plan-accordion-content {
   padding: 10px;
   border: 1px solid #417ff4;
   border-radius: 10px;
-  box-shadow: 0px 0px 10px #00000025;
+}
 
+.plan-accordion-content label {
+  margin: 0 !important;
+}
+
+.plan-container {
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.plan-container>input {
+  accent-color: #417ff4;
+  cursor: pointer;
 }
 
 .plans-list {
-  box-shadow: 5px 5px 10px 5px #447eef33 inset;
   border-radius: 10px 10px;
   border: 1px solid #447eef;
-  background: #f6f6f6;
- display: none;
-    
+  background: #447eef33;
+  display: none;
+  font-size: 14px;
+  padding: 8px !important;
+  margin: 8px 0 0;
 }
 
-.show-list{
-    max-height: 100%;
-display: block !important;
-  padding: 15px 20px 20px 20px !important;
+.show-list {
+  max-height: 100%;
+  display: block !important;
+  padding: 12px !important;
 }
-.free-plan{
-  box-shadow: 5px 5px 10px 5px #447eef33 inset;
+
+.free-plan {
   border-radius: 10px 10px;
   border: 1px solid #447eef;
-  background: #f6f6f6;
-  padding: 15px 20px 20px 20px !important;
+  background: #447eef33;
+  font-size: 14px;
+  padding: 8px !important;
 }
