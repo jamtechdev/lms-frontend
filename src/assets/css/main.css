@@ -1341,6 +1341,7 @@ td.fc-header-center {
 /* =========================== Pricing Plan Css Start ======================= */
 .plan-item {
   padding: 24px 32px;
+  transition: transform 0.3s ease-in-out;
 }
 
 @media screen and (max-width: 1199px) {
@@ -1351,6 +1352,12 @@ td.fc-header-center {
 
 .plan-item:hover {
   border-color: var(--main-600) !important;
+      border-color: var(--main-600) !important;
+    transform: scale(1.1);
+    background: #f0f5ff00;
+    box-shadow: 0px 0px 10px #00000025;
+    z-index: 3;
+    backdrop-filter: blur(6px);
 }
 
 .plan-item.active {

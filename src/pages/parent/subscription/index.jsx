@@ -111,10 +111,11 @@ const Subscription = () => {
                     Trial Plan
                   </span>
                   <h3 className="mb-4">{trialPlan.name}</h3>
-                  <p className="text-gray-600 flex-grow-1">
+                  <p className="text-gray-600">
+                    <strong>Description: </strong>
                     {trialPlan.description}
                   </p>
-                  <ul className="list-unstyled text-gray-600 mb-3">
+                  <ul className="list-unstyled text-gray-600 mb-3 free-plan">
                     <li>
                       <strong>Duration:</strong> {trialPlan.duration_days} days
                     </li>
@@ -150,7 +151,7 @@ const Subscription = () => {
                 <div className="mt-3 flex-grow-1">
                   {monthlyPlans.map((plan) => (
                     <div key={plan.id} className="mb-2">
-                      <label className="d-flex align-items-center gap-2">
+                      <label className="d-flex align-items-center gap-2 plan-container">
                         <input
                           type="radio"
                           name="monthly-plan"
@@ -162,7 +163,11 @@ const Subscription = () => {
                         />
                         {plan.name} - ${plan.price}/month
                       </label>
-                      <ul className="list-unstyled text-gray-600 mb-0 ps-3">
+                      <ul
+                        className={`list-unstyled text-gray-600 mb-0 ps-3 plans-list ${
+                          selectedMonthlyPlan === plan.id ? "show-list" : ""
+                        }`}
+                      >
                         <li>
                           <strong>Duration:</strong> {plan.duration_days} days
                         </li>
@@ -202,7 +207,7 @@ const Subscription = () => {
                 <div className="mt-3 flex-grow-1">
                   {annualPlans.map((plan) => (
                     <div key={plan.id} className="mb-2">
-                      <label className="d-flex align-items-center gap-2">
+                      <label className="d-flex align-items-center gap-2 plan-container">
                         <input
                           type="radio"
                           name="annual-plan"
@@ -214,7 +219,11 @@ const Subscription = () => {
                         />
                         {plan.name} - ${plan.price}/year
                       </label>
-                      <ul className="list-unstyled text-gray-600 mb-0 ps-3">
+                      <ul
+                        className={`list-unstyled text-gray-600 mb-0 ps-3 plans-list ${
+                          selectedAnnualPlan === plan.id ? "show-list" : ""
+                        }`}
+                      >
                         <li>
                           <strong>Duration:</strong> {plan.duration_days} days
                         </li>

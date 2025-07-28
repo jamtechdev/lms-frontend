@@ -2322,3 +2322,33 @@ label.kbc-option-label:has(input:checked)::after {
 .text-red-600 {
   color: #dc3545 !important;
 }
+
+.plan-container {
+  padding: 10px;
+  border: 1px solid #417ff4;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px #00000025;
+
+}
+
+.plans-list {
+  box-shadow: 5px 5px 10px 5px #447eef33 inset;
+  border-radius: 10px 10px;
+  border: 1px solid #447eef;
+  background: #f6f6f6;
+ display: none;
+    
+}
+
+.show-list{
+    max-height: 100%;
+display: block !important;
+  padding: 15px 20px 20px 20px !important;
+}
+.free-plan{
+  box-shadow: 5px 5px 10px 5px #447eef33 inset;
+  border-radius: 10px 10px;
+  border: 1px solid #447eef;
+  background: #f6f6f6;
+  padding: 15px 20px 20px 20px !important;
+}
