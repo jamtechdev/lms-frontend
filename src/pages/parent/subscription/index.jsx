@@ -120,7 +120,7 @@ const Subscription = () => {
                       <strong>Duration:</strong> {trialPlan.duration_days} days
                     </li>
                     <li>
-                      <strong>Levels</strong>{" "}
+                      <strong>Levels:</strong>{" "}
                       {trialPlan.level_ids?.join(", ") || "N/A"}
                     </li>
                     <li>
