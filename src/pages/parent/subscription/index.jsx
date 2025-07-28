@@ -114,6 +114,18 @@ const Subscription = () => {
                   <p className="text-gray-600 flex-grow-1">
                     {trialPlan.description}
                   </p>
+                  <ul className="list-unstyled text-gray-600 mb-3">
+                    <li>
+                      <strong>Duration:</strong> {trialPlan.duration_days} days
+                    </li>
+                    <li>
+                      <strong>Levels</strong>{" "}
+                      {trialPlan.level_ids?.join(", ") || "N/A"}
+                    </li>
+                    <li>
+                      <strong>Subject Limit:</strong> {trialPlan.subject_limit}
+                    </li>
+                  </ul>
                   <h2 className="h1 fw-medium text-main mb-32 mt-16">Free</h2>
                   <Link
                     to="#"
@@ -150,6 +162,21 @@ const Subscription = () => {
                         />
                         {plan.name} - ${plan.price}/month
                       </label>
+                      <ul className="list-unstyled text-gray-600 mb-0 ps-3">
+                        <li>
+                          <strong>Duration:</strong> {plan.duration_days} days
+                        </li>
+                        <li>
+                          <strong>Levels:</strong>{" "}
+                          {plan.level_ids?.join(", ") || "N/A"}
+                        </li>
+                        <li>
+                          <strong>Subject Limit:</strong> {plan.subject_limit}
+                        </li>
+                        <li>
+                          <strong>Description:</strong> {plan.description}
+                        </li>
+                      </ul>
                     </div>
                   ))}
                 </div>
@@ -187,6 +214,21 @@ const Subscription = () => {
                         />
                         {plan.name} - ${plan.price}/year
                       </label>
+                      <ul className="list-unstyled text-gray-600 mb-0 ps-3">
+                        <li>
+                          <strong>Duration:</strong> {plan.duration_days} days
+                        </li>
+                        <li>
+                          <strong>Levels:</strong>{" "}
+                          {plan.level_ids?.join(", ") || "N/A"}
+                        </li>
+                        <li>
+                          <strong>Subject Limit:</strong> {plan.subject_limit}
+                        </li>
+                        <li>
+                          <strong>Description:</strong> {plan.description}
+                        </li>
+                      </ul>
                     </div>
                   ))}
                 </div>
