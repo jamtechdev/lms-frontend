@@ -72,7 +72,7 @@ const McqQuestions = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-          <p className="instruction-text">
+        <p className="instruction-text">
           <strong>Instruction:</strong> {question.question.instruction}
         </p>
         <Feedback question_id={question?.id} />
@@ -117,16 +117,16 @@ const McqQuestions = ({ question, index }) => {
                     !isCorrect &&
                     " (Your Answer)"}
                 </label>
+                {isSubmitted && (
+                  <div className="ml-4 text-sm w-1/2">
+                    <strong>Explanation:</strong> {parse(opt.explanation)}
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
 
-        {/* {isSubmitted && (
-          <div className="mt-4 p-3 border rounded bg-green-100 text-green-800 font-semibold">
-            Correct Answer: <span>{correctAnswerText}</span>
-          </div>
-        )} */}
         <div className="d-flex justify-content-end mt-4">
           <button
             className="dashboard-button"
