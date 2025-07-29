@@ -8,6 +8,7 @@ import {
   setAttemptQuestions,
 } from "../../_store/_reducers/question";
 import Feedback from "../Feedback";
+import ChatgptIcon from "../ChatgptIcon";
 
 const McqQuestions = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -75,6 +76,7 @@ const McqQuestions = ({ question, index }) => {
         <p className="instruction-text">
           <strong>Instruction:</strong> {question.question.instruction}
         </p>
+        <ChatgptIcon/>
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">

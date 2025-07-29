@@ -1304,6 +1304,7 @@ td.fc-header-center {
 .plan-item {
   padding: 24px 32px;
   transition: transform 0.3s ease-in-out;
+  min-height: calc(400px + 5px);
 }
 
 @media screen and (max-width: 1199px) {

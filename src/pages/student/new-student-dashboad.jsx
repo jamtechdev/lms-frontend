@@ -282,7 +282,8 @@ const NewStudentDashboard = () => {
               <h2 className="pb-2 border-bottom mb-3">
                 📃 Your Past Assessments
               </h2>
-              <Table responsive>
+              <div className="table-height">
+                 <Table responsive>
                 <thead>
                   <tr>
                     <th>Subject</th>
@@ -325,6 +326,7 @@ const NewStudentDashboard = () => {
                   )}
                 </tbody>
               </Table>
+              </div>
             </Card.Body>
           </Card>
         </Col>
