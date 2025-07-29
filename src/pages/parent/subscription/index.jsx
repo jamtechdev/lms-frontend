@@ -9,7 +9,7 @@ const Subscription = () => {
   const [loading, setLoading] = useState(false);
   const [selectedMonthlyPlan, setSelectedMonthlyPlan] = useState(null);
   const [selectedAnnualPlan, setSelectedAnnualPlan] = useState(null);
-
+  const [selectedPlanId, setSelectedPlanId] = useState(null);
   const fetchSubscription = async () => {
     setLoading(true);
     try {
@@ -40,10 +40,24 @@ const Subscription = () => {
   const trialPlan = plans.trial[0];
   const monthlyPlans = plans.monthly;
   const annualPlans = plans.annually;
-
   useEffect(() => {
     fetchSubscription();
   }, []);
+
+  const getsubject = async (planId) => {
+    try {
+      const response = await parentService.getPlanSubject({ plan_id: planId });
+      console.log(response, "Plan Subjects for plan:", planId);
+    } catch (error) {
+      toast.error("Error fetching plan subjects");
+    }
+  };
+
+  useEffect(() => {
+    if (selectedPlanId) {
+      getsubject(selectedPlanId);
+    }
+  }, [selectedPlanId]);
 
   const handleMonthlyGetStarted = () => {
     if (selectedMonthlyPlan) {
@@ -119,13 +133,6 @@ const Subscription = () => {
                     <li>
                       <strong>Duration:</strong> {trialPlan.duration_days} days
                     </li>
-                    <li>
-                      <strong>Levels:</strong>{" "}
-                      {trialPlan.level_ids?.join(", ") || "N/A"}
-                    </li>
-                    <li>
-                      <strong>Subject Limit:</strong> {trialPlan.subject_limit}
-                    </li>
                   </ul>
                   <Link
                     to="#"
@@ -158,6 +165,7 @@ const Subscription = () => {
                           onChange={() => {
                             setSelectedMonthlyPlan(plan.id);
                             setSelectedAnnualPlan(null);
+                            setSelectedPlanId(plan.id);
                           }}
                         />
                         {plan.name} - ${plan.price}/month
@@ -167,16 +175,6 @@ const Subscription = () => {
                           selectedMonthlyPlan === plan.id ? "show-list" : ""
                         }`}
                       >
-                        <li>
-                          <strong>Duration:</strong> {plan.duration_days} days
-                        </li>
-                        <li>
-                          <strong>Levels:</strong>{" "}
-                          {plan.level_ids?.join(", ") || "N/A"}
-                        </li>
-                        <li>
-                          <strong>Subject Limit:</strong> {plan.subject_limit}
-                        </li>
                         <li>
                           <strong>Description:</strong> {plan.description}
                         </li>
@@ -214,6 +212,7 @@ const Subscription = () => {
                           onChange={() => {
                             setSelectedAnnualPlan(plan.id);
                             setSelectedMonthlyPlan(null);
+                            setSelectedPlanId(plan.id);
                           }}
                         />
                         {plan.name} - ${plan.price}/year
@@ -223,16 +222,6 @@ const Subscription = () => {
                           selectedAnnualPlan === plan.id ? "show-list" : ""
                         }`}
                       >
-                        <li>
-                          <strong>Duration:</strong> {plan.duration_days} days
-                        </li>
-                        <li>
-                          <strong>Levels:</strong>{" "}
-                          {plan.level_ids?.join(", ") || "N/A"}
-                        </li>
-                        <li>
-                          <strong>Subject Limit:</strong> {plan.subject_limit}
-                        </li>
                         <li>
                           <strong>Description:</strong> {plan.description}
                         </li>

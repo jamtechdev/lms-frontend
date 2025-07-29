@@ -25,6 +25,8 @@ const parentService = {
     getSubscribe,
     createSubscribe,
     getGem,
+    getPlanSubject,
+    getAssignSubject,
 };
 
 async function getStudentLevel() {
@@ -127,5 +129,11 @@ async function createSubscribe(data) {
 }
 async function getGem() {
     return await axiosInstance.get(`/api/v1/assignments/children-gems`);
+}
+async function getPlanSubject(data) {
+    return await axiosInstance.post(`/api/v1/subscription/get-subject`, data);
+}
+async function getAssignSubject(data) {
+    return await axiosInstance.post(`/api/v1/subscription/assign-subject`, data);
 }
 export default parentService;
