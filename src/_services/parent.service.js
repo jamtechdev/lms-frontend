@@ -22,6 +22,11 @@ const parentService = {
     getQuestions,
     updateAssignments,
     updateById,
+    getSubscribe,
+    createSubscribe,
+    getGem,
+    getPlanSubject,
+    getAssignSubject,
 };
 
 async function getStudentLevel() {
@@ -115,5 +120,20 @@ async function updateById(data) {
 }
 async function updateAssignments(data) {
     return await axiosInstance.post(`api/v1/assignments/update`, data);
+}
+async function getSubscribe() {
+    return await axiosInstance.get(`/api/v1/subscription/subscription-plans`);
+}
+async function createSubscribe(data) {
+    return await axiosInstance.post(`/api/v1/subscription/create`, data);
+}
+async function getGem() {
+    return await axiosInstance.get(`/api/v1/assignments/children-gems`);
+}
+async function getPlanSubject(data) {
+    return await axiosInstance.post(`/api/v1/subscription/get-subject`, data);
+}
+async function getAssignSubject(data) {
+    return await axiosInstance.post(`/api/v1/subscription/assign-subject`, data);
 }
 export default parentService;

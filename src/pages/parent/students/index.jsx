@@ -112,29 +112,6 @@ const StudentList = () => {
               </li>
             </ul>
           </div>
-
-          {/* <div className="flex-align gap-8 flex-wrap">
-            <div className="position-relative text-gray-500 flex-align gap-4 text-13">
-              <span className="text-inherit">Sort by: </span>
-              <div className="flex-align text-gray-500 text-13 border border-gray-100 rounded-4 ps-20 focus-border-main-600 bg-white">
-                <span className="text-lg"><i className="ph ph-funnel-simple"></i></span>
-                <select className="form-control ps-8 pe-20 py-16 border-0 text-inherit rounded-4 text-center">
-                  <option value="1" selected>Popular</option>
-                  <option value="1">Latest</option>
-                  <option value="1">Trending</option>
-                  <option value="1">Matches</option>
-                </select>
-              </div>
-            </div>
-            <div className="flex-align text-gray-500 text-13 border border-gray-100 rounded-4 ps-20 focus-border-main-600 bg-white">
-              <span className="text-lg"><i className="ph ph-layout"></i></span>
-              <select className="form-control ps-8 pe-20 py-16 border-0 text-inherit rounded-4 text-center" id="exportOptions">
-                <option value="" selected disabled>Export</option>
-                <option value="csv">CSV</option>
-                <option value="json">JSON</option>
-              </select>
-            </div>
-          </div> */}
         </div>
 
         <div className="d-flex align-items-center justify-content-between mb-2">
@@ -144,71 +121,78 @@ const StudentList = () => {
           </Link>
         </div>
         <div className="table-responsive">
- <table className="student-table table table-bordered">
-          <thead>
-            <tr>
-              <th className="text-white-300">Avatar</th>
-              <th className="text-white-300">Name</th>
-              <th className="text-white-300">Email</th>
-              <th className="text-white-300">Phone</th>
-              <th className="text-white-300">Student Type</th>
-              <th className="text-white-300">Student Level</th>
-              <th className="text-white-300">Address</th>
-              <th className="text-white-300">Lock Code</th>
-              <th className="text-white-300">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {students &&
-              students?.students?.map((student) => (
-                <tr key={student?.id}>
-                  <td>
-                    <img
-                      src={student?.avatar}
-                      alt="avatar"
-                      className="avatar-img"
-                    />
-                  </td>
-                  <td>
-                    {student?.first_name} {student?.last_name}
-                  </td>
-                  <td>{student?.email}</td>
-                  <td>{student?.phone}</td>
-                  <td>{student?.student_type}</td>
-                  <td>{student?.student_level}</td>
-                  <td>{student?.address}</td>
-                  <td>{student?.lock_code}</td>
-                  <td style={{ textAlign: "center" }}>
-                    <label className="switch">
-                      <input
-                        type="checkbox"
-                        checked={student?.lock_code_enabled}
-                        onChange={() => handleToggle(student)}
-                        disabled={lockCodeUpdating}
+          <table className="student-table table table-bordered">
+            <thead>
+              <tr>
+                <th className="text-white-300">Avatar</th>
+                <th className="text-white-300">Name</th>
+                <th className="text-white-300">Email</th>
+                <th className="text-white-300">Phone</th>
+                <th className="text-white-300">Student Type</th>
+                <th className="text-white-300">Student Level</th>
+                <th className="text-white-300">Address</th>
+                <th className="text-white-300">Lock Code</th>
+                <th className="text-white-300">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {students && students?.students?.length > 0 ? (
+                students?.students?.map((student) => (
+                  <tr key={student?.id}>
+                    <td>
+                      <img
+                        src={student?.avatar}
+                        alt="avatar"
+                        className="avatar-img"
                       />
-                      <span className="slider round"></span>
-                    </label>
-                    <button
-                      className="icon-button"
-                      onClick={() => handleEdit(student.id)}
-                      title="Edit"
-                    >
-                      <i className="ph ph-pencil-simple"></i>
-                    </button>
-                    <button
-                      className="icon-button text-danger ms-2"
-                      onClick={() => handleDelete(student.id)}
-                      title="Delete"
-                    >
-                      <i className="ph ph-trash"></i>
-                    </button>
+                    </td>
+                    <td>
+                      {student?.first_name} {student?.last_name}
+                    </td>
+                    <td>{student?.email}</td>
+                    <td>{student?.phone}</td>
+                    <td>{student?.student_type}</td>
+                    <td>{student?.student_level}</td>
+                    <td>{student?.address}</td>
+                    <td>{student?.lock_code}</td>
+                    <td style={{ textAlign: "center" }}>
+                      <label className="switch">
+                        <input
+                          type="checkbox"
+                          checked={student?.lock_code_enabled}
+                          onChange={() => handleToggle(student)}
+                          disabled={lockCodeUpdating}
+                        />
+                        <span className="slider round"></span>
+                      </label>
+                      <button
+                        className="icon-button"
+                        onClick={() => handleEdit(student.id)}
+                        title="Edit"
+                      >
+                        <i className="ph ph-pencil-simple"></i>
+                      </button>
+                      <button
+                        className="icon-button text-danger ms-2"
+                        onClick={() => handleDelete(student.id)}
+                        title="Delete"
+                      >
+                        <i className="ph ph-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="9" className="text-center">
+                    No students found.
                   </td>
                 </tr>
-              ))}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
         </div>
-        {/* Pagination Controls */}
+
         <ResponsivePagination
           current={students?.pagination?.current_page}
           total={students?.pagination?.total_pages}

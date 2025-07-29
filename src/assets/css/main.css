@@ -109,98 +109,62 @@
   --size-160: 10rem;
   --size-164: 10.25rem;
   --size-190: 11.875rem;
-  --main-50: hsl(
-    var(--main-h),
-    var(--main-s),
-    calc(var(--main-l) + (100% - var(--main-l)) * 0.9)
-  );
-  --main-100: hsl(
-    var(--main-h),
-    var(--main-s),
-    calc(var(--main-l) + (100% - var(--main-l)) * 0.8)
-  );
-  --main-200: hsl(
-    var(--main-h),
-    var(--main-s),
-    calc(var(--main-l) + (100% - var(--main-l)) * 0.7)
-  );
-  --main-300: hsl(
-    var(--main-h),
-    var(--main-s),
-    calc(var(--main-l) + (100% - var(--main-l)) * 0.6)
-  );
-  --main-400: hsl(
-    var(--main-h),
-    var(--main-s),
-    calc(var(--main-l) + (100% - var(--main-l)) * 0.5)
-  );
-  --main-500: hsl(
-    var(--main-h),
-    var(--main-s),
-    calc(var(--main-l) + (100% - var(--main-l)) * 0.4)
-  );
+  --main-50: hsl(var(--main-h),
+      var(--main-s),
+      calc(var(--main-l) + (100% - var(--main-l)) * 0.9));
+  --main-100: hsl(var(--main-h),
+      var(--main-s),
+      calc(var(--main-l) + (100% - var(--main-l)) * 0.8));
+  --main-200: hsl(var(--main-h),
+      var(--main-s),
+      calc(var(--main-l) + (100% - var(--main-l)) * 0.7));
+  --main-300: hsl(var(--main-h),
+      var(--main-s),
+      calc(var(--main-l) + (100% - var(--main-l)) * 0.6));
+  --main-400: hsl(var(--main-h),
+      var(--main-s),
+      calc(var(--main-l) + (100% - var(--main-l)) * 0.5));
+  --main-500: hsl(var(--main-h),
+      var(--main-s),
+      calc(var(--main-l) + (100% - var(--main-l)) * 0.4));
   --main-600: hsl(var(--main-h), var(--main-s), var(--main-l));
-  --main-700: hsl(
-    var(--main-h),
-    var(--main-s),
-    calc(var(--main-l) - var(--main-l) * 0.1)
-  );
-  --main-800: hsl(
-    var(--main-h),
-    var(--main-s),
-    calc(var(--main-l) - var(--main-l) * 0.2)
-  );
-  --main-900: hsl(
-    var(--main-h),
-    var(--main-s),
-    calc(var(--main-l) - var(--main-l) * 0.3)
-  );
-  --main-two-50: hsl(
-    var(--main-two-h),
-    var(--main-two-s),
-    calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.9)
-  );
-  --main-two-100: hsl(
-    var(--main-two-h),
-    var(--main-two-s),
-    calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.8)
-  );
-  --main-two-200: hsl(
-    var(--main-two-h),
-    var(--main-two-s),
-    calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.7)
-  );
-  --main-two-300: hsl(
-    var(--main-two-h),
-    var(--main-two-s),
-    calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.6)
-  );
-  --main-two-400: hsl(
-    var(--main-two-h),
-    var(--main-two-s),
-    calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.5)
-  );
-  --main-two-500: hsl(
-    var(--main-two-h),
-    var(--main-two-s),
-    calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.4)
-  );
+  --main-700: hsl(var(--main-h),
+      var(--main-s),
+      calc(var(--main-l) - var(--main-l) * 0.1));
+  --main-800: hsl(var(--main-h),
+      var(--main-s),
+      calc(var(--main-l) - var(--main-l) * 0.2));
+  --main-900: hsl(var(--main-h),
+      var(--main-s),
+      calc(var(--main-l) - var(--main-l) * 0.3));
+  --main-two-50: hsl(var(--main-two-h),
+      var(--main-two-s),
+      calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.9));
+  --main-two-100: hsl(var(--main-two-h),
+      var(--main-two-s),
+      calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.8));
+  --main-two-200: hsl(var(--main-two-h),
+      var(--main-two-s),
+      calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.7));
+  --main-two-300: hsl(var(--main-two-h),
+      var(--main-two-s),
+      calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.6));
+  --main-two-400: hsl(var(--main-two-h),
+      var(--main-two-s),
+      calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.5));
+  --main-two-500: hsl(var(--main-two-h),
+      var(--main-two-s),
+      calc(var(--main-two-l) + (100% - var(--main-two-l)) * 0.4));
   --main-two-600: hsl(var(--main-two-h), var(--main-two-s), var(--main-two-l));
-  --main-two-700: hsl(
-    var(--main-two-h),
-    var(--main-two-s),
-    calc(var(--main-two-l) - var(--main-two-l) * 0.1)
-  );
-  --main-two-800: hsl(
-    var(--main-two-h),
-    var(--main-two-s),
-    calc(var(--main-two-l) - var(--main-two-l) * 0.2)
-  );
-  --main-two-900: hsl(
-    var(--main-two-h),
-    var(--main-two-s),
-    calc(var(--main-two-l) - var(--main-two-l) * 0.3)
-  );
+  --main-two-700: hsl(var(--main-two-h),
+      var(--main-two-s),
+      calc(var(--main-two-l) - var(--main-two-l) * 0.1));
+  --main-two-800: hsl(var(--main-two-h),
+      var(--main-two-s),
+      calc(var(--main-two-l) - var(--main-two-l) * 0.2));
+  --main-two-900: hsl(var(--main-two-h),
+      var(--main-two-s),
+      calc(var(--main-two-l) - var(--main-two-l) * 0.3));
   --gray-50: #ecf1f9;
   --gray-100: #d5dbe7;
   --gray-200: #5977f4;
@@ -312,11 +276,11 @@
 /* Media Breakpoint for Each Device End */
 /* ============================ Mixins Css End ============================ */
 /* ================================= Button Css Start =========================== */
-.btn-check:checked + .btn,
+.btn-check:checked+.btn,
 .btn.active,
 .btn.show,
 .btn:first-child:active,
-:not(.btn-check) + .btn:active {
+:not(.btn-check)+.btn:active {
   color: none;
   background-color: none;
   border-color: none;
@@ -829,17 +793,17 @@ table.dataTable {
   min-width: 1199px;
 }
 
-.table-striped > tbody > tr:nth-of-type(odd) > * {
+.table-striped>tbody>tr:nth-of-type(odd)>* {
   --bs-table-color-type: transparent !important;
   --bs-table-bg-type: transparent !important;
 }
 
-.dataTable > thead > tr > th,
-table.dataTable > thead > tr > td {
+.dataTable>thead>tr>th,
+table.dataTable>thead>tr>td {
   border-bottom: 1px solid var(--gray-100) !important;
 }
 
-.dt-container.dt-empty-footer tbody > tr:last-child > * {
+.dt-container.dt-empty-footer tbody>tr:last-child>* {
   border-bottom: 1px solid var(--gray-100) !important;
 }
 
@@ -850,20 +814,20 @@ table.dataTable td.dt-type-date {
   text-align: start;
 }
 
-.dataTable > tbody > tr td:first-child,
-.dataTable > thead > tr th:first-child {
+.dataTable>tbody>tr td:first-child,
+.dataTable>thead>tr th:first-child {
   padding-inline-start: 20px;
 }
 
-.dataTable > tbody > tr td:last-child,
-.dataTable > thead > tr th:last-child {
+.dataTable>tbody>tr td:last-child,
+.dataTable>thead>tr th:last-child {
   padding-inline-end: 20px;
 }
 
-table.dataTable thead > tr > th.dt-orderable-asc:hover,
-table.dataTable thead > tr > th.dt-orderable-desc:hover,
-table.dataTable thead > tr > td.dt-orderable-asc:hover,
-table.dataTable thead > tr > td.dt-orderable-desc:hover {
+table.dataTable thead>tr>th.dt-orderable-asc:hover,
+table.dataTable thead>tr>th.dt-orderable-desc:hover,
+table.dataTable thead>tr>td.dt-orderable-asc:hover,
+table.dataTable thead>tr>td.dt-orderable-desc:hover {
   outline: 0;
   outline-offset: -2px;
 }
@@ -913,14 +877,14 @@ div.dt-container .dt-paging .dt-paging-button.disabled {
   padding: 20px !important;
 }
 
-table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after {
+table.dataTable thead>tr>th.dt-ordering-desc span.dt-column-order:after {
   opacity: 1;
 }
 
-table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:after,
-table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
-table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:after,
-table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
+table.dataTable thead>tr>th.dt-orderable-desc span.dt-column-order:after,
+table.dataTable thead>tr>th.dt-ordering-desc span.dt-column-order:after,
+table.dataTable thead>tr>td.dt-orderable-desc span.dt-column-order:after,
+table.dataTable thead>tr>td.dt-ordering-desc span.dt-column-order:after {
   content: "\e03e" !important;
   font-family: "Phosphor" !important;
   color: var(--gray-400) !important;
@@ -928,9 +892,9 @@ table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
   opacity: 0.4;
 }
 
-table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order:before,
-table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order:before,
-table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before {
+table.dataTable thead>tr>th.dt-orderable-asc span.dt-column-order:before,
+table.dataTable thead>tr>td.dt-orderable-asc span.dt-column-order:before,
+table.dataTable thead>tr>td.dt-ordering-asc span.dt-column-order:before {
   content: "\e08e" !important;
   font-family: "Phosphor" !important;
   color: var(--gray-400) !important;
@@ -939,9 +903,9 @@ table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before {
   left: -10px !important;
 }
 
-table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
-table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before,
-table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
+table.dataTable thead>tr>th.dt-ordering-desc span.dt-column-order:after,
+table.dataTable thead>tr>td.dt-ordering-asc span.dt-column-order:before,
+table.dataTable thead>tr>td.dt-ordering-desc span.dt-column-order:after {
   opacity: 1;
 }
 
@@ -953,13 +917,13 @@ table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
   opacity: 1 !important;
 }
 
-.table.table-lg.dataTable > tbody > tr > th,
-table.dataTable > tbody > tr > td {
+.table.table-lg.dataTable>tbody>tr>th,
+table.dataTable>tbody>tr>td {
   padding: 15px 10px;
 }
 
-.table-lg.dataTable > thead > tr > th,
-table.dataTable > thead > tr > td {
+.table-lg.dataTable>thead>tr>th,
+table.dataTable>thead>tr>td {
   padding: 13px;
 }
 
@@ -986,7 +950,7 @@ table.dataTable > thead > tr > td {
   margin-bottom: 0;
 }
 
-.dataTable > thead > tr > th {
+.dataTable>thead>tr>th {
   padding: 20px 10px;
 }
 
@@ -994,7 +958,7 @@ table.dataTable > thead > tr > td {
   padding: 0 !important;
 }
 
-.dt-container.dt-empty-footer tbody > tr:last-child > * {
+.dt-container.dt-empty-footer tbody>tr:last-child>* {
   border-bottom: 0 !important;
 }
 
@@ -1012,12 +976,10 @@ table.dataTable > thead > tr > td {
 
 .fc-day.fc-tue.fc-widget-content.fc-today.fc-state-highlight {
   position: relative;
-  background: linear-gradient(
-    180deg,
-    rgba(72, 127, 255, 0.13) 0%,
-    rgba(72, 127, 255, 0.12) 0.01%,
-    rgba(72, 127, 255, 0.05) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(72, 127, 255, 0.13) 0%,
+      rgba(72, 127, 255, 0.12) 0.01%,
+      rgba(72, 127, 255, 0.05) 100%);
 }
 
 .fc-day.fc-tue.fc-widget-content.fc-today.fc-state-highlight::before {
@@ -1060,7 +1022,7 @@ table.fc-header,
   color: var(--main-600) !important;
 }
 
-.fc-state-highlight > div > div.fc-day-number {
+.fc-state-highlight>div>div.fc-day-number {
   background-color: var(--main-600) !important;
   color: #fff !important;
 }
@@ -1277,7 +1239,7 @@ td.fc-header-center {
   border-radius: 100%;
 }
 
-.avatar-upload .avatar-preview > div {
+.avatar-upload .avatar-preview>div {
   width: 100%;
   height: 100%;
   border-radius: inherit;
@@ -1341,6 +1303,8 @@ td.fc-header-center {
 /* =========================== Pricing Plan Css Start ======================= */
 .plan-item {
   padding: 24px 32px;
+  transition: transform 0.3s ease-in-out;
+  min-height: calc(400px + 5px);
 }
 
 @media screen and (max-width: 1199px) {
@@ -1478,22 +1442,22 @@ td.fc-header-center {
 
 /* ================================ Apex Charts Css End =================================== */
 /* ======================= Common Table Css Start ======================= */
-.table-list > span {
+.table-list>span {
   position: relative;
   margin-inline-end: 8px;
   padding-inline-end: 8px;
 }
 
-.table-list > span:last-child {
+.table-list>span:last-child {
   margin-inline-end: 0;
   padding-inline-end: 0;
 }
 
-.table-list > span:last-child::before {
+.table-list>span:last-child::before {
   display: none;
 }
 
-.table-list > span::before {
+.table-list>span::before {
   position: absolute;
   content: "";
   width: 1px;
@@ -1504,7 +1468,7 @@ td.fc-header-center {
   background-color: var(--main-600);
 }
 
-.table > :not(caption) > * > * {
+.table> :not(caption)>*>* {
   border-bottom-width: 0;
 }
 
@@ -1648,12 +1612,12 @@ h6,
   line-height: 21px;
 }
 
-h1 > a,
-h2 > a,
-h3 > a,
-h4 > a,
-h5 > a,
-h6 > a {
+h1>a,
+h2>a,
+h3>a,
+h4>a,
+h5>a,
+h6>a {
   font-weight: inherit;
   font-size: inherit;
   color: inherit;
@@ -1661,12 +1625,12 @@ h6 > a {
   line-height: inherit;
 }
 
-h1 > a:hover,
-h2 > a:hover,
-h3 > a:hover,
-h4 > a:hover,
-h5 > a:hover,
-h6 > a:hover {
+h1>a:hover,
+h2>a:hover,
+h3>a:hover,
+h4>a:hover,
+h5>a:hover,
+h6>a:hover {
   color: hsl(var(--main));
 }
 
@@ -9042,8 +9006,8 @@ button:focus {
 }
 
 ul.sidebar-menu .sidebar-menu__item.activePage .sidebar-menu__link {
- background-color: #ffc37c;
- color: #111111 !important;
+  background-color: #ffc37c;
+  color: #111111 !important;
 }
 
 .sidebar-menu__item.activePage .sidebar-menu__link::before {
@@ -9061,14 +9025,11 @@ ul.sidebar-menu .sidebar-menu__item.activePage .sidebar-menu__link {
   color: hsl(var(--white));
 }
 
-.sidebar-menu__item:has(.sidebar-submenu__item.activePage)
-  .sidebar-menu__link::before {
+.sidebar-menu__item:has(.sidebar-submenu__item.activePage) .sidebar-menu__link::before {
   color: hsl(var(--white)) !important;
 }
 
-.sidebar-menu__item:has(.sidebar-submenu__item.activePage)
-  .sidebar-menu__link
-  .link-badge {
+.sidebar-menu__item:has(.sidebar-submenu__item.activePage) .sidebar-menu__link .link-badge {
   background-color: hsl(var(--white));
   color: var(--main-600);
 }
@@ -9337,7 +9298,7 @@ ul.sidebar-menu .sidebar-menu__item.activePage .sidebar-menu__link {
   transition: 0.2s linear;
 }
 
-.dashboard-main-wrapper > .dashboard-inner-content {
+.dashboard-main-wrapper>.dashboard-inner-content {
   flex: 1;
   width: 100%;
   max-width: 100%;
@@ -9368,6 +9329,7 @@ ul.sidebar-menu .sidebar-menu__item.activePage .sidebar-menu__link {
 }
 
 @media screen and (max-width: 1499px) {
+
   .top-navbar,
   .dashboard-body {
     padding-inline-start: 16px;
@@ -9395,7 +9357,7 @@ ul.sidebar-menu .sidebar-menu__item.activePage .sidebar-menu__link {
 .dashboard-footer p,
 .dashboard-footer span {
   color: #ffffff !important;
-    font-weight: 600 !important;
+  font-weight: 600 !important;
 }
 
 @media screen and (max-width: 991px) {
@@ -9969,8 +9931,7 @@ ul.sidebar-menu .sidebar-menu__item.activePage .sidebar-menu__link {
 /* ======================== Auth Css End ============================= */
 /* =============================== Index Two Css Start ============================== */
 .grettings-box__content {
-  padding: clamp(1.5rem, -1.086rem + 5.388vw, 3.625rem)
-    clamp(1.25rem, -3.621rem + 6vw, 2.75rem) !important;
+  padding: clamp(1.5rem, -1.086rem + 5.388vw, 3.625rem) clamp(1.25rem, -3.621rem + 6vw, 2.75rem) !important;
 }
 
 .grettings-box-two {
@@ -9979,15 +9940,15 @@ ul.sidebar-menu .sidebar-menu__item.activePage .sidebar-menu__link {
 
 /* =============================== Index Two Css End ============================== */
 /* ============================= List Grid View Css Start ============================ */
-.list-grid-view .activePage > a {
+.list-grid-view .activePage>a {
   color: var(--main-600) !important;
 }
 
-.list-grid-view .activePage > a .ph-rows::before {
+.list-grid-view .activePage>a .ph-rows::before {
   content: "\e5a2";
 }
 
-.list-grid-view .activePage > a .ph-squares-four::before {
+.list-grid-view .activePage>a .ph-squares-four::before {
   content: "\e464";
 }
 
@@ -10011,16 +9972,16 @@ ul.sidebar-menu .sidebar-menu__item.activePage .sidebar-menu__link {
 
 /* ============================= List Grid View Css End ============================ */
 /* Email Css Start */
-.item-active.activePage > a {
+.item-active.activePage>a {
   background-color: var(--main-50) !important;
   color: var(--main-600) !important;
 }
 
-.item-active.activePage > a .icon {
+.item-active.activePage>a .icon {
   color: inherit;
 }
 
-.email-links.activePage > a {
+.email-links.activePage>a {
   background-color: var(--main-50) !important;
 }
 
