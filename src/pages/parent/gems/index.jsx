@@ -35,7 +35,9 @@ const Gems = () => {
             <div className="col-md-4" key={index}>
               <div className="card shadow-sm mb-4">
                 <div className="card-body">
-                  <h5 className="card-title">Gems for {gem.username}</h5>
+                  <h5 className="card-title">Gem History for {gem.username}</h5>
+
+                  {/* Gem Details */}
                   <div className="d-flex justify-content-between align-items-center">
                     <div>
                       <span className="badge bg-primary">
@@ -64,33 +66,17 @@ const Gems = () => {
 
                   <hr />
 
-                  {/* Conditional Content Based on Source */}
-                  {gem.source === "question_bank" ? (
-                    <div>
-                      <h6 className="card-subtitle mb-2 text-muted">Question</h6>
-                      <div
-                        className="card-text"
-                        dangerouslySetInnerHTML={{ __html: gem.question_content }}
-                      ></div>
-                      <div className="mt-2">
-                        <strong>Subject: </strong>
-                        {gem.subject.name}
-                      </div>
-                    </div>
-                  ) : gem.source === "assignment" ? (
-                    <div>
-                      <h6 className="card-subtitle mb-2 text-muted">Assignment</h6>
-                      <strong>Title: </strong>{gem.assignment.title}
+                  {/* Gem History Log Content */}
+                  <div>
+                    <h6 className="card-subtitle mb-2 text-muted">Gem History Details</h6>
+                    <div className="card-text">
+                      <strong>Source:</strong> {gem.source === "assignment" ? gem.assignment.title : "Question Bank"}
                       <br />
-                      <strong>Description: </strong>{gem.assignment.description}
-                      <div className="mt-2">
-                        <strong>Subject: </strong>
-                        {gem.assignment.subject.name}
-                      </div>
+                      <strong>Subject:</strong> {gem.source === "assignment" ? gem.assignment.subject.name : gem.subject.name}
+                      <br />
+                      <strong>Gems Awarded:</strong> {gem.gems}
                     </div>
-                  ) : (
-                    <span>No details available</span>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
