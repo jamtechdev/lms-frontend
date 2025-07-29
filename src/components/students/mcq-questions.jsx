@@ -8,13 +8,14 @@ import {
   setAttemptQuestions,
 } from "../../_store/_reducers/question";
 import Feedback from "../Feedback";
+import { getChildId } from "../../_store/_reducers/auth";
 
 const McqQuestions = ({ question, index }) => {
   const dispatch = useDispatch();
   const answersStore = useSelector(getSelected);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+const childId = useSelector(getChildId);
   const handleOptionChange = (e) => {
     if (isSubmitted) return;
     setSelectedAnswer(e.target.value);
@@ -32,6 +33,7 @@ const McqQuestions = ({ question, index }) => {
           question_id: question?.id,
           answer: selectedAnswer,
           type: question?.question?.type || "mcq",
+          child_id: childId,
         },
       ],
     };

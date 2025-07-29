@@ -7,6 +7,7 @@ import {
   setAttemptQuestions,
 } from "../../_store/_reducers/question";
 import Feedback from "../Feedback";
+import { getChildId } from "../../_store/_reducers/auth";
 
 const OpenClozeWithDropdown = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const OpenClozeWithDropdown = ({ question, index }) => {
   const blanks = questionData.questions || [];
   const questionId = question?.id;
   const questionType = questionData?.question_type;
+  const childId = useSelector(getChildId);
 
   const selectedAnswers = inputs[questionId] || {};
   const isSubmitted = submittedQuestions[questionId] || false;
@@ -42,6 +44,7 @@ const OpenClozeWithDropdown = ({ question, index }) => {
         question_id: item.question_id,
         answer: item.user_answer,
         type: item.type,
+        child_id: childId,
       })),
     };
 

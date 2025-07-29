@@ -7,6 +7,7 @@ import {
   setAttemptQuestions,
 } from "../../_store/_reducers/question";
 import Feedback from "../Feedback";
+import { getChildId } from "../../_store/_reducers/auth";
 
 const OpenClozeWithOptions = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const OpenClozeWithOptions = ({ question, index }) => {
   const [userAnswerJSON, setUserAnswerJSON] = useState({});
   const [submittedQuestions, setSubmittedQuestions] = useState({});
   const [storedAnswer, setStoredAnswer] = useState([]);
-
+ const childId = useSelector(getChildId);
   const questionData = question.question;
   const questionId = question.id;
   const type = questionData.question_type;
@@ -78,6 +79,7 @@ const OpenClozeWithOptions = ({ question, index }) => {
           question_id: questionId,
           answer: JSON.stringify(userAnswer),
           type: type,
+          child_id: childId,
         },
       ],
     };

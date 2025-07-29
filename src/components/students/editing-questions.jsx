@@ -8,6 +8,7 @@ import {
   setAttemptQuestions,
 } from "../../_store/_reducers/question";
 import Feedback from "../Feedback";
+import { getChildId } from "../../_store/_reducers/auth";
 
 const EditingQuesions = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -15,7 +16,7 @@ const EditingQuesions = ({ question, index }) => {
   const [submitted, setSubmitted] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [inputs, setInputs] = useState({});
-
+  const childId = useSelector(getChildId);
   const questionData = question?.question || {};
   const paragraph = questionData?.paragraph || "";
   const boxes = questionData?.questions || [];
@@ -74,6 +75,7 @@ const EditingQuesions = ({ question, index }) => {
         question_id: item.question_id,
         answer: item.user_answer,
         type: item?.type,
+          child_id: childId,
       })),
     };
 

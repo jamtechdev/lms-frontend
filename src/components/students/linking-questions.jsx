@@ -6,6 +6,7 @@ import { setAttemptQuestions } from "../../_store/_reducers/question";
 import { userService } from "../../_services";
 import toast from "react-hot-toast";
 import Feedback from "../Feedback";
+import { getChildId } from "../../_store/_reducers/auth";
 
 const LinkingQuestions = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const LinkingQuestions = ({ question, index }) => {
   // Manage shuffledRight internally or derive it here:
   // Assuming question has a field with right side items, otherwise adjust accordingly
   const [shuffledRight, setShuffledRight] = useState([]);
-
+  const childId = useSelector(getChildId);
   const [matchesByQuestion, setMatchesByQuestion] = useState({});
   const [selected, setSelected] = useState({});
   const [submittedQuestions, setSubmittedQuestions] = useState(new Set());
@@ -76,8 +77,7 @@ const LinkingQuestions = ({ question, index }) => {
   const selectedLeft = selected[qId]?.leftIndex;
   const selectedRight = selected[qId]?.rightIndex;
   const isSubmitted = submittedQuestions.has(qId);
-  const isButtonDisabled = Object.keys(currentMatches).length === 0;
-
+  const isButtonDisabled = Object.keys(currentMatches).length === 0;     
   const handleLeftClick = (qId, index) => {
     if (submittedQuestions.has(qId)) return;
     setSelected((prev) => ({
@@ -142,6 +142,7 @@ const LinkingQuestions = ({ question, index }) => {
             question_id: payload.question_id,
             answer: payload.user_answer,
             type: payload.type,
+            child_id: childId,
           },
         ],
       });

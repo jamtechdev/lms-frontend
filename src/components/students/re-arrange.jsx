@@ -7,13 +7,14 @@ import {
   setAttemptQuestions,
 } from "../../_store/_reducers/question";
 import Feedback from "../Feedback";
+import { getChildId } from "../../_store/_reducers/auth";
 
 const ReArrangeList = ({ question, index }) => {
   const dispatch = useDispatch();
   const answersStore = useSelector(getSelected);
   const containerRefs = useRef({});
   const positionsRef = useRef({});
-
+const childId = useSelector(getChildId);
   const [submitted, setSubmitted] = useState(false);
   const [words, setWords] = useState([]);
 
@@ -87,6 +88,7 @@ const ReArrangeList = ({ question, index }) => {
           question_id: question.id,
           answer: userAnswer,
           type: question.question.type,
+            child_id: childId,
         },
       ],
     };

@@ -8,13 +8,14 @@ import {
   setAttemptQuestions,
 } from "../../_store/_reducers/question";
 import Feedback from "../Feedback";
+import { getChildId } from "../../_store/_reducers/auth";
 
 const TrueFalseQuestions = ({ question, index }) => {
   const dispatch = useDispatch();
   const answersStore = useSelector(getSelected);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+const childId = useSelector(getChildId);
   const handleOptionChange = (e) => {
     setSelectedAnswer(e.target.value);
   };
@@ -31,6 +32,7 @@ const TrueFalseQuestions = ({ question, index }) => {
           question_id: question.id,
           answer: selectedAnswer,
           type: question?.question?.type,
+          child_id: childId,
         },
       ],
     };

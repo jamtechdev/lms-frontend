@@ -8,6 +8,7 @@ import {
 } from "../../_store/_reducers/question";
 import { useDispatch, useSelector } from "react-redux";
 import Feedback from "../Feedback";
+import { getChildId } from "../../_store/_reducers/auth";
 
 const FillInTheBlank = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const FillInTheBlank = ({ question, index }) => {
   const [inputs, setInputs] = useState({});
   const [answers, setAnswers] = useState([]);
   const [correctMap, setCorrectMap] = useState({});
+  const childId = useSelector(getChildId);
 
   const questionId = question?.id;
   const questionData = question?.question || {};
@@ -89,6 +91,7 @@ const FillInTheBlank = ({ question, index }) => {
           question_id: item.question_id,
           answer: item.user_answer,
           type: item?.type,
+          child_id: childId,
         })),
       };
 
