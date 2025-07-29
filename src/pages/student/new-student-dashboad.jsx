@@ -301,7 +301,7 @@ const NewStudentDashboard = () => {
                   ) : results.length > 0 ? (
                     results.map((item, index) => (
                       <tr key={index}>
-                        <td>{item.assignment_subject || "N/A"}</td>
+                        <td>{item.subject || "N/A"}</td>
                         <td>{item.score}%</td>
                         <td>
                           {item.submitted_at
