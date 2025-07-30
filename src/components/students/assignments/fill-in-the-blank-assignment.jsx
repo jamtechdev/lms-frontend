@@ -7,6 +7,7 @@ import {
 } from "../../../_store/_reducers/question";
 import { useDispatch, useSelector } from "react-redux";
 import Feedback from "../../Feedback";
+import ChatgptIcon from "../../ChatgptIcon";
 
 const FillInTheBlankAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -74,7 +75,6 @@ const FillInTheBlankAssignment = ({ question, index }) => {
     };
     dispatch(setAssignmentsQuestion(payload));
     toast.success("Answer submitted successfully.");
-
   };
 
   const renderParsedQuestion = (text = "") => {
@@ -150,8 +150,11 @@ const FillInTheBlankAssignment = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-                  <p className="instruction-text"><strong>Instruction:</strong> {parse(instruction || "")}</p>
-       <Feedback question_id={question?.id}/>
+        <p className="instruction-text">
+          <strong>Instruction:</strong> {parse(instruction || "")}
+        </p>
+        <Feedback question_id={question?.id} />
+        <ChatgptIcon />
       </div>
       <div className="question-card">
         <div>{renderParsedQuestion(questionText)}</div>
@@ -161,7 +164,7 @@ const FillInTheBlankAssignment = ({ question, index }) => {
             className="dashboard-button"
             disabled={question?.is_attempt || !isAllFilled() || submitted}
           >
-            {(question?.is_attempt || submitted) ? "Attempted" : "Submit"}
+            {question?.is_attempt || submitted ? "Attempted" : "Submit"}
           </button>
         </div>
       </div>

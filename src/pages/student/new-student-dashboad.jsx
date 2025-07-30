@@ -4,7 +4,6 @@ import {
   Row,
   Col,
   Card,
-  Button,
   ProgressBar,
   Table,
   Alert,
@@ -22,6 +21,7 @@ import {
   getLevel,
 } from "../../_store/_reducers/auth";
 import loader from "../../assets/images/loader.gif";
+import parentService from "../../_services/parent.service";
 
 const NewStudentDashboard = () => {
   const level = useSelector(getLevel);
@@ -40,6 +40,7 @@ const NewStudentDashboard = () => {
   const lastname = useSelector(getLastName);
   const [results, setResults] = useState([]);
   const [resultsLoading, setResultsLoading] = useState(false);
+  const [gems, setGems] = useState([]);
 
   const getAssignments = async () => {
     setAssignmentLoading(true);
@@ -119,8 +120,19 @@ const NewStudentDashboard = () => {
       setResultsLoading(false);
     }
   };
+
+  const fetchGems = async () => {
+    try {
+      const data = await parentService.getStudentGems(childId);
+      setGems(data?.data?.total_gems);
+    } catch (error) {
+      console.error("Error fetching results:", error);
+    }
+  };
+
   useEffect(() => {
     fetchResults();
+    fetchGems();
   }, []);
 
   const AssignmentButton = ({ due_date, id, status }) => {
@@ -128,8 +140,7 @@ const NewStudentDashboard = () => {
     dueDate.setHours(0, 0, 0, 0);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const isEnabled = dueDate > today;
-    // const status = isEnabled ? "Start" : "Completed";
+    const isEnabled = dueDate >= today;
     return (
       <div>
         <button
@@ -154,7 +165,7 @@ const NewStudentDashboard = () => {
   return (
     <Container className="my-4" fluid>
       <Row className="mb-4">
-        <Col md={9}>
+        <Col md={8}>
           <Card className="h-100 text-left">
             <Card.Body>
               <h1>
@@ -170,37 +181,33 @@ const NewStudentDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={3} className="mt-4 mt-md-0">
+        <Col md={4} className="mt-4 mt-md-0">
           <Card className="h-100">
             <Card.Body>
-              <div className="d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center justify-content-between mb-4">
                 <h2 className="mb-0">Your Gems</h2>
-                <h3 className="text-warning mb-0">💎 45</h3>
+                <h3 className="text-warning mb-0">💎 {gems}</h3>
               </div>
               <div className="pt-2 pb-3">
-                <p className="text-muted my-1">Progress to next reward</p>
-                <ProgressBar now={45} label={`45%`} />
+                <p className="text-muted my-1">Redeem your gem-based rewards</p>
+                {/* <ProgressBar now={gems} label={`${gems}%`} /> */}
               </div>
-              <button className="dashboard-button w-100" size="sm">
-                View Prizes
-              </button>
+              <div className="d-flex gap-5">
+                <button
+                  className="dashboard-button w-100"
+                  size="sm"
+                  onClick={() => navigate("gems")}
+                >
+                  Gems History
+                </button>
+                <button className="dashboard-button w-100" size="sm">
+                  View Prizes
+                </button>
+              </div>
             </Card.Body>
           </Card>
         </Col>
       </Row>
-
-      {/* <Card className="mb-4">
-        <Card.Body>
-          <h2 className="pb-2 border-bottom mb-3">
-            🧑 Weekly Assignment Target
-          </h2>
-          <h5 className="mb-3">
-            Your parent has assigned you to complete 3 papers this week.
-          </h5>
-          <ProgressBar label={`1 of 3 completed`} now={33} />
-        </Card.Body>
-      </Card> */}
-
       <Card className="mb-4">
         <Card.Body>
           <h2 className="pb-2 border-bottom mb-3">📃 This Week’s Assignment</h2>
@@ -242,24 +249,6 @@ const NewStudentDashboard = () => {
       </Card>
 
       <Row className="mb-4">
-        {/* <Col md={6}>
-          <Card>
-            <Card.Body>
-              <h2 className="pb-2 border-bottom mb-3">📅 Daily Challenge</h2>
-              <Card className="student-card flex-row align-items-start justify-content-between m-0">
-                <div>
-                  <h4 className="text-white">🔍 Mystery Science Quiz</h4>
-                  <p className="mb-2 text-white">
-                    Complete today’s special challenge to earn bonus gems!
-                  </p>
-                  <p className="badge badge-success">Earn +5 Gems</p>
-                </div>
-                <button className="dashboard-button">Start Challenge</button>
-              </Card>
-            </Card.Body>
-          </Card>
-        </Col> */}
-
         <Col md={6}>
           <Card className="h-100">
             <Card.Body>
@@ -283,49 +272,49 @@ const NewStudentDashboard = () => {
                 📃 Your Past Assessments
               </h2>
               <div className="table-height">
-                 <Table responsive>
-                <thead>
-                  <tr>
-                    <th>Subject</th>
-                    <th>Score</th>
-                    <th>Submitted At</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {resultsLoading ? (
+                <Table responsive>
+                  <thead>
                     <tr>
-                      <td colSpan="3" className="text-center py-4">
-                        <img src={loader} width={50} alt="Loading..." />
-                      </td>
+                      <th>Subject</th>
+                      <th>Score</th>
+                      <th>Submitted At</th>
                     </tr>
-                  ) : results.length > 0 ? (
-                    results.map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.subject || "N/A"}</td>
-                        <td>{item.score}%</td>
-                        <td>
-                          {item.submitted_at
-                            ? new Date(item.submitted_at).toLocaleDateString(
-                                "en-GB",
-                                {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric",
-                                }
-                              )
-                            : "N/A"}
+                  </thead>
+                  <tbody>
+                    {resultsLoading ? (
+                      <tr>
+                        <td colSpan="3" className="text-center py-4">
+                          <img src={loader} width={50} alt="Loading..." />
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="3" className="text-center">
-                        💤 No assessments found
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </Table>
+                    ) : results.length > 0 ? (
+                      results.map((item, index) => (
+                        <tr key={index}>
+                          <td>{item.subject || "N/A"}</td>
+                          <td>{item.score}%</td>
+                          <td>
+                            {item.submitted_at
+                              ? new Date(item.submitted_at).toLocaleDateString(
+                                  "en-GB",
+                                  {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                  }
+                                )
+                              : "N/A"}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="3" className="text-center">
+                          💤 No assessments found
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </Table>
               </div>
             </Card.Body>
           </Card>

@@ -9,14 +9,13 @@ import {
 } from "../../_store/_reducers/question";
 import Feedback from "../Feedback";
 import { getChildId } from "../../_store/_reducers/auth";
-import ChatgptIcon from "../ChatgptIcon";
 
 const McqQuestions = ({ question, index }) => {
   const dispatch = useDispatch();
   const answersStore = useSelector(getSelected);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-const childId = useSelector(getChildId);
+  const childId = useSelector(getChildId);
   const handleOptionChange = (e) => {
     if (isSubmitted) return;
     setSelectedAnswer(e.target.value);
@@ -78,7 +77,6 @@ const childId = useSelector(getChildId);
         <p className="instruction-text">
           <strong>Instruction:</strong> {question.question.instruction}
         </p>
-        <ChatgptIcon/>
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">

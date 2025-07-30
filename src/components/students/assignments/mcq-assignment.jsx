@@ -30,10 +30,10 @@ const McqAssignment = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-            <p className="instruction-text">
+        <p className="instruction-text">
           <strong>Instruction:</strong> {question.question.instruction}
         </p>
-     <Feedback question_id={question?.id}/>
+        <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
         <div className="question-text">
@@ -57,6 +57,11 @@ const McqAssignment = ({ question, index }) => {
                   />
                   {opt.value}
                 </label>
+                {question?.is_attempt && opt.explanation && (
+                  <div className="ml-4 text-sm w-1/2">
+                    <strong>Explanation:</strong> {parse(opt.explanation)}
+                  </div>
+                )}
               </div>
             );
           })}

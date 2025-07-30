@@ -9,6 +9,7 @@ import {
   setAttemptQuestions,
 } from "../../../_store/_reducers/question";
 import Feedback from "../../Feedback";
+import ChatgptIcon from "../../ChatgptIcon";
 
 const ComprehensionAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -103,11 +104,13 @@ const ComprehensionAssignment = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-        <p className="instruction-text"><strong>Instruction:</strong> {question.question.instruction}</p>
+        <p className="instruction-text">
+          <strong>Instruction:</strong> {question.question.instruction}
+        </p>
         <Feedback question_id={question?.id} />
+        <ChatgptIcon />
       </div>
       <div className="question-card">
-         
         <div
           style={{
             padding: "15px",
@@ -141,14 +144,15 @@ const ComprehensionAssignment = ({ question, index }) => {
                   return (
                     <div key={i}>
                       <label
-                        className={`kbc-option-label ${isSubmitted
+                        className={`kbc-option-label ${
+                          isSubmitted
                             ? isCorrect
                               ? "text-green-600 font-bold"
                               : isUserSelected
-                                ? "text-red-600 line-through"
-                                : ""
+                              ? "text-red-600 line-through"
+                              : ""
                             : ""
-                          }`}
+                        }`}
                       >
                         <input
                           type="radio"
@@ -238,9 +242,11 @@ const ComprehensionAssignment = ({ question, index }) => {
         <button
           onClick={handlePaperSubmit}
           className="dashboard-button"
-          disabled={question?.is_attempt || isSubmitted || subquestions.length === 0}
+          disabled={
+            question?.is_attempt || isSubmitted || subquestions.length === 0
+          }
         >
-          {(question?.is_attempt || isSubmitted) ? "Attempted" : "Submit"}
+          {question?.is_attempt || isSubmitted ? "Attempted" : "Submit"}
         </button>
       </div>
     </>

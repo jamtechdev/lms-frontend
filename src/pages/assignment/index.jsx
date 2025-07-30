@@ -51,6 +51,7 @@ const WeeklyAssignment = () => {
       })
       .then((data) => {
         toast.success("Assignment submitted successfully.");
+        getAssignments();
       })
       .catch((error) => {
         console.error("Error", error);

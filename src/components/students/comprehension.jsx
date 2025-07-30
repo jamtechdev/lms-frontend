@@ -9,6 +9,7 @@ import {
 } from "../../_store/_reducers/question";
 import Feedback from "../Feedback";
 import { getChildId } from "../../_store/_reducers/auth";
+import ChatgptIcon from "../ChatgptIcon";
 
 const Comprehension = ({ question, index }) => {
   const dispatch = useDispatch();
@@ -112,10 +113,11 @@ const Comprehension = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-         <p className="instruction-text">
+        <p className="instruction-text">
           <strong>Instruction:</strong> {question.question.instruction}
         </p>
         <Feedback question_id={question?.id} />
+        <ChatgptIcon />
       </div>
       <div className="question-card">
         <div
