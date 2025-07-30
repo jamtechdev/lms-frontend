@@ -94,8 +94,9 @@ const childId = useSelector(getChildId);
     };
 
     try {
-      await userService.answer(payload);
+      const response = await userService.answer(payload);
       toast.success("Answer submitted successfully.");
+      toast.success(response?.message);
       setSubmitted(true);
       dispatch(
         setAttemptQuestions({

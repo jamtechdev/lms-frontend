@@ -11,7 +11,7 @@ const Gems = () => {
     setLoading(true);
     try {
       const response = await parentService.getGem();
-      setGemsData(response.data || []); // Assuming response.data is the array
+      setGemsData(response.data || []);
     } catch (error) {
       toast.error("Error fetching gems");
     } finally {
@@ -22,6 +22,14 @@ const Gems = () => {
   useEffect(() => {
     fetchGems();
   }, []);
+
+  const formatSource = (source) => {
+    if (!source) return "";
+    return source
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
 
   return (
     <div className="mt-3">
@@ -35,34 +43,37 @@ const Gems = () => {
             <div className="col-md-4" key={index}>
               <div className="card shadow-sm mb-5">
                 <div className="card-body">
-                   <div className="gem-icon mb-3">
-                  <i class="ph ph-sketch-logo"></i>
-                </div>
+                  <div className="gem-icon mb-3">
+                    <i class="ph ph-sketch-logo"></i>
+                  </div>
                   <h5 className="card-title mb-1">{gem.username}</h5>
-
-                  {/* Gem Details */}
                   <div className="d-flex justify-content-between align-items-center">
                     <div>
                       <span className="badge bg-primary d-flex align-items-center gap-5">
-                        {/* Gem Icon SVG */}
-                       <i class="ph ph-sketch-logo"></i>
+                        <i class="ph ph-sketch-logo"></i>
                         {gem.gems}
                       </span>
                     </div>
                     <div>
-                      <small className="text-muted">{new Date(gem.created_at).toLocaleDateString()}</small>
+                      <small className="text-muted">
+                        {new Date(gem.created_at).toLocaleDateString()}
+                      </small>
                     </div>
                   </div>
-
-                  {/* Gem History Log Content */}
                   <div className="pt-2">
-                    {/* <h6 className="card-subtitle mb-2 text-black">Gem History Details</h6> */}
                     <div className="card-text">
-                      <strong><i class="ph ph-books"></i></strong> {gem.source}
+                      <strong>
+                        <i class="ph ph-books"></i>
+                      </strong>{" "}
+                      {formatSource(gem.source)}
                       <br />
-                      <strong><i class="ph ph-book-open"></i></strong> {gem.source === "assignment" ? gem.assignment.subject.name : gem.subject.name}
+                      <strong>
+                        <i class="ph ph-book-open"></i>
+                      </strong>{" "}
+                      {gem.source === "assignment"
+                        ? gem.assignment.subject.name
+                        : gem.subject.name}
                       <br />
-                      {/* <strong>Gems Awarded:</strong> {gem.gems} */}
                     </div>
                   </div>
                 </div>

@@ -136,7 +136,7 @@ const LinkingQuestions = ({ question, index }) => {
     };
 
     try {
-      await userService.answer({
+      const response = await userService.answer({
         answers: [
           {
             question_id: payload.question_id,
@@ -147,6 +147,7 @@ const LinkingQuestions = ({ question, index }) => {
         ],
       });
       toast.success(`Answer submitted successfully.`);
+      toast.success(response?.message);
       dispatch(setAttemptQuestions(payload));
       setSubmittedQuestions((prev) => new Set(prev).add(qId));
     } catch (err) {

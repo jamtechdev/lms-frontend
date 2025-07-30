@@ -51,6 +51,7 @@ const WeeklyAssignment = () => {
       })
       .then((data) => {
         toast.success("Assignment submitted successfully.");
+        toast.success(data.data.message);
         getAssignments();
       })
       .catch((error) => {

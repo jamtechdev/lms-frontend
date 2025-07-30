@@ -27,6 +27,14 @@ const StudentGems = () => {
     fetchGems();
   }, []);
 
+  const formatSource = (source) => {
+    if (!source) return "";
+    return source
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   return (
     <div className="mt-3">
       {loading ? (
@@ -61,7 +69,7 @@ const StudentGems = () => {
                       <strong>
                         <i class="ph ph-books"></i>
                       </strong>{" "}
-                      {gem.source}
+                      {formatSource(gem.source)}
                       <br />
                       <strong>
                         <i class="ph ph-book-open"></i>

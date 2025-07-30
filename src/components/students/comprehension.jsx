@@ -86,8 +86,9 @@ const Comprehension = ({ question, index }) => {
     };
 
     try {
-      await userService.answer(payload);
+      const response = await userService.answer(payload);
       toast.success("Answer submitted successfully.");
+      toast.success(response?.message);
       setIsSubmitted(true);
       dispatch(setAttemptQuestions(payload?.answers[0]));
     } catch (error) {
