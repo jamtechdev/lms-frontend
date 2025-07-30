@@ -9,6 +9,9 @@ import userService from "../../../_services/user.service";
 const Prize = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPrize, setSelectedPrize] = useState(null);
+  const [shippingAddress, setShippingAddress] = useState("");
   const childId = useSelector(getChildId);
   const navigate = useNavigate();
 
@@ -28,6 +31,37 @@ const Prize = () => {
     fetchPrize();
   }, []);
 
+  const handleRedeemClick = (prize) => {
+    setSelectedPrize(prize);
+    setShippingAddress("");
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedPrize(null);
+  };
+
+  const handleSubmit = async () => {
+    if (!shippingAddress.trim()) {
+      toast.error("Please enter a shipping address.");
+      return;
+    }
+
+    try {
+      await userService.redeemRequest({
+        prize_id: selectedPrize.id,
+        child_id: childId,
+        shipping_address: shippingAddress,
+      });
+      toast.success("Prize redeemed successfully!");
+      setShowModal(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to redeem prize.");
+    }
+  };
+
   return (
     <div className="prize-container">
       {loading ? (
@@ -44,7 +78,10 @@ const Prize = () => {
               <p className="prize-gems">
                 <strong>Gems Required:</strong> {item.gems_required}
               </p>
-              <button className="dashboard-button w-100" size="sm">
+              <button
+                className="dashboard-button w-100"
+                onClick={() => handleRedeemClick(item)}
+              >
                 Redeem Prize
               </button>
             </div>
@@ -52,6 +89,38 @@ const Prize = () => {
         </div>
       ) : (
         <p className="no-prize">No Prizes Available</p>
+      )}
+
+      {showModal && selectedPrize && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Redeem Prize</h2>
+            <p>
+              <strong>Prize:</strong> {selectedPrize.name}
+            </p>
+            <label htmlFor="shippingAddress" className="shipping-label">
+              Shipping Address:
+            </label>
+            <textarea
+              className="shipping-textarea"
+              rows="4"
+              placeholder="Enter your shipping address..."
+              value={shippingAddress}
+              onChange={(e) => setShippingAddress(e.target.value)}
+            />
+            <div className="modal-actions">
+              <button className="dashboard-button" onClick={handleSubmit}>
+                Confirm
+              </button>
+              <button
+                className="dashboard-button cancel"
+                onClick={handleCloseModal}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
