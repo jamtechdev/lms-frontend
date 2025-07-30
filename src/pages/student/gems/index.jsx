@@ -61,9 +61,7 @@ const StudentGems = () => {
                       <strong>
                         <i class="ph ph-books"></i>
                       </strong>{" "}
-                      {gem.source === "assignment"
-                        ? gem.assignment.title
-                        : "Question Bank"}
+                      {gem.source}
                       <br />
                       <strong>
                         <i class="ph ph-book-open"></i>

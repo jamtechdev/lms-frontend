@@ -58,7 +58,7 @@ const Gems = () => {
                   <div className="pt-2">
                     {/* <h6 className="card-subtitle mb-2 text-black">Gem History Details</h6> */}
                     <div className="card-text">
-                      <strong><i class="ph ph-books"></i></strong> {gem.source === "assignment" ? gem.assignment.title : "Question Bank"}
+                      <strong><i class="ph ph-books"></i></strong> {gem.source}
                       <br />
                       <strong><i class="ph ph-book-open"></i></strong> {gem.source === "assignment" ? gem.assignment.subject.name : gem.subject.name}
                       <br />
