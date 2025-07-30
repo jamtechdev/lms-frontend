@@ -2407,3 +2407,22 @@ label.kbc-option-label:has(input:checked)::after {
   background-color: #052b55 !important;
 }
 
+.gem-icon {
+    background-color: #eabfff !important;
+    color: #000000 !important;
+    padding: 12px !important;
+    display: flex
+;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+    border: none;
+    outline: none;
+    text-decoration: none;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    width: fit-content;
+    font-size: 30px;
+    margin: -40px 0 0;
+}
+

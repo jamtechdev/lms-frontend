@@ -33,30 +33,20 @@ const Gems = () => {
         <div className="row">
           {gemsData.map((gem, index) => (
             <div className="col-md-4" key={index}>
-              <div className="card shadow-sm mb-4">
+              <div className="card shadow-sm mb-5">
                 <div className="card-body">
-                  <h5 className="card-title">Gem History for {gem.username}</h5>
+                   <div className="gem-icon mb-3">
+                  <i class="ph ph-sketch-logo"></i>
+                </div>
+                  <h5 className="card-title mb-1">{gem.username}</h5>
 
                   {/* Gem Details */}
                   <div className="d-flex justify-content-between align-items-center">
                     <div>
-                      <span className="badge bg-primary">
+                      <span className="badge bg-primary d-flex align-items-center gap-5">
                         {/* Gem Icon SVG */}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="me-2"
-                        >
-                          <path d="M12 2l2 6h6l-4 6 2 6-6-4-6 4 2-6-4-6h6z"></path>
-                        </svg>
-                        {gem.gems} Gems
+                       <i class="ph ph-sketch-logo"></i>
+                        {gem.gems}
                       </span>
                     </div>
                     <div>
@@ -64,17 +54,15 @@ const Gems = () => {
                     </div>
                   </div>
 
-                  <hr />
-
                   {/* Gem History Log Content */}
-                  <div>
-                    <h6 className="card-subtitle mb-2 text-muted">Gem History Details</h6>
+                  <div className="pt-2">
+                    {/* <h6 className="card-subtitle mb-2 text-black">Gem History Details</h6> */}
                     <div className="card-text">
-                      <strong>Source:</strong> {gem.source === "assignment" ? gem.assignment.title : "Question Bank"}
+                      <strong><i class="ph ph-books"></i></strong> {gem.source === "assignment" ? gem.assignment.title : "Question Bank"}
                       <br />
-                      <strong>Subject:</strong> {gem.source === "assignment" ? gem.assignment.subject.name : gem.subject.name}
+                      <strong><i class="ph ph-book-open"></i></strong> {gem.source === "assignment" ? gem.assignment.subject.name : gem.subject.name}
                       <br />
-                      <strong>Gems Awarded:</strong> {gem.gems}
+                      {/* <strong>Gems Awarded:</strong> {gem.gems} */}
                     </div>
                   </div>
                 </div>
