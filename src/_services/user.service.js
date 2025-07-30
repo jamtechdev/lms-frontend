@@ -9,8 +9,10 @@ const userService = {
     answer,
     getStudentAssignment,
     assignmentAttempt,
-    getresult, 
+    getresult,
     feedback,
+    getViewPrize,
+    redeemRequest,
 };
 async function login(data) {
     return await axiosInstance.post(`/api/v1/auth/login`, data);
@@ -41,5 +43,11 @@ async function getresult(data) {
 }
 async function feedback(data) {
     return await axiosInstance.post(`api/v1/feedback`, data);
+}
+async function getViewPrize(id) {
+    return await axiosInstance.get(`/api/v1/gems/view-prize?child_id=${id}`);
+}
+async function redeemRequest(data) {
+    return await axiosInstance.post(`/api/v1/gems/gems-redeem-request`, data);
 }
 export default userService;

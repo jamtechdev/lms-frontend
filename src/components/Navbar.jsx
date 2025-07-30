@@ -182,7 +182,7 @@ const Nav = () => {
                   Back
                 </button>
               )}
-              {path === "/student/gems" && (
+              {(path === "/student/gems" || path === "/student/prize") && (
                 <button
                   className="logout-btn d-flex align-items-center justify-content-center gap-2"
                   onClick={() => navigate("/student")}

@@ -200,7 +200,11 @@ const NewStudentDashboard = () => {
                 >
                   Gems History
                 </button>
-                <button className="dashboard-button w-100" size="sm">
+                <button
+                  className="dashboard-button w-100"
+                  size="sm"
+                  onClick={() => navigate("prize")}
+                >
                   View Prizes
                 </button>
               </div>

@@ -2129,27 +2129,27 @@ label.kbc-option-label:not(.text-red-600, .text-green-600)::after {
 }
 
 label.kbc-option-label.text-red-600 {
-    background: #ffdbd8;
+  background: #ffdbd8;
 }
 
 label.kbc-option-label.text-red-600:before {
-    content: "\e4f8";
-    font-family: "Phosphor" !important;
-    font-size: 25px;
-    float: right;
-    line-height: 1;
+  content: "\e4f8";
+  font-family: "Phosphor" !important;
+  font-size: 25px;
+  float: right;
+  line-height: 1;
 }
 
 label.kbc-option-label.text-green-600 {
-    background: #ccffce;
+  background: #ccffce;
 }
 
 label.kbc-option-label.text-green-600:before {
-    content: "\e184";
-    font-family: "Phosphor" !important;
-    font-size: 25px;
-    float: right;
-    line-height: 1;
+  content: "\e184";
+  font-family: "Phosphor" !important;
+  font-size: 25px;
+  float: right;
+  line-height: 1;
 }
 
 label.kbc-option-label input {
@@ -2393,36 +2393,108 @@ label.kbc-option-label:has(input:checked)::after {
 }
 
 .table-height {
-    max-height: 200px;
-    overflow-y: auto;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .ai-button {
-    position: absolute !important;
-    right: 80px;
-    top: 15px;
+  position: absolute !important;
+  right: 80px;
+  top: 15px;
 }
 
-.ai-button, .ai-button:hover, .ai-button:focus{
+.ai-button,
+.ai-button:hover,
+.ai-button:focus {
   background-color: #052b55 !important;
 }
 
 .gem-icon {
-    background-color: #eabfff !important;
-    color: #000000 !important;
-    padding: 12px !important;
-    display: flex
-;
-    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
-    border: none;
-    outline: none;
-    text-decoration: none;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.2);
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px;
-    width: fit-content;
-    font-size: 30px;
-    margin: -40px 0 0;
+  background-color: #eabfff !important;
+  color: #000000 !important;
+  padding: 12px !important;
+  display: flex;
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+  border: none;
+  outline: none;
+  text-decoration: none;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  width: fit-content;
+  font-size: 30px;
+  margin: -40px 0 0;
 }
 
+.prize-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 25px;
+  padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.prize-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.prize-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.prize-image {
+  width: 100%;
+  max-width: 140px;
+  margin: 0 auto 15px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.prize-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.prize-description {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+  min-height: 40px;
+}
+
+.prize-gems {
+  font-size: 14px;
+  color: #222;
+  margin-bottom: 12px;
+}
+
+.dashboard-button {
+  background: linear-gradient(to right, #4e9cff, #1c64ff);
+  border: none;
+  color: #fff;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dashboard-button:hover {
+  background: linear-gradient(to right, #1c64ff, #4e9cff);
+  transform: scale(1.03);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
