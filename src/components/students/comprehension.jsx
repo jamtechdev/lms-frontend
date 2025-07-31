@@ -118,7 +118,7 @@ const Comprehension = ({ question, index }) => {
           <strong>Instruction:</strong> {question.question.instruction}
         </p>
         <Feedback question_id={question?.id} />
-        <ChatgptIcon />
+        {isSubmitted && <ChatgptIcon question_id={question?.id} />}
       </div>
       <div className="question-card">
         <div

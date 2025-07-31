@@ -108,7 +108,6 @@ const ComprehensionAssignment = ({ question, index }) => {
           <strong>Instruction:</strong> {question.question.instruction}
         </p>
         <Feedback question_id={question?.id} />
-        <ChatgptIcon />
       </div>
       <div className="question-card">
         <div

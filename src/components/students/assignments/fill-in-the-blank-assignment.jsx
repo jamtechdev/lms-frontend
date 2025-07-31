@@ -154,7 +154,6 @@ const FillInTheBlankAssignment = ({ question, index }) => {
           <strong>Instruction:</strong> {parse(instruction || "")}
         </p>
         <Feedback question_id={question?.id} />
-        <ChatgptIcon />
       </div>
       <div className="question-card">
         <div>{renderParsedQuestion(questionText)}</div>

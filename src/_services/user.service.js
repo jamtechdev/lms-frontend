@@ -13,6 +13,7 @@ const userService = {
     feedback,
     getViewPrize,
     redeemRequest,
+    getAi,
 };
 async function login(data) {
     return await axiosInstance.post(`/api/v1/auth/login`, data);
@@ -49,5 +50,8 @@ async function getViewPrize(id) {
 }
 async function redeemRequest(data) {
     return await axiosInstance.post(`/api/v1/gems/gems-redeem-request`, data);
+}
+async function getAi(data) {
+    return await axiosInstance.post(`/api/v1/comparison/question`, data);
 }
 export default userService;
