@@ -2427,7 +2427,7 @@ label.kbc-option-label:has(input:checked)::after {
   margin: -40px 0 0;
 }
 
-.prize-grid {
+/* .prize-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 25px;
@@ -2545,4 +2545,4 @@ label.kbc-option-label:has(input:checked)::after {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-}
+} */
