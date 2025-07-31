@@ -182,16 +182,7 @@ const Nav = () => {
                   Back
                 </button>
               )}
-              {path === "/student/gems" && (
-                <button
-                  className="logout-btn d-flex align-items-center justify-content-center gap-2"
-                  onClick={() => navigate("/student")}
-                >
-                  <i className="ph ph-arrow-left"></i>
-                  Back
-                </button>
-              )}
-              {(path === "/student/prize/log" || path === "/student/prize") && (
+              {(path === "/student/gems" || path === "/student/prize") && (
                 <>
                   <div className="d-flex align-items-center justify-content-center gap-2">
                     <button
@@ -201,6 +192,17 @@ const Nav = () => {
                       Track your price
                     </button>
                   </div>
+                  <button
+                    className="logout-btn d-flex align-items-center justify-content-center gap-2"
+                    onClick={() => navigate("/student")}
+                  >
+                    <i className="ph ph-arrow-left"></i>
+                    Back
+                  </button>
+                </>
+              )}
+              {path === "/student/prize/log" && (
+                <>
                   <button
                     className="logout-btn d-flex align-items-center justify-content-center gap-2"
                     onClick={() => navigate("/student")}
