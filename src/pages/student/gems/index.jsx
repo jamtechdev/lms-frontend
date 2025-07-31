@@ -48,13 +48,13 @@ const StudentGems = () => {
               <div className="card shadow-sm mb-5">
                 <div className="card-body">
                   <div className="gem-icon mb-3">
-                    <i class="ph ph-sketch-logo"></i>
+                    <i className="ph ph-sketch-logo"></i>
                   </div>
                   <h5 className="card-title mb-1">{gem.username}</h5>
                   <div className="d-flex justify-content-between align-items-center">
                     <div>
                       <span className="badge bg-primary d-flex align-items-center gap-5">
-                        <i class="ph ph-sketch-logo"></i>
+                        <i className="ph ph-sketch-logo"></i>
                         {gem.gems}
                       </span>
                     </div>
@@ -67,12 +67,12 @@ const StudentGems = () => {
                   <div className="pt-2">
                     <div className="card-text">
                       <strong>
-                        <i class="ph ph-books"></i>
+                        <i className="ph ph-books"></i>
                       </strong>{" "}
                       {formatSource(gem.source)}
                       <br />
                       <strong>
-                        <i class="ph ph-book-open"></i>
+                        <i className="ph ph-book-open"></i>
                       </strong>{" "}
                       {gem.source === "assignment"
                         ? gem.assignment.subject.name
