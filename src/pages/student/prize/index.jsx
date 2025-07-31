@@ -63,61 +63,87 @@ const Prize = () => {
   };
 
   return (
-    <div className="prize-container">
+    <div className="container mt-5">
       {loading ? (
-        <div className="text-center mt-3">
-          <img src={loader} alt="Loading..." />
+        <div className="text-center">
+          <img src={loader} alt="Loading..." className="my-5" />
         </div>
       ) : data.length > 0 ? (
-        <div className="prize-grid">
+        <div className="row row-cols-1 row-cols-md-3 g-4">
           {data.map((item) => (
-            <div className="prize-card" key={item.id}>
-              <img src={item.image} alt={item.name} className="prize-image" />
-              <h3 className="prize-title">{item.name}</h3>
-              <p className="prize-description">{item.description}</p>
-              <p className="prize-gems">
-                <strong>Gems Required:</strong> {item.gems_required}
-              </p>
-              <button
-                className="dashboard-button w-100"
-                onClick={() => handleRedeemClick(item)}
-              >
-                Redeem Prize
-              </button>
+            <div className="col" key={item.id}>
+              <div className="card shadow-lg border-0 rounded-3">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="card-img-top img-fluid"
+                  style={{
+                    height: "250px",
+                    objectFit: "cover", // Ensures images fill the container properly
+                    borderRadius: "10px", // Rounded corners for images
+                  }}
+                />
+                <div className="card-body text-center">
+                  <h5 className="card-title text-dark">{item.name}</h5>
+                  <p className="card-text text-muted">{item.description}</p>
+                  <p className="card-text">
+                    <strong>Gems Required:</strong> {item.gems_required}
+                  </p>
+                  <button
+                    className="btn btn-primary w-100"
+                    onClick={() => handleRedeemClick(item)}
+                  >
+                    Redeem Prize
+                  </button>
+                </div>
+              </div>
             </div>
           ))}
         </div>
       ) : (
-        <p className="no-prize">No Prizes Available</p>
+        <p className="text-center text-muted">No Prizes Available</p>
       )}
 
+      {/* Modal for redeeming prize */}
       {showModal && selectedPrize && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Redeem Prize</h2>
-            <p>
-              <strong>Prize:</strong> {selectedPrize.name}
-            </p>
-            <label htmlFor="shippingAddress" className="shipping-label">
-              Shipping Address:
-            </label>
-            <textarea
-              className="shipping-textarea"
-              rows="4"
-              placeholder="Enter your shipping address..."
-              value={shippingAddress}
-              onChange={(e) => setShippingAddress(e.target.value)}
-            />
-            <div className="modal-actions">
-              <button className="dashboard-button" onClick={handleSubmit}>
-                Confirm
-              </button>
-              <button
-                className="dashboard-button cancel"
-                onClick={handleCloseModal}
-              >
-                Cancel
-              </button>
+        <div className="modal fade show" style={{ display: "block" }} tabIndex="-1" aria-labelledby="redeemModalLabel" aria-hidden="true">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="redeemModalLabel">Redeem Prize</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={handleCloseModal}
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>
+                  <strong>Prize:</strong> {selectedPrize.name}
+                </p>
+                <div className="mb-3">
+                  <label htmlFor="shippingAddress" className="form-label">
+                    Shipping Address
+                  </label>
+                  <textarea
+                    id="shippingAddress"
+                    className="form-control"
+                    rows="4"
+                    placeholder="Enter your shipping address..."
+                    value={shippingAddress}
+                    onChange={(e) => setShippingAddress(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-success" onClick={handleSubmit}>
+                  Confirm
+                </button>
+                <button className="btn btn-secondary" onClick={handleCloseModal}>
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -11,6 +11,8 @@ const StudentGems = () => {
   const [gemsData, setGemsData] = useState([]);
   const childId = useSelector(getChildId);
   const navigate = useNavigate();
+
+  // Function to fetch gems history
   const fetchGems = async () => {
     setLoading(true);
     try {
@@ -27,6 +29,7 @@ const StudentGems = () => {
     fetchGems();
   }, []);
 
+  // Format the source to capitalize each word and handle empty sources
   const formatSource = (source) => {
     if (!source) return "";
     return source
@@ -48,36 +51,41 @@ const StudentGems = () => {
               <div className="card shadow-sm mb-5">
                 <div className="card-body">
                   <div className="gem-icon mb-3">
-                    <i class="ph ph-sketch-logo"></i>
+                    <i className="ph ph-sketch-logo"></i>
                   </div>
                   <h5 className="card-title mb-1">{gem.username}</h5>
                   <div className="d-flex justify-content-between align-items-center">
                     <div>
                       <span className="badge bg-primary d-flex align-items-center gap-5">
-                        <i class="ph ph-sketch-logo"></i>
-                        {gem.gems}
+                        <i className="ph ph-sketch-logo"></i>
+                        {gem.total_gems}
                       </span>
                     </div>
                     <div>
-                      <small className="text-muted">
-                        {new Date(gem.created_at).toLocaleDateString()}
-                      </small>
+                      <small className="text-muted">{gem.date}</small>
                     </div>
                   </div>
                   <div className="pt-2">
                     <div className="card-text">
-                      <strong>
-                        <i class="ph ph-books"></i>
-                      </strong>{" "}
-                      {formatSource(gem.source)}
-                      <br />
-                      <strong>
-                        <i class="ph ph-book-open"></i>
-                      </strong>{" "}
-                      {gem.source === "assignment"
-                        ? gem.assignment.subject.name
-                        : gem.subject.name}
-                      <br />
+                      {/* Loop through gems_summary */}
+                      {Object.entries(gem.gems_summary).map(([subject, topics], subjectIndex) => (
+                        <div key={subjectIndex}>
+                          <strong>
+                            <i className="ph ph-book-open"></i>
+                          </strong>{" "}
+                          {subject}
+                          <ul>
+                            {Object.entries(topics).map(([topic, gems], topicIndex) => (
+                              <li key={topicIndex}>
+                                <strong>
+                                  <i className="ph ph-book"></i>
+                                </strong>{" "}
+                                {topic}: {gems} Gems
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>

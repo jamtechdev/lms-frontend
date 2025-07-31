@@ -1,17 +1,23 @@
 import { useState, useEffect } from "react";
 import loader from "../../../assets/images/loader.gif";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { getChildId } from "../../../_store/_reducers/auth";
+import { useSelector } from "react-redux";
 import parentService from "../../../_services/parent.service";
 
 const Gems = () => {
   const [loading, setLoading] = useState(false);
   const [gemsData, setGemsData] = useState([]);
+  const childId = useSelector(getChildId);
+  const navigate = useNavigate();
 
+  // Fetch gems data from the service
   const fetchGems = async () => {
     setLoading(true);
     try {
       const response = await parentService.getGem();
-      setGemsData(response.data || []);
+      setGemsData(response.data || []); // Set the fetched gems data
     } catch (error) {
       toast.error("Error fetching gems");
     } finally {
@@ -23,6 +29,7 @@ const Gems = () => {
     fetchGems();
   }, []);
 
+  // Helper function to format the source (e.g., 'question_bank' -> 'Question Bank')
   const formatSource = (source) => {
     if (!source) return "";
     return source
@@ -44,36 +51,43 @@ const Gems = () => {
               <div className="card shadow-sm mb-5">
                 <div className="card-body">
                   <div className="gem-icon mb-3">
-                    <i class="ph ph-sketch-logo"></i>
+                    <i className="ph ph-sketch-logo"></i>
                   </div>
                   <h5 className="card-title mb-1">{gem.username}</h5>
                   <div className="d-flex justify-content-between align-items-center">
                     <div>
                       <span className="badge bg-primary d-flex align-items-center gap-5">
-                        <i class="ph ph-sketch-logo"></i>
-                        {gem.gems}
+                        <i className="ph ph-sketch-logo"></i>
+                        {gem.total_gems}
                       </span>
                     </div>
                     <div>
                       <small className="text-muted">
-                        {new Date(gem.created_at).toLocaleDateString()}
+                        {new Date(gem.date).toLocaleDateString()}
                       </small>
                     </div>
                   </div>
                   <div className="pt-2">
                     <div className="card-text">
-                      <strong>
-                        <i class="ph ph-books"></i>
-                      </strong>{" "}
-                      {formatSource(gem.source)}
-                      <br />
-                      <strong>
-                        <i class="ph ph-book-open"></i>
-                      </strong>{" "}
-                      {gem.source === "assignment"
-                        ? gem.assignment.subject.name
-                        : gem.subject.name}
-                      <br />
+                      {/* Loop through gems_summary to show grouped data */}
+                      {Object.entries(gem.gems_summary).map(([subject, topics], subjectIndex) => (
+                        <div key={subjectIndex}>
+                          <strong>
+                            <i className="ph ph-book-open"></i>
+                          </strong>{" "}
+                          {subject}
+                          <ul>
+                            {Object.entries(topics).map(([topic, gems], topicIndex) => (
+                              <li key={topicIndex}>
+                                <strong>
+                                  <i className="ph ph-book"></i>
+                                </strong>{" "}
+                                {topic}: {gems} Gems
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
