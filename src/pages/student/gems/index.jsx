@@ -12,7 +12,6 @@ const StudentGems = () => {
   const childId = useSelector(getChildId);
   const navigate = useNavigate();
 
-  // Function to fetch gems history
   const fetchGems = async () => {
     setLoading(true);
     try {
@@ -29,7 +28,6 @@ const StudentGems = () => {
     fetchGems();
   }, []);
 
-  // Format the source to capitalize each word and handle empty sources
   const formatSource = (source) => {
     if (!source) return "";
     return source
@@ -67,25 +65,28 @@ const StudentGems = () => {
                   </div>
                   <div className="pt-2">
                     <div className="card-text">
-                      {/* Loop through gems_summary */}
-                      {Object.entries(gem.gems_summary).map(([subject, topics], subjectIndex) => (
-                        <div key={subjectIndex}>
-                          <strong>
-                            <i className="ph ph-book-open"></i>
-                          </strong>{" "}
-                          {subject}
-                          <ul>
-                            {Object.entries(topics).map(([topic, gems], topicIndex) => (
-                              <li key={topicIndex}>
-                                <strong>
-                                  <i className="ph ph-book"></i>
-                                </strong>{" "}
-                                {topic}: {gems} Gems
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
+                      {Object.entries(gem.gems_summary).map(
+                        ([subject, topics], subjectIndex) => (
+                          <div key={subjectIndex}>
+                            <strong>
+                              <i className="ph ph-book-open"></i>
+                            </strong>{" "}
+                            {subject}
+                            <ul>
+                              {Object.entries(topics).map(
+                                ([topic, gems], topicIndex) => (
+                                  <li key={topicIndex}>
+                                    <strong>
+                                      <i className="ph ph-book"></i>
+                                    </strong>{" "}
+                                    {topic}: {gems} Gems
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                          </div>
+                        )
+                      )}
                     </div>
                   </div>
                 </div>

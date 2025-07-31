@@ -14,6 +14,8 @@ const userService = {
     getViewPrize,
     redeemRequest,
     getAi,
+    getLogs,
+
 };
 async function login(data) {
     return await axiosInstance.post(`/api/v1/auth/login`, data);
@@ -53,5 +55,8 @@ async function redeemRequest(data) {
 }
 async function getAi(data) {
     return await axiosInstance.post(`/api/v1/comparison/question`, data);
+}
+async function getLogs(id) {
+    return await axiosInstance.get(`/api/v1/gems/redemption-logs?child_id=${id}`);
 }
 export default userService;

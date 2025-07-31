@@ -25,6 +25,7 @@ import UpdateAssignment from "../pages/parent/assessment-history/update";
 import WeeklyAssignment from "../pages/assignment";
 import StudentGems from "../pages/student/gems";
 import Prize from "../pages/student/prize";
+import Logs from "../pages/student/prizelog";
 
 
 const Login = lazy(() => import("../pages/login/index"));
@@ -74,6 +75,7 @@ const AppRouter = () => {
           <Route path="week-assignment/:id" element={<WeeklyAssignment />} />
           <Route path="gems" element={<StudentGems />} />
           <Route path="prize" element={<Prize />} />
+          <Route path="prize/log" element={<Logs />} />
         </Route>
 
         {/* Parent Routes */}

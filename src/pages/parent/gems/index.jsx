@@ -12,12 +12,11 @@ const Gems = () => {
   const childId = useSelector(getChildId);
   const navigate = useNavigate();
 
-  // Fetch gems data from the service
   const fetchGems = async () => {
     setLoading(true);
     try {
       const response = await parentService.getGem();
-      setGemsData(response.data || []); // Set the fetched gems data
+      setGemsData(response.data || []);
     } catch (error) {
       toast.error("Error fetching gems");
     } finally {
@@ -29,7 +28,6 @@ const Gems = () => {
     fetchGems();
   }, []);
 
-  // Helper function to format the source (e.g., 'question_bank' -> 'Question Bank')
   const formatSource = (source) => {
     if (!source) return "";
     return source
@@ -69,25 +67,28 @@ const Gems = () => {
                   </div>
                   <div className="pt-2">
                     <div className="card-text">
-                      {/* Loop through gems_summary to show grouped data */}
-                      {Object.entries(gem.gems_summary).map(([subject, topics], subjectIndex) => (
-                        <div key={subjectIndex}>
-                          <strong>
-                            <i className="ph ph-book-open"></i>
-                          </strong>{" "}
-                          {subject}
-                          <ul>
-                            {Object.entries(topics).map(([topic, gems], topicIndex) => (
-                              <li key={topicIndex}>
-                                <strong>
-                                  <i className="ph ph-book"></i>
-                                </strong>{" "}
-                                {topic}: {gems} Gems
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
+                      {Object.entries(gem.gems_summary).map(
+                        ([subject, topics], subjectIndex) => (
+                          <div key={subjectIndex}>
+                            <strong>
+                              <i className="ph ph-book-open"></i>
+                            </strong>{" "}
+                            {subject}
+                            <ul>
+                              {Object.entries(topics).map(
+                                ([topic, gems], topicIndex) => (
+                                  <li key={topicIndex}>
+                                    <strong>
+                                      <i className="ph ph-book"></i>
+                                    </strong>{" "}
+                                    {topic}: {gems} Gems
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                          </div>
+                        )
+                      )}
                     </div>
                   </div>
                 </div>

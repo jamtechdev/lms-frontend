@@ -79,8 +79,8 @@ const Prize = () => {
                   className="card-img-top img-fluid"
                   style={{
                     height: "250px",
-                    objectFit: "cover", // Ensures images fill the container properly
-                    borderRadius: "10px", // Rounded corners for images
+                    objectFit: "cover", 
+                    borderRadius: "10px",
                   }}
                 />
                 <div className="card-body text-center">
@@ -104,7 +104,6 @@ const Prize = () => {
         <p className="text-center text-muted">No Prizes Available</p>
       )}
 
-      {/* Modal for redeeming prize */}
       {showModal && selectedPrize && (
         <div className="modal fade show" style={{ display: "block" }} tabIndex="-1" aria-labelledby="redeemModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
