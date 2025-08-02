@@ -1,11 +1,10 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import logo from "../../assets/images/logo/logo.png";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { login } from "../../_store/_reducers/auth";
 import parentService from "../../_services/parent.service";
 
 const SignUp = () => {

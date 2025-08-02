@@ -1,6 +1,5 @@
 import React from "react";
 import kids from "../../assets/images/about-section.gif";
-import study from "../../assets/images/study.png";
 import animated2 from "../../assets/images/animated2.gif";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo/logo.png";
@@ -21,25 +20,7 @@ function Landing() {
               </small>
             </div>
           </div>
-          <div className="col-lg-6 text-center text-lg-right">
-            {/* <div className="d-inline-flex align-items-center">
-              <Link className="text-white px-2" to="https://www.facebook.com/">
-                <i className="fab fa-facebook-f"></i>
-            </Link>
-              <a className="text-white px-2" href="#">
-                <i className="fab fa-twitter"></i>
-              </a>
-              <a className="text-white px-2" href="#">
-                <i className="fab fa-linkedin-in"></i>
-              </a>
-              <a className="text-white px-2" href="#">
-                <i className="fab fa-instagram"></i>
-              </a>
-              <a className="text-white pl-2" href="#">
-                <i className="fab fa-youtube"></i>
-              </a>
-            </div> */}
-          </div>
+          <div className="col-lg-6 text-center text-lg-right"></div>
         </div>
       </div>
 
@@ -84,10 +65,7 @@ function Landing() {
             </div>
             <div className="col-lg-5 mb-5 mb-lg-0">
               <div className="position-relative h-100">
-                <img
-                  className="w-100 h-100 object-fit-contain"
-                  src={kids}
-                />
+                <img className="w-100 h-100 object-fit-contain" src={kids} />
               </div>
             </div>
             <div className="col-lg-7">
@@ -244,14 +222,6 @@ function Landing() {
                 </div>
               </div>
             </div>
-            {/* <div className="col-lg-5" style={{ height: "500px" }}>
-              <div className="position-relative h-100">
-                <img
-                  className="position-absolute w-100 h-100 object-fit-contain"
-                  src={study}
-                />
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
@@ -320,22 +290,6 @@ function Landing() {
                 anywhere.
               </p>
             </div>
-            {/* <div className="col-md-6 mb-5">
-              <h3 className="text-white mb-4">Newsletter</h3>
-              <div className="w-100">
-                <div className="input-group">
-                  <input
-                    type="text"
-                    className="form-control border-light"
-                    style={{ padding: "30px" }}
-                    placeholder="Your Email Address"
-                  />
-                  <div className="input-group-append">
-                    <button className="btn btn-primary px-4">Sign Up</button>
-                  </div>
-                </div>
-              </div>
-            </div> */}
 
             <div className="col-md-4 mb-5">
               <h3 className="text-black mb-4">Get In Touch</h3>
@@ -406,13 +360,6 @@ function Landing() {
           </div>
         </div>
       </div>
-
-      {/* <Link
-        to="/"
-        className="btn btn-lg btn-primary rounded-0 btn-lg-square back-to-top"
-      >
-        <i className="fa fa-angle-double-up"></i>
-      </Link> */}
     </>
   );
 }
