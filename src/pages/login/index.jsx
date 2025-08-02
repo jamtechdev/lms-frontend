@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import logo from "../../assets/images/logo/logo.png";
-import loginImage from "../../assets/images/auth-img1.png";
 import userService from "../../_services/user.service";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,14 +15,12 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [passwordShown, setPasswordShown] = useState(false);
-  const [activeTab, setActiveTab] = useState("parent");
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [unverifiedEmail, setUnverifiedEmail] = useState("");
 
   const togglePasswordVisibility = () => setPasswordShown((prev) => !prev);
 
   const parentInitialValues = { email: "", password: "" };
-  const studentInitialValues = { lock_code: "" };
 
   const parentValidationSchema = Yup.object({
     email: Yup.string()
@@ -32,10 +29,6 @@ const Login = () => {
     password: Yup.string()
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
-  });
-
-  const studentValidationSchema = Yup.object({
-    lock_code: Yup.string().required("Lock code is required"),
   });
 
   const handleParentSubmit = async (values) => {
@@ -85,29 +78,6 @@ const Login = () => {
       toast.success("Verification email sent!");
     } catch (err) {
       toast.error("Failed to resend verification email.");
-    }
-  };
-
-  const handleStudentSubmit = async (values) => {
-    try {
-      const response = await userService.loginStudent(values);
-      const userData = response.data;
-      dispatch(
-        login({
-          token: userData.token,
-          first_name: userData.first_name,
-          last_name: userData.last_name,
-          student_type: userData.student_type,
-          level: userData.level_id,
-          role: userData?.role,
-        })
-      );
-      toast.success("Student login successful!");
-      navigate("/student");
-    } catch (err) {
-      toast.error(
-        err?.response?.data?.message || "Student login failed, please try again"
-      );
     }
   };
 
@@ -209,37 +179,6 @@ const Login = () => {
                 Create an account
               </Link>
             </p>
-            {/* <div className="divider my-32 position-relative text-center">
-              <span className="divider__text text-gray-600 text-13 fw-medium px-26 bg-white">
-                or
-              </span>
-            </div>
-            <ul className="flex-align gap-10 flex-wrap justify-content-center">
-              <li>
-                <Link
-                  to="https://www.facebook.com"
-                  className="w-38 h-38 flex-center rounded-6 text-facebook-600 bg-facebook-50 hover-bg-facebook-600 hover-text-white text-lg"
-                >
-                  <i className="ph ph-facebook-logo"></i>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="https://www.twitter.com"
-                  className="w-38 h-38 flex-center rounded-6 text-twitter-600 bg-twitter-50 hover-bg-twitter-600 hover-text-white text-lg"
-                >
-                  <i className="ph ph-twitter-logo"></i>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="https://www.google.com"
-                  className="w-38 h-38 flex-center rounded-6 text-google-600 bg-google-50 hover-bg-google-600 hover-text-white text-lg"
-                >
-                  <i className="ph ph-google-logo"></i>
-                </Link>
-              </li>
-            </ul> */}
           </div>
         </div>
       </section>
