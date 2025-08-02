@@ -230,7 +230,6 @@ function Landing() {
         <div className="container py-5">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-5 mb-lg-0">
-              <h2 className="display-4">Send Us A Message</h2>
               <h6 className="d-inline-block position-relative text-primary text-uppercase pb-2 font-weight-semi-bold">
                 Need Help?
               </h6>
@@ -259,7 +258,7 @@ function Landing() {
                   </div>
                   <div className="mt-n1">
                     <h4>Email Us</h4>
-                    <p className="m-0 text-black">info@example.com</p>
+                    <p className="m-0 text-black">info@qtnvault.com</p>
                   </div>
                 </div>
               </div>
@@ -301,7 +300,7 @@ function Landing() {
                 <i className="fa fa-phone-alt mr-2"></i>+012 345 67890
               </p>
               <p>
-                <i className="fa fa-envelope mr-2"></i>info@example.com
+                <i className="fa fa-envelope mr-2"></i>info@qtnvault.com
               </p>
             </div>
 
