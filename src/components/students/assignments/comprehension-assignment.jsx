@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
-import userService from "../../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getSelected,
   setAssignmentsQuestion,
-  setAttemptQuestions,
 } from "../../../_store/_reducers/question";
 import Feedback from "../../Feedback";
-import ChatgptIcon from "../../ChatgptIcon";
 
 const ComprehensionAssignment = ({ question, index }) => {
   const dispatch = useDispatch();

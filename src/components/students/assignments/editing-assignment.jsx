@@ -1,12 +1,10 @@
 import parse from "html-react-parser";
 import { useEffect, useState } from "react";
-import userService from "../../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getSelected,
   setAssignmentsQuestion,
-  setAttemptQuestions,
 } from "../../../_store/_reducers/question";
 import Feedback from "../../Feedback";
 

@@ -7,7 +7,6 @@ import {
 } from "../../../_store/_reducers/question";
 import { useDispatch, useSelector } from "react-redux";
 import Feedback from "../../Feedback";
-import ChatgptIcon from "../../ChatgptIcon";
 
 const FillInTheBlankAssignment = ({ question, index }) => {
   const dispatch = useDispatch();

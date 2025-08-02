@@ -1,6 +1,6 @@
 import React, { useRef, useLayoutEffect, useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { useDispatch, } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setAssignmentsQuestion } from "../../../_store/_reducers/question";
 import Feedback from "../../Feedback";
 
@@ -8,11 +8,9 @@ const ReArrangeListAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
   const containerRefs = useRef({});
   const positionsRef = useRef({});
-
   const [submitted, setSubmitted] = useState(false);
   const [words, setWords] = useState([]);
 
-  // Shuffle once on mount
   useEffect(() => {
     if (question?.question?.options) {
       const shuffled = [...question.question.options].sort(
@@ -41,7 +39,7 @@ const ReArrangeListAssignment = ({ question, index }) => {
         if (dx || dy) {
           node.style.transform = `translate(${dx}px, ${dy}px)`;
           node.style.transition = "transform 0s";
-          node.getBoundingClientRect(); // force reflow
+          node.getBoundingClientRect();
           node.style.transition = "transform 300ms ease";
           node.style.transform = "";
         }
@@ -89,10 +87,10 @@ const ReArrangeListAssignment = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-             <p className="instruction-text">
+        <p className="instruction-text">
           <strong>Instruction:</strong> {question?.question?.instruction}
         </p>
-      <Feedback question_id={question?.id}/>
+        <Feedback question_id={question?.id} />
       </div>
       <div className="question-card mt-2">
         <div className="rearrangeBox mt-4">

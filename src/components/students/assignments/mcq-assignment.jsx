@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import parse from "html-react-parser";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAssignmentsQuestion,
-  setAssignmentsQuestion,
-} from "../../../_store/_reducers/question";
+import { setAssignmentsQuestion } from "../../../_store/_reducers/question";
 import Feedback from "../../Feedback";
 
 const McqAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
-  const answersStore = useSelector(getAssignmentsQuestion);
   const [selectedAnswer, setSelectedAnswer] = useState("");
 
   const handleSubmit = async () => {

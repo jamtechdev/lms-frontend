@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import userService from "../../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getSelected,
   setAssignmentsQuestion,
-  setAttemptQuestions,
 } from "../../../_store/_reducers/question";
 import Feedback from "../../Feedback";
 
@@ -133,14 +131,13 @@ const OpenClozeWithOptionsAssignment = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-         <p className="instruction-text">
+        <p className="instruction-text">
           <strong>Instruction:</strong> {questionData.instruction}
         </p>
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
-        <div
-        >
+        <div>
           {options.length > 0 && (
             <div className="option-tag">
               <strong>Options:</strong>

@@ -2,38 +2,26 @@ import parse from "html-react-parser";
 import { useState, useEffect } from "react";
 import Xarrow from "react-xarrows";
 import { useDispatch, useSelector } from "react-redux";
-import { setAssignmentsQuestion, setAttemptQuestions } from "../../../_store/_reducers/question";
-import { userService } from "../../../_services";
+import { setAssignmentsQuestion } from "../../../_store/_reducers/question";
 import toast from "react-hot-toast";
 import Feedback from "../../Feedback";
 
 const LinkingAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
-  const answersStore = useSelector((state) => state.question.attempts);
-
-  // Internal state to manage pagination if question has multiple sets (adjust as needed)
   const [page, setPage] = useState(1);
-
-  // Manage shuffledRight internally or derive it here:
-  // Assuming question has a field with right side items, otherwise adjust accordingly
   const [shuffledRight, setShuffledRight] = useState([]);
-
   const [matchesByQuestion, setMatchesByQuestion] = useState({});
   const [selected, setSelected] = useState({});
   const [submittedQuestions, setSubmittedQuestions] = useState(new Set());
-
-  // Assuming 'type' is from question.question.type or fallback
   const type = question?.question?.type || "linking";
 
   useEffect(() => {
-    // Shuffle right side items on load or page change
     if (question?.question?.answer) {
       const rightItems = question.question.answer.map((a) => a.right);
       const shuffled = [...rightItems].sort(() => Math.random() - 0.5);
       setShuffledRight(shuffled);
     }
   }, [question, page]);
-
 
   if (!question || !Array.isArray(question.question.answer)) return null;
 
@@ -112,7 +100,9 @@ const LinkingAssignment = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-           <p className="instruction-text"><strong>Instruction:</strong> {q.question.instruction}</p>
+        <p className="instruction-text">
+          <strong>Instruction:</strong> {q.question.instruction}
+        </p>
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card mb-0">
@@ -139,8 +129,9 @@ const LinkingAssignment = ({ question, index }) => {
                   <div
                     key={i}
                     id={`left-${qId}-${i}`}
-                    className={`link-item ${isConnected ? "connected" : ""} ${isSelected ? "selected" : ""
-                      } ${isSubmitted ? "disabled" : ""}`}
+                    className={`link-item ${isConnected ? "connected" : ""} ${
+                      isSelected ? "selected" : ""
+                    } ${isSubmitted ? "disabled" : ""}`}
                     onClick={() => handleLeftClick(qId, i)}
                   >
                     <div className="selector-circle" />
@@ -166,8 +157,9 @@ const LinkingAssignment = ({ question, index }) => {
                   <div
                     key={i}
                     id={`right-${qId}-${i}`}
-                    className={`link-item ${isConnected ? "connected" : ""} ${isSelected ? "selected" : ""
-                      } ${isSubmitted ? "disabled" : ""}`}
+                    className={`link-item ${isConnected ? "connected" : ""} ${
+                      isSelected ? "selected" : ""
+                    } ${isSubmitted ? "disabled" : ""}`}
                     onClick={() => handleRightClick(qId, i)}
                   >
                     <div className="selector-circle" />
@@ -221,7 +213,6 @@ const LinkingAssignment = ({ question, index }) => {
             )}
           </div>
         </div>
-        {/* map(pair => `${pair.left.word} → ${pair.right.word}`).join("\n"); */}
         {isSubmitted && (
           <div className="mt-4 p-3 border rounded bg-green-100 text-green-800 font-semibold whitespace-pre-line">
             Correct Answer:
@@ -241,7 +232,7 @@ const LinkingAssignment = ({ question, index }) => {
             className="dashboard-button"
             disabled={question?.is_attempt || isSubmitted || isButtonDisabled}
           >
-            {(question?.is_attempt || isSubmitted) ? "Attempted" : "Submit"}
+            {question?.is_attempt || isSubmitted ? "Attempted" : "Submit"}
           </button>
         </div>
       </div>

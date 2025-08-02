@@ -91,8 +91,11 @@ const OpenClozeWithDropdownAssignment = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-          <p className="instruction-text"> <strong>Instruction:</strong> {questionData.instruction}</p>
-     <Feedback question_id={question?.id}/>
+        <p className="instruction-text">
+          {" "}
+          <strong>Instruction:</strong> {questionData.instruction}
+        </p>
+        <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
         <div>
@@ -105,10 +108,9 @@ const OpenClozeWithDropdownAssignment = ({ question, index }) => {
             className="dashboard-button"
             disabled={question?.is_attempt || !allAnswered || isSubmitted}
           >
-            {(question?.is_attempt || isSubmitted) ? "Attempted" : "Submit"}
+            {question?.is_attempt || isSubmitted ? "Attempted" : "Submit"}
           </button>
         </div>
-
       </div>
     </>
   );

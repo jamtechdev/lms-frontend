@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import parse from "html-react-parser";
-import userService from "../../../_services/user.service";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAssignmentsQuestion,
-  setAssignmentsQuestion,
-} from "../../../_store/_reducers/question";
+import { setAssignmentsQuestion } from "../../../_store/_reducers/question";
 import Feedback from "../../Feedback";
 
 const TrueFalseAssignment = ({ question, index }) => {
   const dispatch = useDispatch();
-  const answersStore = useSelector(getAssignmentsQuestion);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -37,7 +32,7 @@ const TrueFalseAssignment = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-           <p className="instruction-text">
+        <p className="instruction-text">
           <strong>Instruction:</strong> {question.question.instruction}
         </p>
         <Feedback question_id={question?.id} />
