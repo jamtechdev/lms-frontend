@@ -47,7 +47,6 @@ const EditStudent = () => {
         if (key === "lock_code_enabled") {
           formData.append(key, values[key] ? 1 : 0);
         } else if (key === "avatar" && values[key] !== student?.avatar) {
-          // If avatar has changed, append it to FormData
           formData.append(key, values[key]);
         } else if (key !== "avatar") {
           formData.append(key, values[key]);
@@ -67,9 +66,12 @@ const EditStudent = () => {
         setUpdating(false);
       });
   };
-  if (loading) return <div className="text-center mt-5">
+  if (loading)
+    return (
+      <div className="text-center mt-5">
         <img src={loader} width={100} />
-      </div>;
+      </div>
+    );
   return (
     <>
       <Card className="p-4">

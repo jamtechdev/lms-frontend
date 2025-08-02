@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { data, Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import topicsService from "../../../../_services/topics.service";
 import { useDispatch, useSelector } from "react-redux";
 import { getSubject, setTopic } from "../../../../_store/_reducers/auth";
@@ -11,6 +11,7 @@ const Topics = () => {
   const subject = useSelector(getSubject);
   const [topics, setTopics] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const fetchTopics = async () => {
     setLoading(true);
     await topicsService
@@ -32,50 +33,6 @@ const Topics = () => {
   return (
     <>
       <div className="dashboard-body">
-        {/* <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
-                    <div className="breadcrumb mb-24">
-                        <ul className="flex-align gap-4">
-                            <li>
-                                <Link to="/student/subjects"
-                                    className="text-gray-200 fw-normal text-15 hover-text-main-600"
-                                >
-                                    Back to Subjects
-                                </Link>
-                            </li>
-                            <li>
-                                <span className="text-gray-500 fw-normal d-flex">
-                                    <i className="ph ph-caret-right"></i>
-                                </span>
-                            </li>
-                            <li>
-                                <span className="text-main-600 fw-normal text-15 hover-text-main-600">
-                                    Topics
-                                </span>
-                            </li>
-                            <li>
-                                <span className="text-gray-500 fw-normal d-flex">
-                                    <i className="ph ph-caret-right"></i>
-                                </span>
-                            </li>
-                            <li>
-                                <span className="text-gray-600 fw-normal text-15">
-                                    Questions Type
-                                </span>
-                            </li>
-                            <li>
-                                <span className="text-gray-500 fw-normal d-flex">
-                                    <i className="ph ph-caret-right"></i>
-                                </span>
-                            </li>
-                            <li>
-                                <span className="text-gray-600 fw-normal text-15">
-                                    Questions
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                </div> */}
-
         <div className="row gy-4 shadowBox">
           {loading ? (
             <div className="col-12 text-center">

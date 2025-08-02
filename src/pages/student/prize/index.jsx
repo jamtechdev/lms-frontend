@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import loader from "../../../assets/images/loader.gif";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { getChildId } from "../../../_store/_reducers/auth";
 import { useSelector } from "react-redux";
 import userService from "../../../_services/user.service";
@@ -13,7 +12,6 @@ const Prize = () => {
   const [selectedPrize, setSelectedPrize] = useState(null);
   const [shippingAddress, setShippingAddress] = useState("");
   const childId = useSelector(getChildId);
-  const navigate = useNavigate();
 
   const fetchPrize = async () => {
     setLoading(true);
@@ -79,7 +77,7 @@ const Prize = () => {
                   className="card-img-top img-fluid"
                   style={{
                     height: "250px",
-                    objectFit: "cover", 
+                    objectFit: "cover",
                     borderRadius: "10px",
                   }}
                 />
@@ -105,11 +103,19 @@ const Prize = () => {
       )}
 
       {showModal && selectedPrize && (
-        <div className="modal fade show" style={{ display: "block" }} tabIndex="-1" aria-labelledby="redeemModalLabel" aria-hidden="true">
+        <div
+          className="modal fade show"
+          style={{ display: "block" }}
+          tabIndex="-1"
+          aria-labelledby="redeemModalLabel"
+          aria-hidden="true"
+        >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="redeemModalLabel">Redeem Prize</h5>
+                <h5 className="modal-title" id="redeemModalLabel">
+                  Redeem Prize
+                </h5>
                 <button
                   type="button"
                   className="btn-close"
@@ -139,7 +145,10 @@ const Prize = () => {
                 <button className="btn btn-success" onClick={handleSubmit}>
                   Confirm
                 </button>
-                <button className="btn btn-secondary" onClick={handleCloseModal}>
+                <button
+                  className="btn btn-secondary"
+                  onClick={handleCloseModal}
+                >
                   Cancel
                 </button>
               </div>

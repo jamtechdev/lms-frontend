@@ -10,7 +10,6 @@ const CreateStudent = () => {
   const navigate = useNavigate();
   const [passwordShown, setPasswordShown] = useState(false);
   const [creating, setCreating] = useState(false);
-  const togglePasswordVisibility = () => setPasswordShown((prev) => !prev);
   const [studentLevel, setStudentLevel] = useState();
   useEffect(() => {
     const fetchStudentLevel = async () => {

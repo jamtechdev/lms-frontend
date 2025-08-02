@@ -1,40 +1,17 @@
 import React, { useEffect, useState } from "react";
 import maths from "../../../../assets/images/maths.png";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getLevel,
-  getQuestion,
-  getStudentType,
-  getSubject,
-  setQuestion,
-  setSubject,
-} from "../../../../_store/_reducers/auth";
+import { getLevel, setSubject } from "../../../../_store/_reducers/auth";
 import userService from "../../../../_services/user.service";
-import parse from "html-react-parser";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Subject = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [selectedSubject, setSelectedSubject] = useState(null);
-  const [selectedQuestionType, setSelectedQuestionType] = useState(null);
   const [loading, setLoading] = useState(false);
   const [subjects, setSubjects] = useState([]);
   const level = useSelector(getLevel);
-  const questionTypes = [
-    { key: "mcq", label: "MCQ" },
-    { key: "true_false", label: "True/False" },
-    { key: "linking", label: "Linking" },
-    { key: "rearranging", label: "Rearranging" },
-    { key: "open_cloze_with_options", label: "Open Close With Options" },
-    {
-      key: "open_cloze_with_dropdown_options",
-      label: "Open Close With Dropdown",
-    },
-    { key: "comprehension", label: "Comprehension" },
-    { key: "editing", label: "Editing" },
-    { key: "fill_in_the_blank", label: "Fill in the blank" },
-  ];
 
   useEffect(() => {
     const fetchSubjects = async () => {
@@ -57,74 +34,6 @@ const Subject = () => {
   return (
     <>
       <div className="dashboard-body">
-        {/* <div className="breadcrumb-with-buttons mb-24 flex-between flex-wrap gap-8">
-                    <div className="breadcrumb mb-24">
-                        <ul className="flex-align gap-4">
-                            <li>
-                                <Link
-                                    to="/student/subjects"
-                                    onClick={() => {
-                                        setSelectedSubject(null);
-                                        setSelectedQuestionType(null);
-                                    }}
-                                    className="text-gray-200 fw-normal text-15 hover-text-main-600"
-                                >
-                                    Back to Subjects
-                                </Link>
-                            </li>
-                            <li>
-                                <span className="text-gray-500 fw-normal d-flex">
-                                    <i className="ph ph-caret-right"></i>
-                                </span>
-                            </li>
-                            <li>
-                                {selectedQuestionType ? (
-                                    <span className="text-main-600 lfw-normal text-15">
-                                        Questions
-                                    </span>
-                                ) : (
-                                    <span className="text-gray-500 fw-normal text-15">
-                                        Topics
-                                    </span>
-                                )}
-                            </li>
-                            <li>
-                                <span className="text-gray-500 fw-normal d-flex">
-                                    <i className="ph ph-caret-right"></i>
-                                </span>
-                            </li>
-                            <li>
-                                {selectedQuestionType ? (
-                                    <a
-                                        href="#"
-                                        onClick={() => {
-                                            setSelectedQuestionType(null);
-                                        }}
-                                        className="text-gray-200 fw-normal text-15 hover-text-main-600"
-                                    >
-                                        {questionTypes.find((t) => t.key === selectedQuestionType)
-                                            ?.label || "Question Type"}
-                                    </a>
-                                ) : (
-                                    <span className="text-gray-500 fw-normal text-15">
-                                        Question Type
-                                    </span>
-                                )}
-                            </li>
-                            <li>
-                                <span className="text-gray-500 fw-normal d-flex">
-                                    <i className="ph ph-caret-right"></i>
-                                </span>
-                            </li>
-                            <li>
-                                <span className="text-gray-500 fw-normal text-15">
-                                    Questions
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                </div> */}
-
         {!selectedSubject && (
           <div className="row gy-4 shadowBox">
             {loading ? (

@@ -1,16 +1,11 @@
 import { useState, useEffect } from "react";
 import loader from "../../../assets/images/loader.gif";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import { getChildId } from "../../../_store/_reducers/auth";
-import { useSelector } from "react-redux";
 import parentService from "../../../_services/parent.service";
 
 const Gems = () => {
   const [loading, setLoading] = useState(false);
   const [gemsData, setGemsData] = useState([]);
-  const childId = useSelector(getChildId);
-  const navigate = useNavigate();
 
   const fetchGems = async () => {
     setLoading(true);
@@ -27,14 +22,6 @@ const Gems = () => {
   useEffect(() => {
     fetchGems();
   }, []);
-
-  const formatSource = (source) => {
-    if (!source) return "";
-    return source
-      .split("_")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
 
   return (
     <div className="mt-3">

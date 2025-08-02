@@ -14,7 +14,6 @@ import EditingQuesions from "../../../components/students/editing-questions";
 import FillInTheBlank from "../../../components/students/fill-in-the-blank";
 import Comprehension from "../../../components/students/comprehension";
 import loader from "../../../assets/images/loader.gif";
-import ResponsivePagination from "react-responsive-pagination";
 import "react-responsive-pagination/themes/classic.css";
 import toast from "react-hot-toast";
 
@@ -30,7 +29,7 @@ const AllQuestions = () => {
   const education = useSelector(getStudentType);
   const level = useSelector(getLevel);
   const [page, setPage] = useState(1);
-  
+
   const navigate = useNavigate();
   const fetchQuestion = async () => {
     setLoading(true);
@@ -62,9 +61,11 @@ const AllQuestions = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchQuestion();
   }, [page, type, subject, topic]);
+
   useEffect(() => {
     return () => {
       dispatch(removeAttemptQuestions());
@@ -195,11 +196,6 @@ const AllQuestions = () => {
         >
           {page < questions?.pagination?.total_pages ? "Next" : "Finished"}
         </button>
-        {/* <ResponsivePagination
-          current={page}
-          total={questions?.pagination?.total_pages}
-          onPageChange={setPage}
-        /> */}
       </div>
     </>
   );

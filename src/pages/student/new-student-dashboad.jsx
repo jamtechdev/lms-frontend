@@ -4,7 +4,6 @@ import {
   Row,
   Col,
   Card,
-  ProgressBar,
   Table,
   Alert,
   Modal,
@@ -190,7 +189,6 @@ const NewStudentDashboard = () => {
               </div>
               <div className="pt-2 pb-3">
                 <p className="text-muted my-1">Redeem your gem-based rewards</p>
-                {/* <ProgressBar now={gems} label={`${gems}%`} /> */}
               </div>
               <div className="d-flex gap-5">
                 <button

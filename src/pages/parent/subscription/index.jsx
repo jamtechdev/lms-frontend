@@ -10,6 +10,7 @@ const Subscription = () => {
   const [selectedMonthlyPlan, setSelectedMonthlyPlan] = useState(null);
   const [selectedAnnualPlan, setSelectedAnnualPlan] = useState(null);
   const [selectedPlanId, setSelectedPlanId] = useState(null);
+
   const fetchSubscription = async () => {
     setLoading(true);
     try {
@@ -40,6 +41,7 @@ const Subscription = () => {
   const trialPlan = plans.trial[0];
   const monthlyPlans = plans.monthly;
   const annualPlans = plans.annually;
+
   useEffect(() => {
     fetchSubscription();
   }, []);
