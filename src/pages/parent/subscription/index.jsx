@@ -49,7 +49,6 @@ const Subscription = () => {
   const getsubject = async (planId) => {
     try {
       const response = await parentService.getPlanSubject({ plan_id: planId });
-      console.log(response, "Plan Subjects for plan:", planId);
     } catch (error) {
       toast.error("Error fetching plan subjects");
     }
