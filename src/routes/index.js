@@ -2,11 +2,9 @@ import React, { lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
 import ParentLayout from "../layouts/ParentLayout";
-import ParentDashboard from "../pages/parent";
 import ProtectedRoute from "../layouts/ProtectedRoute";
 import AccessDeniedPage from "../components/common/access-denied";
 import StudentLayout from "../layouts/StudentLayout";
-import StudentDashboard from "../pages/student";
 import StudentList from "../pages/parent/students";
 import CreateStudent from "../pages/parent/students/create";
 
@@ -32,7 +30,6 @@ const Login = lazy(() => import("../pages/login/index"));
 const Landing = lazy(() => import("../pages/landing/index"));
 const Signup = lazy(() => import("../pages/signup/index"));
 const ForgotPassword = lazy(() => import("../pages/forgotpassword/index"));
-const Dashboard = lazy(() => import("../pages/dashboard/index"));
 const Questions = lazy(() => import("../pages/student/questions/index"));
 
 const NoPage = () => (
@@ -52,11 +49,6 @@ const AppRouter = () => {
           <Route path="/not-access" element={<AccessDeniedPage />} />
         </Route>
 
-        {/* <Route element={<AuthLayout isProtected={true} />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/questions" element={<Questions />} />
-        </Route> */}
-        {/* Parent Routes */}
         <Route
           path="/student/*"
           element={
@@ -78,7 +70,6 @@ const AppRouter = () => {
           <Route path="prize/log" element={<Logs />} />
         </Route>
 
-        {/* Parent Routes */}
         <Route
           path="/parent/*"
           element={
