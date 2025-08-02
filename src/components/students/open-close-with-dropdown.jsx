@@ -86,9 +86,7 @@ const OpenClozeWithDropdown = ({ question, index }) => {
         const blankNumber = parseInt(match[1]);
         const blank = blanks.find((b) => b.blank_number === blankNumber);
         if (!blank) return <span key={i}>{part}</span>;
-
         const selectedValue = selectedAnswers[blankNumber] || "";
-
         return (
           <select
             key={i}
@@ -122,7 +120,6 @@ const OpenClozeWithDropdown = ({ question, index }) => {
     setInputs({});
     setSubmittedQuestions({});
     setAnswers([]);
-    // ✅ Restore answer from Redux store if it exists
     const saved = answersStore.find((ans) => ans.question_id === questionId);
 
     if (saved?.answer || saved?.user_answer) {
@@ -147,7 +144,7 @@ const OpenClozeWithDropdown = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-         <p className="instruction-text">
+        <p className="instruction-text">
           {" "}
           <strong>Instruction:</strong> {questionData.instruction}
         </p>

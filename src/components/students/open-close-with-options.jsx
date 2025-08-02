@@ -17,11 +17,10 @@ const OpenClozeWithOptions = ({ question, index }) => {
   const [userAnswerJSON, setUserAnswerJSON] = useState({});
   const [submittedQuestions, setSubmittedQuestions] = useState({});
   const [storedAnswer, setStoredAnswer] = useState([]);
- const childId = useSelector(getChildId);
+  const childId = useSelector(getChildId);
   const questionData = question.question;
   const questionId = question.id;
   const type = questionData.question_type;
-
   const paragraph = questionData.paragraph;
   const blanks = questionData.questions;
   const options =
@@ -185,14 +184,13 @@ const OpenClozeWithOptions = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-          <p className="instruction-text">
+        <p className="instruction-text">
           <strong>Instruction:</strong> {questionData.instruction}
         </p>
         <Feedback question_id={question?.id} />
       </div>
       <div className="question-card">
-        <div
-        >
+        <div>
           {options.length > 0 && (
             <div className="option-tag">
               <strong>Options:</strong>

@@ -14,11 +14,10 @@ const ReArrangeList = ({ question, index }) => {
   const answersStore = useSelector(getSelected);
   const containerRefs = useRef({});
   const positionsRef = useRef({});
-const childId = useSelector(getChildId);
+  const childId = useSelector(getChildId);
   const [submitted, setSubmitted] = useState(false);
   const [words, setWords] = useState([]);
 
-  // Shuffle once on mount
   useEffect(() => {
     if (question?.question?.options) {
       const shuffled = [...question.question.options].sort(
@@ -47,7 +46,7 @@ const childId = useSelector(getChildId);
         if (dx || dy) {
           node.style.transform = `translate(${dx}px, ${dy}px)`;
           node.style.transition = "transform 0s";
-          node.getBoundingClientRect(); // force reflow
+          node.getBoundingClientRect();
           node.style.transition = "transform 300ms ease";
           node.style.transform = "";
         }
@@ -88,7 +87,7 @@ const childId = useSelector(getChildId);
           question_id: question.id,
           answer: userAnswer,
           type: question.question.type,
-            child_id: childId,
+          child_id: childId,
         },
       ],
     };
@@ -134,7 +133,7 @@ const childId = useSelector(getChildId);
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-          <p className="instruction-text">
+        <p className="instruction-text">
           <strong>Instruction:</strong> {question?.question?.instruction}
         </p>
         <Feedback question_id={question?.id} />

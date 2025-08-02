@@ -11,23 +11,15 @@ import { getChildId } from "../../_store/_reducers/auth";
 const LinkingQuestions = ({ question, index }) => {
   const dispatch = useDispatch();
   const answersStore = useSelector((state) => state.question.attempts);
-
-  // Internal state to manage pagination if question has multiple sets (adjust as needed)
   const [page, setPage] = useState(1);
-
-  // Manage shuffledRight internally or derive it here:
-  // Assuming question has a field with right side items, otherwise adjust accordingly
   const [shuffledRight, setShuffledRight] = useState([]);
   const childId = useSelector(getChildId);
   const [matchesByQuestion, setMatchesByQuestion] = useState({});
   const [selected, setSelected] = useState({});
   const [submittedQuestions, setSubmittedQuestions] = useState(new Set());
-
-  // Assuming 'type' is from question.question.type or fallback
   const type = question?.question?.type || "linking";
 
   useEffect(() => {
-    // Shuffle right side items on load or page change
     if (question?.question?.answer) {
       const rightItems = question.question.answer.map((a) => a.right);
       const shuffled = [...rightItems].sort(() => Math.random() - 0.5);
@@ -57,7 +49,7 @@ const LinkingQuestions = ({ question, index }) => {
 
         setMatchesByQuestion({ [question.id]: matches });
         setSubmittedQuestions((prev) => new Set(prev).add(question.id));
-        setShuffledRight(rightItems); // keep original order
+        setShuffledRight(rightItems);
       } catch (e) {
         console.error("Failed to parse saved answer", e?.response);
       }
@@ -77,7 +69,7 @@ const LinkingQuestions = ({ question, index }) => {
   const selectedLeft = selected[qId]?.leftIndex;
   const selectedRight = selected[qId]?.rightIndex;
   const isSubmitted = submittedQuestions.has(qId);
-  const isButtonDisabled = Object.keys(currentMatches).length === 0;     
+  const isButtonDisabled = Object.keys(currentMatches).length === 0;
   const handleLeftClick = (qId, index) => {
     if (submittedQuestions.has(qId)) return;
     setSelected((prev) => ({
@@ -160,7 +152,7 @@ const LinkingQuestions = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-         <p className="instruction-text">
+        <p className="instruction-text">
           <strong>Instruction:</strong> {q.question.instruction}
         </p>
         <Feedback question_id={question?.id} />
@@ -273,7 +265,6 @@ const LinkingQuestions = ({ question, index }) => {
             )}
           </div>
         </div>
-        {/* map(pair => `${pair.left.word} → ${pair.right.word}`).join("\n"); */}
         {isSubmitted && (
           <div className="mt-4 p-3 border rounded bg-green-100 text-green-800 font-semibold whitespace-pre-line">
             Correct Answer:

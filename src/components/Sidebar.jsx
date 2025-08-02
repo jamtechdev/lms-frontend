@@ -3,7 +3,7 @@ import { useLocation, Link } from "react-router-dom";
 import logo from "../assets/images/logo/logo.png";
 import { useSelector } from "react-redux";
 import { getLevel, hasPermission } from "../_store/_reducers/auth";
-import { Accordion, Card } from "react-bootstrap";
+import { Accordion } from "react-bootstrap";
 import { userService } from "../_services";
 import topicsService from "../_services/topics.service";
 
@@ -35,7 +35,7 @@ const Sidebar = () => {
       fetchSubjects();
     }
   }, [level]);
-  
+
   const topicsBySubject = async (subject) => {
     const isCurrentlyExpanded = expandedKey === subject?.subject_name;
 

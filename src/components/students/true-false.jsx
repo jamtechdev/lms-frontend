@@ -15,7 +15,7 @@ const TrueFalseQuestions = ({ question, index }) => {
   const answersStore = useSelector(getSelected);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-const childId = useSelector(getChildId);
+  const childId = useSelector(getChildId);
   const handleOptionChange = (e) => {
     setSelectedAnswer(e.target.value);
   };
