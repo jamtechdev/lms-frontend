@@ -13,8 +13,6 @@
 @import url("./assets/css/owl.carousel.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css");
-/* @import url('./assets/css/all.min.css'); */
-
 @import url("https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap");
 
@@ -49,9 +47,7 @@ button>* {
 .quiz-container {
   background-color: #ffffff;
   border-radius: 15px;
-  /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
   padding: 40px;
-  /* max-width: 800px; */
   width: 100%;
 }
 
@@ -103,7 +99,6 @@ button>* {
   color: #495057;
   margin-bottom: 8px;
   display: block;
-  /* Ensures label is on its own line */
 }
 
 .blank-item .form-control {
@@ -121,7 +116,6 @@ button>* {
 
 .option-item {
   background-color: #ffffff;
-  /* border: 1px solid #ced4da; */
   border-radius: 10px;
   padding: 5px 20px;
   margin-bottom: 5px;
@@ -140,11 +134,8 @@ button>* {
 .option-item input[type="radio"] {
   margin-right: 7px;
   min-width: 20px;
-  /* Ensure radio button is visible */
   min-height: 20px;
-  /* Ensure radio button is visible */
   accent-color: #007bff;
-  /* Custom color for radio button */
   --bs-form-check-bg-image: #fff !important;
 }
 
@@ -153,7 +144,6 @@ button>* {
   color: #495057;
   cursor: pointer;
   flex-grow: 1;
-  /* Allow label to take available space */
 }
 
 .answer-item label {
@@ -170,9 +160,7 @@ button>* {
   border: 1px solid #ced4da;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   min-height: 100px;
-  /* Make textarea larger */
   resize: vertical;
-  /* Allow vertical resizing */
 }
 
 .answer-item .form-control:focus {
@@ -263,7 +251,6 @@ button>* {
   }
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .quiz-container {
     padding: 25px;
@@ -358,46 +345,36 @@ button>* {
   grid-template-columns: auto auto;
 }
 
-/* Basic styling for column items */
 .column-item {
   padding: 0.75rem 1rem;
   background-color: #ffffff;
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   border: 1px solid #e2e8f0;
-  /* Light border */
   margin-bottom: 0.75rem;
-  /* Space between items */
   font-size: 1rem;
 }
 
 .question-item {
   color: #1f2937;
-  /* Darker text for questions */
   font-weight: 500;
 }
 
 .answer-item {
   color: #4b5563;
-  /* Slightly lighter text for answers */
 }
 
-/* Custom adjustments for Bootstrap layout */
 .card {
   border-radius: 0.75rem;
-  /* Slightly more rounded corners for cards */
 }
 
 .card-body {
   padding: 1.5rem;
-  /* More padding inside cards */
 }
 
 .column-container {
   background-color: #f8f9fa;
-  /* Light background for columns */
   border: 1px solid #e9ecef;
-  /* Light border for columns */
   border-radius: 0.5rem;
   padding: 1rem;
 }
@@ -478,9 +455,6 @@ button>* {
   overflow: hidden;
 }
 
-/* my css */
-/* Matching */
-
 .match_1 {
   border: 2px solid #5977f4;
 }
@@ -510,8 +484,6 @@ button>* {
   border: 2px solid red;
   background-color: #f8d7da;
 }
-
-/* End Matching */
 
 .kbc-option-button {
   display: block;
@@ -786,8 +758,6 @@ button>* {
   color: #721c24;
 }
 
-/* Student table CSS in parent dashboard */
-
 .student-table {
   width: 100%;
   border-collapse: collapse;
@@ -812,7 +782,6 @@ button>* {
   margin-top: 5px;
 }
 
-/* Toggle Switch */
 .switch {
   position: relative;
   display: inline-block;
@@ -917,7 +886,6 @@ table#assignmentTable td {
   background: #fff;
 }
 
-/* Container for linking */
 .linking-container {
   display: flex;
   justify-content: space-between;
@@ -928,7 +896,6 @@ table#assignmentTable td {
   margin: auto;
 }
 
-/* Left and right sides */
 .left-side,
 .right-side {
   display: flex;
@@ -937,7 +904,6 @@ table#assignmentTable td {
   flex: 1;
 }
 
-/* Each item (left or right) */
 .link-item {
   border-radius: 0.5rem;
   padding: 0.75rem 1rem;
@@ -983,7 +949,6 @@ table#assignmentTable td {
 
 @media (max-width: 768px) {
   .linking-container {
-    /* flex-direction: column !important; */
     gap: 2rem !important;
     align-items: center;
   }
@@ -1061,12 +1026,6 @@ ul.pagination li.disabled span {
   border: none !important;
 }
 
-/* .rearrangeBox div {
-    width: 49%;
-    background: rgb(90 126 239 / 84%) !important;
-    color: #fff !important;
-} */
-
 .rearrangeBox {
   display: flex;
   flex-direction: row;
@@ -1099,7 +1058,6 @@ label.kbc-option-label input[type="radio"] {
   top: 3px;
 }
 
-/* Student list custom table css */
 
 .table-container {
   background-color: #ffffff;
@@ -1108,31 +1066,23 @@ label.kbc-option-label input[type="radio"] {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   max-width: 100%;
   overflow-x: auto;
-  /* Ensures responsiveness for wide tables */
 }
 
 .table {
   border-radius: 10px;
-  /* Apply rounded corners to the table itself */
   overflow: hidden;
-  /* Ensures the border-radius is visible */
   width: 100%;
-  /* Make table take full width of its container */
   border-collapse: separate;
-  /* Required for rounded corners on cells */
   border-spacing: 0;
-  /* Remove space between cells */
 }
 
 .table thead th {
   background-color: #5977f4;
-  /* A nice purple-blue */
   color: #ffffff;
   font-weight: bold;
   text-align: center;
   padding: 15px;
   border: none;
-  /* Remove default borders */
 }
 
 .table tbody tr {
@@ -1141,27 +1091,21 @@ label.kbc-option-label input[type="radio"] {
 
 .table tbody tr:nth-child(even) {
   background-color: #f8f9fa;
-  /* Light grey for even rows */
 }
 
 .table tbody tr:hover {
   background-color: #e2e6ea;
-  /* Lighter grey on hover */
 }
 
 .table tbody td {
   padding: 12px 15px;
   vertical-align: middle;
   border-top: 1px solid #dee2e6;
-  /* Light border between rows */
   text-align: center;
   border-left: none;
-  /* Remove left border */
   border-right: none;
-  /* Remove right border */
 }
 
-/* Specific rounded corners for the table header */
 .table thead th:first-child {
   border-top-left-radius: 10px;
 }
@@ -1170,7 +1114,6 @@ label.kbc-option-label input[type="radio"] {
   border-top-right-radius: 10px;
 }
 
-/* Specific rounded corners for the table body (bottom rows) */
 .table tbody tr:last-child td:first-child {
   border-bottom-left-radius: 10px;
 }
@@ -1179,18 +1122,15 @@ label.kbc-option-label input[type="radio"] {
   border-bottom-right-radius: 10px;
 }
 
-/* Ensure all table cells have rounded corners if the table itself has them */
 .table th,
 .table td {
   box-sizing: border-box;
-  /* Include padding and border in the element's total width and height */
 }
 
 li.page-item.active {
   margin: 0px 7px;
 }
 
-/* End Css */
 
 @media screen and (min-width: 1024px) and (max-width: 1025px) {
   .shadowBox .col-sm-3 {
@@ -1206,13 +1146,11 @@ li.page-item.active {
   }
 }
 
-/* Custom styles for drag-and-drop feedback */
 .draggable-item {
   transition: transform 0.3s ease, background-color 0.3s ease,
     box-shadow 0.3s ease;
   cursor: grab;
   user-select: none;
-  /* Prevent text selection during drag */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1230,18 +1168,15 @@ li.page-item.active {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   transform: scale(1.02);
   border: 2px dashed #60a5fa;
-  /* Blue for dragging */
 }
 
 .drop-zone {
   border: 2px dashed #d1d5db;
-  /* Light gray dashed border */
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .drop-zone.drag-over {
   background-color: #ebf8ff;
-  /* Light blue background when item is dragged over */
 }
 
 .text-purple-800 {
@@ -1308,8 +1243,6 @@ li.page-item.active {
   color: #607d8b !important;
   border-color: rgb(96 125 139 / 28%) !important;
 }
-
-/* End */
 
 .dropdown-menu.show {
   display: block;
