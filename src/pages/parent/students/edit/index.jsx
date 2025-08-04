@@ -329,15 +329,15 @@ const EditStudent = () => {
                 <Col xl={12} lg={12} md={12}>
                   <div>
                     <label htmlFor="address" className="form-label mb-8 h6">
-                      Address
+                      Shipping Address
                     </label>
                     <div className="position-relative">
                       <Field
+                        as="textarea"
                         id="address"
                         name="address"
-                        type="text"
                         className="form-control py-11"
-                        placeholder="Type your address"
+                        placeholder="Type your shipping address"
                       />
                     </div>
                     <ErrorMessage
