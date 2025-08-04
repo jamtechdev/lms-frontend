@@ -53,8 +53,8 @@ const EditingQuesions = ({ question, index }) => {
   };
 
   const isAnyInputFilled = boxes.every(
-  (box) => inputs[box.box] && inputs[box.box].trim() !== ""
-);
+    (box) => inputs[box.box] && inputs[box.box].trim() !== ""
+  );
 
   const handleStoreData = async () => {
     const payload = {
@@ -75,13 +75,20 @@ const EditingQuesions = ({ question, index }) => {
         question_id: item.question_id,
         answer: item.user_answer,
         type: item?.type,
-          child_id: childId,
+        child_id: childId,
       })),
     };
 
     try {
       const response = await userService.answer(finalPayload);
-      toast.success(response?.message);
+      if (
+        response?.message ===
+        "😔 Oops! That wasn’t the correct answer. Don’t worry, keep trying and you’ll get it next time!"
+      ) {
+        toast.error(response.message);
+      } else {
+        toast.success(response.message);
+      }
       dispatch(setAttemptQuestions(finalPayload?.answers[0]));
     } catch (error) {
       console.error("Error", error);
@@ -166,7 +173,7 @@ const EditingQuesions = ({ question, index }) => {
     <>
       <div className="question-header">
         <h2>Question {index + 1}</h2>
-          <p className="instruction-text">
+        <p className="instruction-text">
           <strong>Instruction:</strong> {instruction}
         </p>
         <Feedback question_id={question?.id} />
