@@ -50,7 +50,6 @@ const OpenClozeWithDropdown = ({ question, index }) => {
 
     try {
       const response = await userService.answer(finalPayload);
-      toast.success("Answer submitted successfully.");
       toast.success(response?.message);
       setSubmittedQuestions((prev) => ({ ...prev, [questionId]: true }));
       dispatch(

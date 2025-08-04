@@ -81,7 +81,6 @@ const EditingQuesions = ({ question, index }) => {
 
     try {
       const response = await userService.answer(finalPayload);
-      toast.success("Answer submitted successfully.");
       toast.success(response?.message);
       dispatch(setAttemptQuestions(finalPayload?.answers[0]));
     } catch (error) {
