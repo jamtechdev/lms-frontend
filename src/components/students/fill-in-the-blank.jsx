@@ -97,8 +97,14 @@ const FillInTheBlank = ({ question, index }) => {
       };
 
       const response = await userService.answer(finalPayload);
-      toast.success("Answer submitted successfully.");
-      toast.success(response?.message);
+      if (
+        response?.message ===
+        "😔 Oops! That wasn’t the correct answer. Don’t worry, keep trying and you’ll get it next time!"
+      ) {
+        toast.error(response.message);
+      } else {
+        toast.success(response.message);
+      }
       dispatch(setAttemptQuestions(finalPayload?.answers[0]));
     } catch (error) {
       console.error("Error", error);

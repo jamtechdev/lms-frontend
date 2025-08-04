@@ -85,8 +85,14 @@ const OpenClozeWithOptions = ({ question, index }) => {
 
     try {
       const response = await userService.answer(payload);
-      toast.success("Answer submitted successfully.");
-      toast.success(response?.message);
+      if (
+        response?.message ===
+        "😔 Oops! That wasn’t the correct answer. Don’t worry, keep trying and you’ll get it next time!"
+      ) {
+        toast.error(response.message);
+      } else {
+        toast.success(response.message);
+      }
       setSubmittedQuestions((prev) => ({
         ...prev,
         [questionId]: true,
