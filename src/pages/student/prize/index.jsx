@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import loader from "../../../assets/images/loader.gif";
 import toast from "react-hot-toast";
-import { getChildId } from "../../../_store/_reducers/auth";
+import { getaddress, getChildId } from "../../../_store/_reducers/auth";
 import { useSelector } from "react-redux";
 import userService from "../../../_services/user.service";
 
@@ -13,7 +13,7 @@ const Prize = () => {
   const [selectedPrize, setSelectedPrize] = useState(null);
   const [shippingAddress, setShippingAddress] = useState("");
   const childId = useSelector(getChildId);
-
+  const shipping = useSelector(getaddress);
   const fetchPrize = async () => {
     setLoading(true);
     try {
@@ -35,7 +35,7 @@ const Prize = () => {
 
   const handleRedeemClick = (prize) => {
     setSelectedPrize(prize);
-    setShippingAddress("");
+    setShippingAddress(shipping || "");
     setShowModal(true);
   };
 
@@ -70,7 +70,9 @@ const Prize = () => {
     return (
       <div className="col-12 col-sm-6 col-md-4 mb-4" key={item.id}>
         <div className="card h-100 shadow-sm border-0 rounded-4">
-          <span className="badge bg-warning text-dark mb-3 position-absolute end-0">💎 {item.gems_required} Gems</span>
+          <span className="badge bg-warning text-dark mb-3 position-absolute end-0">
+            💎 {item.gems_required} Gems
+          </span>
           <img
             src={item.image}
             alt={item.name}
@@ -78,10 +80,14 @@ const Prize = () => {
             style={{ height: "180px", objectFit: "cover" }}
           />
           <div className="card-body text-center d-flex flex-column justify-content-between">
-            <h5 className="card-title fw-semibold text-dark mb-1">{item.name}</h5>
+            <h5 className="card-title fw-semibold text-dark mb-1">
+              {item.name}
+            </h5>
             <p className="card-text text-muted small">{item.description}</p>
             <button
-              className={`btn btn-sm w-100 ${canRedeem ? "btn-primary" : "btn-secondary"}`}
+              className={`btn btn-sm w-100 ${
+                canRedeem ? "btn-primary" : "btn-secondary"
+              }`}
               onClick={() => handleRedeemClick(item)}
               disabled={!canRedeem}
             >
@@ -120,7 +126,9 @@ const Prize = () => {
           <div>
             <h4 className="mb-3">🔒 Locked Prizes</h4>
             {notEnoughGemsPrizes.length > 0 ? (
-              <div className="row">{notEnoughGemsPrizes.map(renderPrizeCard)}</div>
+              <div className="row">
+                {notEnoughGemsPrizes.map(renderPrizeCard)}
+              </div>
             ) : (
               <p className="text-muted">You can redeem all prizes!</p>
             )}
@@ -141,7 +149,11 @@ const Prize = () => {
             <div className="modal-content rounded-4 border-0 shadow">
               <div className="modal-header border-0">
                 <h5 className="modal-title">🎁 Redeem Prize</h5>
-                <button type="button" className="btn-close" onClick={handleCloseModal}></button>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={handleCloseModal}
+                ></button>
               </div>
               <div className="modal-body">
                 <p>
@@ -162,10 +174,16 @@ const Prize = () => {
                 </div>
               </div>
               <div className="modal-footer border-0 d-flex flex-column gap-2">
-                <button className="btn btn-success w-100 btn-sm text-white" onClick={handleSubmit}>
+                <button
+                  className="btn btn-success w-100 btn-sm text-white"
+                  onClick={handleSubmit}
+                >
                   Confirm Redemption
                 </button>
-                <button className="btn btn-outline-secondary w-100 btn-sm" onClick={handleCloseModal}>
+                <button
+                  className="btn btn-outline-secondary w-100 btn-sm"
+                  onClick={handleCloseModal}
+                >
                   Cancel
                 </button>
               </div>
