@@ -8,6 +8,7 @@ import userService from "../../../_services/user.service";
 const Prize = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [childGems, setChildGems] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedPrize, setSelectedPrize] = useState(null);
   const [shippingAddress, setShippingAddress] = useState("");
@@ -18,6 +19,9 @@ const Prize = () => {
     try {
       const response = await userService.getViewPrize(childId);
       setData(response.data);
+      if (response.data.length > 0) {
+        setChildGems(response.data[0].user_gems);
+      }
     } catch (error) {
       toast.error("No Prize Found");
     } finally {
@@ -54,101 +58,114 @@ const Prize = () => {
       });
       toast.success("Prize redeemed successfully!");
       setShowModal(false);
+      fetchPrize();
     } catch (error) {
-      console.error(error);
       toast.error("Failed to redeem prize.");
     }
   };
 
+  const renderPrizeCard = (item) => {
+    const canRedeem = item.is_redeem;
+
+    return (
+      <div className="col-12 col-sm-6 col-md-4 mb-4" key={item.id}>
+        <div className="card h-100 shadow-sm border-0 rounded-4">
+          <span className="badge bg-warning text-dark mb-3 position-absolute end-0">💎 {item.gems_required} Gems</span>
+          <img
+            src={item.image}
+            alt={item.name}
+            className="card-img-top rounded-top"
+            style={{ height: "180px", objectFit: "cover" }}
+          />
+          <div className="card-body text-center d-flex flex-column justify-content-between">
+            <h5 className="card-title fw-semibold text-dark mb-1">{item.name}</h5>
+            <p className="card-text text-muted small">{item.description}</p>
+            <button
+              className={`btn btn-sm w-100 ${canRedeem ? "btn-primary" : "btn-secondary"}`}
+              onClick={() => handleRedeemClick(item)}
+              disabled={!canRedeem}
+            >
+              {canRedeem ? "Redeem Prize" : "Not Enough Gems"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const redeemablePrizes = data.filter((item) => item.is_redeem);
+  const notEnoughGemsPrizes = data.filter((item) => !item.is_redeem);
+
   return (
-    <div className="container mt-5">
+    <div className="container py-5">
+      <h3 className="text-center fw-bold mb-4">
+        🎉 Your Gems: <span className="text-primary">{childGems}💎</span>
+      </h3>
+
       {loading ? (
         <div className="text-center">
           <img src={loader} alt="Loading..." className="my-5" />
         </div>
       ) : data.length > 0 ? (
-        <div className="row row-cols-1 row-cols-md-3 g-4">
-          {data.map((item) => (
-            <div className="col" key={item.id}>
-              <div className="card shadow-lg border-0 rounded-3">
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="card-img-top img-fluid"
-                  style={{
-                    height: "250px",
-                    objectFit: "cover",
-                    borderRadius: "10px",
-                  }}
-                />
-                <div className="card-body text-center">
-                  <h5 className="card-title text-dark">{item.name}</h5>
-                  <p className="card-text text-muted">{item.description}</p>
-                  <p className="card-text">
-                    <strong>Gems Required:</strong> {item.gems_required}
-                  </p>
-                  <button
-                    className="btn btn-primary w-100"
-                    onClick={() => handleRedeemClick(item)}
-                  >
-                    Redeem Prize
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <>
+          <div className="mb-5">
+            <h4 className="mb-3">🎁 Redeemable Prizes</h4>
+            {redeemablePrizes.length > 0 ? (
+              <div className="row">{redeemablePrizes.map(renderPrizeCard)}</div>
+            ) : (
+              <p className="text-muted">No redeemable prizes available.</p>
+            )}
+          </div>
+
+          <div>
+            <h4 className="mb-3">🔒 Locked Prizes</h4>
+            {notEnoughGemsPrizes.length > 0 ? (
+              <div className="row">{notEnoughGemsPrizes.map(renderPrizeCard)}</div>
+            ) : (
+              <p className="text-muted">You can redeem all prizes!</p>
+            )}
+          </div>
+        </>
       ) : (
         <p className="text-center text-muted">No Prizes Available</p>
       )}
 
+      {/* Modal */}
       {showModal && selectedPrize && (
         <div
           className="modal fade show"
-          style={{ display: "block" }}
+          style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
           tabIndex="-1"
-          aria-labelledby="redeemModalLabel"
-          aria-hidden="true"
         >
           <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="redeemModalLabel">
-                  Redeem Prize
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={handleCloseModal}
-                  aria-label="Close"
-                ></button>
+            <div className="modal-content rounded-4 border-0 shadow">
+              <div className="modal-header border-0">
+                <h5 className="modal-title">🎁 Redeem Prize</h5>
+                <button type="button" className="btn-close" onClick={handleCloseModal}></button>
               </div>
               <div className="modal-body">
                 <p>
                   <strong>Prize:</strong> {selectedPrize.name}
                 </p>
                 <div className="mb-3">
-                  <label htmlFor="shippingAddress" className="form-label">
+                  <label htmlFor="shippingAddress" className="form-label small">
                     Shipping Address
                   </label>
                   <textarea
                     id="shippingAddress"
                     className="form-control"
-                    rows="4"
+                    rows="3"
                     placeholder="Enter your shipping address..."
                     value={shippingAddress}
                     onChange={(e) => setShippingAddress(e.target.value)}
                   />
                 </div>
               </div>
-              <div className="modal-footer">
-                <button className="btn btn-success" onClick={handleSubmit}>
-                  Confirm
+              <div className="modal-footer border-0 d-flex flex-column gap-2">
+                <button className="btn btn-success w-100 btn-sm text-white" onClick={handleSubmit}>
+                  Confirm Redemption
                 </button>
-                <button
-                  className="btn btn-secondary"
-                  onClick={handleCloseModal}
-                >
+                <button className="btn btn-outline-secondary w-100 btn-sm" onClick={handleCloseModal}>
                   Cancel
                 </button>
               </div>
