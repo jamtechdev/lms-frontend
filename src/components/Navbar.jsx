@@ -78,6 +78,7 @@ const Nav = () => {
           level: parentBackup.level_id,
           role: parentBackup.role,
           child_id: parentBackup.child_id,
+          address: parentBackup?.address,
         })
       );
       toast.success("Switched to parent dashboard");

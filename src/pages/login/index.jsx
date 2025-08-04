@@ -43,6 +43,7 @@ const Login = () => {
           student_type: userData.student_type,
           level: userData.level_id,
           role: userData?.role,
+          address: userData?.address,
         })
       );
       dispatch(

@@ -60,7 +60,6 @@ const NewParentDashboard = () => {
       };
       const response = await userService.loginStudent(values);
       const userData = response.data;
-
       dispatch(
         login({
           token: parentToken,
@@ -71,6 +70,7 @@ const NewParentDashboard = () => {
           role: userData?.role,
           avatar: userData?.avatar,
           child_id: selectedChildId,
+          address: userData?.address,
         })
       );
 
