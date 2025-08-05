@@ -12,6 +12,7 @@ const Prize = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedPrize, setSelectedPrize] = useState(null);
   const [shippingAddress, setShippingAddress] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const childId = useSelector(getChildId);
   const shipping = useSelector(getaddress);
   const fetchPrize = async () => {
@@ -49,7 +50,7 @@ const Prize = () => {
       toast.error("Please enter a shipping address.");
       return;
     }
-
+    setSubmitting(true);
     try {
       await userService.redeemRequest({
         prize_id: selectedPrize.id,
@@ -61,6 +62,8 @@ const Prize = () => {
       fetchPrize();
     } catch (error) {
       toast.error("Failed to redeem prize.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -175,11 +178,19 @@ const Prize = () => {
               </div>
               <div className="modal-footer border-0 d-flex flex-column gap-2">
                 <button
-                  className="btn btn-success w-100 btn-sm text-white"
+                  className="btn btn-success w-100 btn-sm text-white d-flex justify-content-center align-items-center gap-2"
                   onClick={handleSubmit}
+                  disabled={submitting}
                 >
-                  Confirm Redemption
+                  {submitting && (
+                    <span
+                      className="spinner-border spinner-border-sm"
+                      role="status"
+                    />
+                  )}
+                  {submitting ? "Processing..." : "Confirm Redemption"}
                 </button>
+
                 <button
                   className="btn btn-outline-secondary w-100 btn-sm"
                   onClick={handleCloseModal}
