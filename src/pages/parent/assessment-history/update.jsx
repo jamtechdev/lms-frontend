@@ -243,7 +243,7 @@ const UpdateAssignment = () => {
                 />
               </Col>
 
-              <Col xl={6}>
+              {/* <Col xl={6}>
                 <label className="form-label h6">Select Questions</label>
                 <button
                   type="button"
@@ -258,6 +258,22 @@ const UpdateAssignment = () => {
                   name="question_ids"
                   component="div"
                   className="text-danger"
+                />
+              </Col> */}
+              <Col xl={6}>
+                <label htmlFor="due_date" className="form-label mb-8 h6">
+                  Due Date
+                </label>
+                <Field
+                  name="due_date"
+                  type="date"
+                  className="form-control py-11"
+                  min={new Date().toISOString().split("T")[0]}
+                />
+                <ErrorMessage
+                  name="due_date"
+                  component="div"
+                  className="text-danger text-13"
                 />
               </Col>
 
@@ -278,7 +294,7 @@ const UpdateAssignment = () => {
                 />
               </Col>
 
-              <Col xl={6}>
+              {/* <Col xl={6}>
                 <label htmlFor="due_date" className="form-label h6">
                   Due Date
                 </label>
@@ -293,7 +309,7 @@ const UpdateAssignment = () => {
                   component="div"
                   className="text-danger"
                 />
-              </Col>
+              </Col> */}
 
               <Col xl={12}>
                 <button
@@ -306,7 +322,7 @@ const UpdateAssignment = () => {
               </Col>
             </Row>
 
-            {showModal && (
+            {/* {showModal && (
               <div className="modal show fade d-block" tabIndex="-1">
                 <div className="modal-dialog modal-dialog-scrollable">
                   <div className="modal-content">
@@ -381,7 +397,7 @@ const UpdateAssignment = () => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
           </Form>
         )}
       </Formik>

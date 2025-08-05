@@ -207,7 +207,7 @@ const CreateAssignment = () => {
                 />
               </Col>
 
-              <Col xl={6}>
+              {/* <Col xl={6}>
                 <label className="form-label mb-8 h6">Select Questions</label>
                 <div>
                   <button
@@ -225,8 +225,23 @@ const CreateAssignment = () => {
                     className="text-danger text-13"
                   />
                 </div>
+              </Col> */}
+ <Col xl={6}>
+                <label htmlFor="due_date" className="form-label mb-8 h6">
+                  Due Date
+                </label>
+                <Field
+                  name="due_date"
+                  type="date"
+                  className="form-control py-11"
+                  min={new Date().toISOString().split("T")[0]}
+                />
+                <ErrorMessage
+                  name="due_date"
+                  component="div"
+                  className="text-danger text-13"
+                />
               </Col>
-
               <Col xl={12}>
                 <label htmlFor="description" className="form-label mb-8 h6">
                   Description
@@ -244,7 +259,7 @@ const CreateAssignment = () => {
                 />
               </Col>
 
-              <Col xl={6}>
+              {/* <Col xl={6}>
                 <label htmlFor="due_date" className="form-label mb-8 h6">
                   Due Date
                 </label>
@@ -259,7 +274,7 @@ const CreateAssignment = () => {
                   component="div"
                   className="text-danger text-13"
                 />
-              </Col>
+              </Col> */}
 
               <Col xl={12}>
                 <button
@@ -271,7 +286,7 @@ const CreateAssignment = () => {
                 </button>
               </Col>
             </Row>
-            {showModal && (
+            {/* {showModal && (
               <div
                 className="modal show fade d-block"
                 tabIndex="-1"
@@ -355,7 +370,7 @@ const CreateAssignment = () => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
           </Form>
         )}
       </Formik>
