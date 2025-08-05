@@ -29,14 +29,17 @@ const SignUp = () => {
       .oneOf([Yup.ref("password"), null], "Passwords must match")
       .required("Please confirm your password"),
     phone: Yup.string()
-      .matches(/^\d+$/, "Phone number must be digits only")
-      .min(10, "Phone number must be at least 10 digits")
+      .matches(/^\d{8}$/, "Phone number must be exactly 8 digits")
       .required("Phone number is required"),
   });
 
   const handlesignup = async (values, { resetForm }) => {
     try {
-      const response = await parentService.signUp(values);
+      const payload = {
+        ...values,
+        phone: `+65${values.phone}`,
+      };
+      const response = await parentService.signUp(payload);
       toast.success(
         "Signup successful! Check your email to verify your account."
       );
@@ -195,17 +198,39 @@ const SignUp = () => {
                     <label htmlFor="phone" className="form-label mb-8 h6">
                       Phone
                     </label>
-                    <div className="position-relative">
+                    <div className="d-flex">
+                      <div
+                        className="form-control py-11 ps-16 pe-12 d-flex align-items-center gap-2"
+                        style={{
+                          borderTopRightRadius: "0",
+                          borderBottomRightRadius: "0",
+                          width: "120px",
+                          backgroundColor: "#fff",
+                        }}
+                      >
+                        <img
+                          src="https://flagcdn.com/sg.svg"
+                          alt="SG"
+                          style={{
+                            width: "20px",
+                            height: "14px",
+                            objectFit: "contain",
+                          }}
+                        />
+                        <span className="text-dark">+65</span>
+                      </div>
                       <Field
                         name="phone"
                         type="text"
                         id="phone"
-                        placeholder="Enter your phone number"
-                        className="form-control py-11 ps-40"
+                        maxLength={8}
+                        placeholder="Enter 8-digit number"
+                        className="form-control py-11 ps-16"
+                        style={{
+                          borderTopLeftRadius: "0",
+                          borderBottomLeftRadius: "0",
+                        }}
                       />
-                      <span className="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex">
-                        <i className="ph ph-phone"></i>
-                      </span>
                     </div>
                     <ErrorMessage
                       name="phone"
