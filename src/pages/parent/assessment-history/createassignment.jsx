@@ -22,6 +22,9 @@ const CreateAssignment = () => {
     question_ids: [],
     description: "",
     due_date: "",
+    assignment_type: "",
+    number_of_papers: "",
+    frequency: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -33,11 +36,27 @@ const CreateAssignment = () => {
       .required("Question is required"),
     description: Yup.string().required("Description is required"),
     due_date: Yup.date()
-      .required("Due Date is required")
+      .nullable()
+      .transform((curr, orig) => (orig === "" ? null : curr))
       .min(
         new Date().toISOString().split("T")[0],
         "Due Date cannot be in the past"
       ),
+    assignment_type: Yup.string().required("Assignment type is required"),
+    number_of_papers: Yup.number().when("assignment_type", {
+      is: "routine",
+      then: (schema) =>
+        schema
+          .required("Number of papers is required")
+          .min(1, "Must be at least 1"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+
+    frequency: Yup.string().when("assignment_type", {
+      is: "routine",
+      then: (schema) => schema.required("Frequency is required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
   });
 
   useEffect(() => {
@@ -175,7 +194,73 @@ const CreateAssignment = () => {
                   className="text-danger text-13"
                 />
               </Col>
+              <Col xl={6}>
+                <label htmlFor="assignment_type" className="form-label mb-8 h6">
+                  Choose Assignment Type
+                </label>
+                <Field
+                  as="select"
+                  name="assignment_type"
+                  className="form-control"
+                >
+                  <option value="">Select assignment type</option>
+                  <option value="one-off">
+                    One-off Assignment (single instance)
+                  </option>
+                  <option value="routine">
+                    Routine Assignment (recurring)
+                  </option>
+                </Field>
+                <ErrorMessage
+                  name="assignment_type"
+                  component="div"
+                  className="text-danger text-13"
+                />
+              </Col>
+              {values.assignment_type === "routine" && (
+                <>
+                  <Col xl={6}>
+                    <label
+                      htmlFor="number_of_papers"
+                      className="form-label mb-8 h6"
+                    >
+                      Number of Papers
+                    </label>
+                    <Field
+                      name="number_of_papers"
+                      type="number"
+                      className="form-control py-11"
+                      placeholder="Enter number of papers"
+                    />
+                    <ErrorMessage
+                      name="number_of_papers"
+                      component="div"
+                      className="text-danger text-13"
+                    />
+                  </Col>
 
+                  <Col xl={6}>
+                    <label htmlFor="frequency" className="form-label mb-8 h6">
+                      Frequency
+                    </label>
+                    <Field
+                      as="select"
+                      name="frequency"
+                      className="form-control"
+                    >
+                      <option value="">Select frequency</option>
+                      <option value="daily">Daily</option>
+                      <option value="weekly">Weekly</option>
+                      <option value="monthly">Monthly</option>
+                    </Field>
+                    <ErrorMessage
+                      name="frequency"
+                      component="div"
+                      className="text-danger text-13"
+                    />
+                  </Col>
+                </>
+              )}
               <Col xl={6}>
                 <label htmlFor="subject_id" className="form-label mb-8 h6">
                   Select Subject
@@ -208,7 +293,7 @@ const CreateAssignment = () => {
 
               <Col xl={6}>
                 <label htmlFor="due_date" className="form-label mb-8 h6">
-                  Due Date
+                  Due Date <small className="text-muted">(optional)</small>
                 </label>
                 <Field
                   name="due_date"

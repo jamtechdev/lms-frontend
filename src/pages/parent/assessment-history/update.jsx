@@ -40,6 +40,21 @@ const UpdateAssignment = () => {
         new Date().toISOString().split("T")[0],
         "Due Date cannot be in the past"
       ),
+    assignment_type: Yup.string().required("Assignment type is required"),
+    number_of_papers: Yup.number().when("assignment_type", {
+      is: "routine",
+      then: (schema) =>
+        schema
+          .required("Number of papers is required")
+          .min(1, "Must be at least 1"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+
+    frequency: Yup.string().when("assignment_type", {
+      is: "routine",
+      then: (schema) => schema.required("Frequency is required"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
   });
 
   useEffect(() => {
@@ -65,6 +80,9 @@ const UpdateAssignment = () => {
           due_date: assignment.due_date
             ? formatDateForInput(assignment.due_date)
             : "",
+          assignment_type: assignment.assignment_type || "",
+          number_of_papers: assignment.number_of_papers || "",
+          frequency: assignment.frequency || "",
         });
 
         setSelectedStudentId(assignment.student_id?.toString() || "");
@@ -211,7 +229,74 @@ const UpdateAssignment = () => {
                   className="text-danger"
                 />
               </Col>
+              <Col xl={6}>
+                <label htmlFor="assignment_type" className="form-label mb-8 h6">
+                  Choose Assignment Type
+                </label>
+                <Field
+                  as="select"
+                  name="assignment_type"
+                  className="form-control"
+                >
+                  <option value="">Select assignment type</option>
+                  <option value="one-off">
+                    One-off Assignment (single instance)
+                  </option>
+                  <option value="routine">
+                    Routine Assignment (recurring)
+                  </option>
+                </Field>
+                <ErrorMessage
+                  name="assignment_type"
+                  component="div"
+                  className="text-danger text-13"
+                />
+              </Col>
 
+              {values.assignment_type === "routine" && (
+                <>
+                  <Col xl={6}>
+                    <label
+                      htmlFor="number_of_papers"
+                      className="form-label mb-8 h6"
+                    >
+                      Number of Papers
+                    </label>
+                    <Field
+                      name="number_of_papers"
+                      type="number"
+                      className="form-control py-11"
+                      placeholder="Enter number of papers"
+                    />
+                    <ErrorMessage
+                      name="number_of_papers"
+                      component="div"
+                      className="text-danger text-13"
+                    />
+                  </Col>
+
+                  <Col xl={6}>
+                    <label htmlFor="frequency" className="form-label mb-8 h6">
+                      Frequency
+                    </label>
+                    <Field
+                      as="select"
+                      name="frequency"
+                      className="form-control"
+                    >
+                      <option value="">Select frequency</option>
+                      <option value="daily">Daily</option>
+                      <option value="weekly">Weekly</option>
+                      <option value="monthly">Monthly</option>
+                    </Field>
+                    <ErrorMessage
+                      name="frequency"
+                      component="div"
+                      className="text-danger text-13"
+                    />
+                  </Col>
+                </>
+              )}
               <Col xl={6}>
                 <label htmlFor="subject_id" className="form-label h6">
                   Select Subject
