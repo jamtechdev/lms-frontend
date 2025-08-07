@@ -12,7 +12,6 @@ const CreateAssignment = () => {
   const [students, setStudents] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [questions, setQuestions] = useState([]);
-  const [showModal, setShowModal] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState("");
   const [selectedSubjectId, setSelectedSubjectId] = useState("");
 
@@ -207,26 +206,7 @@ const CreateAssignment = () => {
                 />
               </Col>
 
-              {/* <Col xl={6}>
-                <label className="form-label mb-8 h6">Select Questions</label>
-                <div>
-                  <button
-                    type="button"
-                    className="form-control text-start"
-                    onClick={() => setShowModal(true)}
-                  >
-                    {values.question_ids.length > 0
-                      ? `${values.question_ids.length} question(s) selected`
-                      : "Click to select questions"}
-                  </button>
-                  <ErrorMessage
-                    name="question_ids"
-                    component="div"
-                    className="text-danger text-13"
-                  />
-                </div>
-              </Col> */}
- <Col xl={6}>
+              <Col xl={6}>
                 <label htmlFor="due_date" className="form-label mb-8 h6">
                   Due Date
                 </label>
@@ -259,23 +239,6 @@ const CreateAssignment = () => {
                 />
               </Col>
 
-              {/* <Col xl={6}>
-                <label htmlFor="due_date" className="form-label mb-8 h6">
-                  Due Date
-                </label>
-                <Field
-                  name="due_date"
-                  type="date"
-                  className="form-control py-11"
-                  min={new Date().toISOString().split("T")[0]}
-                />
-                <ErrorMessage
-                  name="due_date"
-                  component="div"
-                  className="text-danger text-13"
-                />
-              </Col> */}
-
               <Col xl={12}>
                 <button
                   type="submit"
@@ -286,91 +249,6 @@ const CreateAssignment = () => {
                 </button>
               </Col>
             </Row>
-            {/* {showModal && (
-              <div
-                className="modal show fade d-block"
-                tabIndex="-1"
-                role="dialog"
-              >
-                <div
-                  className="modal-dialog modal-dialog-scrollable"
-                  role="document"
-                >
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h5 className="modal-title">Select Questions</h5>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        onClick={() => setShowModal(false)}
-                      ></button>
-                    </div>
-                    <div className="modal-body">
-                      {questions.length === 0 ? (
-                        <p>No questions available...</p>
-                      ) : (
-                        questions.map((q) => {
-                          const rawContent =
-                            q.question?.content ||
-                            q.question?.paragraph ||
-                            q.question?.passage ||
-                            q.question?.question_text ||
-                            q.question?.instruction ||
-                            "Untitled question";
-                          const cleanText = rawContent
-                            .replace(/<\/?p>/g, "")
-                            .trim();
-
-                          return (
-                            <div className="form-check mb-2" key={q.id}>
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id={`q-${q.id}`}
-                                value={q.id}
-                                checked={values.question_ids.includes(
-                                  Number(q.id)
-                                )}
-                                onChange={(e) => {
-                                  const value = Number(e.target.value);
-                                  const updated = e.target.checked
-                                    ? [...values.question_ids, value]
-                                    : values.question_ids.filter(
-                                        (id) => id !== value
-                                      );
-                                  setFieldValue("question_ids", updated);
-                                }}
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor={`q-${q.id}`}
-                                dangerouslySetInnerHTML={{ __html: rawContent }}
-                              ></label>
-                            </div>
-                          );
-                        })
-                      )}
-                    </div>
-                    <div className="modal-footer">
-                      <button
-                        type="button"
-                        className="btn btn-secondary"
-                        onClick={() => setShowModal(false)}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={() => setShowModal(false)}
-                      >
-                        Confirm Selection
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )} */}
           </Form>
         )}
       </Formik>
