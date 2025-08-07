@@ -40,7 +40,10 @@ const NewStudentDashboard = () => {
   const [results, setResults] = useState([]);
   const [resultsLoading, setResultsLoading] = useState(false);
   const [gems, setGems] = useState([]);
-
+  const [papersModalOpen, setPapersModalOpen] = useState(false);
+  const [papers, setPapers] = useState([]);
+  const [selectedAssignmentId, setSelectedAssignmentId] = useState(null);
+  const [selectedPaper, setSelectedPaper] = useState("");
   const getAssignments = async () => {
     setAssignmentLoading(true);
     try {
@@ -134,18 +137,35 @@ const NewStudentDashboard = () => {
     fetchGems();
   }, []);
 
-  const AssignmentButton = ({ due_date, id, status }) => {
+  const fetchPapers = async (assignment_id) => {
+    setLoading(true);
+    try {
+      const response = await userService.getPapers({ assignment_id });
+      setPapers(response?.data || []);
+      setPapersModalOpen(true);
+    } catch (error) {
+      console.error("Error fetching papers:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const AssignmentButton = ({ due_date, id }) => {
     const dueDate = new Date(due_date);
     dueDate.setHours(0, 0, 0, 0);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const isEnabled = dueDate >= today;
+
     return (
       <div>
         <button
           className="dashboard-button width-fit"
           disabled={!isEnabled}
-          onClick={() => handleStart(id)}
+          onClick={() => {
+            setSelectedAssignmentId(id);
+            fetchPapers(id);
+          }}
         >
           Start Assignment
         </button>
@@ -418,6 +438,52 @@ const NewStudentDashboard = () => {
               ✅ Start Practice
             </button>
           </div>
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        show={papersModalOpen}
+        onHide={() => {
+          setPapersModalOpen(false);
+          setSelectedPaper("");
+        }}
+        centered
+        dialogClassName="kids-modal"
+        animation={true}
+      >
+        <Modal.Header closeButton className="kids-modal-header">
+          <Modal.Title>📄 Assignment Papers</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body className="kids-modal-body">
+          {loading ? (
+            <div className="text-center py-4">
+              <img src={loader} width={60} alt="Loading..." />
+            </div>
+          ) : papers && papers.length > 0 ? (
+            <Form.Group controlId="paperSelect">
+              <Form.Label>📄 Select a Paper</Form.Label>
+              <Form.Select
+                className="kids-select"
+                value={selectedPaper}
+                onChange={(e) => setSelectedPaper(e.target.value)}
+              >
+                <option value="">-- Select Paper --</option>
+                {papers.map((paper) => (
+                  <option key={paper.id} value={paper.id}>
+                    {paper.title}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          ) : (
+            <div className="text-muted text-center py-3">
+              💤 No papers found for this assignment.
+            </div>
+          )}
+        </Modal.Body>
+
+        <Modal.Footer>
+          <button className="dashboard-button w-100">Start Assignment</button>
         </Modal.Footer>
       </Modal>
     </Container>

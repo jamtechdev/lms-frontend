@@ -15,7 +15,7 @@ const userService = {
     redeemRequest,
     getAi,
     getLogs,
-
+    getPapers,
 };
 async function login(data) {
     return await axiosInstance.post(`/api/v1/auth/login`, data);
@@ -58,5 +58,8 @@ async function getAi(data) {
 }
 async function getLogs(id) {
     return await axiosInstance.get(`/api/v1/gems/redemption-logs?child_id=${id}`);
+}
+async function getPapers(data) {
+    return await axiosInstance.post(`/api/v1/assignments/get-papers`, data);
 }
 export default userService;
