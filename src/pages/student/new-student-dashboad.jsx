@@ -483,7 +483,28 @@ const NewStudentDashboard = () => {
         </Modal.Body>
 
         <Modal.Footer>
-          <button className="dashboard-button w-100">Start Assignment</button>
+          <div className="d-flex gap-3 w-100">
+            <button
+              className="logout-btn w-50"
+              onClick={() => {
+                setPapersModalOpen(false);
+                setSelectedPaper("");
+              }}
+            >
+              ❌ Cancel
+            </button>
+            <button
+              className="dashboard-button w-50"
+              disabled={!selectedPaper}
+              onClick={() => {
+                navigate(`/student/week-assignment/${selectedPaper}`);
+                setPapersModalOpen(false);
+                setSelectedPaper("");
+              }}
+            >
+              ✅ Start Assignment
+            </button>
+          </div>
         </Modal.Footer>
       </Modal>
     </Container>

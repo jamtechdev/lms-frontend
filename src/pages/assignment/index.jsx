@@ -28,8 +28,8 @@ const WeeklyAssignment = () => {
   const [loading, setLoading] = useState(true);
   const getAssignments = async () => {
     try {
-      const data = await userService.getStudentAssignment({
-        student_id: childId,
+      const data = await userService.getAssignmentPaper({
+        paper_id: id,
       });
       setQuestions(data?.data?.find((item) => item?.id == id));
     } catch (error) {
@@ -46,7 +46,7 @@ const WeeklyAssignment = () => {
     }
     await userService
       .assignmentAttempt({
-        assignment_id: id,
+        paper_id: id,
         answers: assignmentAnswer,
       })
       .then((data) => {
