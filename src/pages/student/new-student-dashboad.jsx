@@ -150,12 +150,18 @@ const NewStudentDashboard = () => {
     }
   };
 
-  const AssignmentButton = ({ due_date, id }) => {
-    const dueDate = new Date(due_date);
-    dueDate.setHours(0, 0, 0, 0);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const isEnabled = dueDate >= today;
+  const AssignmentButton = ({ due_date, id, recurrence_type }) => {
+    let isEnabled = false;
+
+    if (recurrence_type === "daily") {
+      isEnabled = true;
+    } else if (due_date) {
+      const dueDate = new Date(due_date);
+      dueDate.setHours(0, 0, 0, 0);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      isEnabled = dueDate >= today;
+    }
 
     return (
       <div>
@@ -167,7 +173,7 @@ const NewStudentDashboard = () => {
             fetchPapers(id);
           }}
         >
-          Start Assignment
+          Start
         </button>
       </div>
     );
@@ -271,6 +277,7 @@ const NewStudentDashboard = () => {
                       due_date={assignment?.due_date}
                       id={assignment?.id}
                       status={assignment?.assignment_status}
+                      recurrence_type={assignment?.recurrence_type}
                     />
                   </Card>
                 </Col>
