@@ -224,14 +224,29 @@ const NewStudentDashboard = () => {
                 <Col md={4} className="mb-3" key={i}>
                   <Card className="student-card flex-row align-items-start justify-content-between m-0">
                     <div>
-                      <h3 className="text-white"> {assignment?.title}</h3>
+                      <h3 className="text-white">{assignment?.title}</h3>
                       <h4 className="text-white">
                         📘 {assignment?.subject?.subject_name}
                       </h4>
-                      <p className="text-white m-0">
-                        Due: {formatDate(assignment?.due_date)}
-                      </p>
+
+                      {assignment?.recurrence_type === "none" && (
+                        <p className="text-white m-0">
+                          Due: {formatDate(assignment?.due_date)}
+                        </p>
+                      )}
+
+                      {assignment?.recurrence_type === "daily" && (
+                        <>
+                          <p className="text-white m-0">
+                            📝 Papers Count: {assignment?.papers_count || 0}
+                          </p>
+                          <p className="text-white m-0">
+                            🔁 Frequency: {assignment?.frequency || "N/A"}
+                          </p>
+                        </>
+                      )}
                     </div>
+
                     <AssignmentButton
                       due_date={assignment?.due_date}
                       id={assignment?.id}
