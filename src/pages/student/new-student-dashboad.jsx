@@ -147,7 +147,7 @@ const NewStudentDashboard = () => {
           disabled={!isEnabled}
           onClick={() => handleStart(id)}
         >
-          {status}
+          Start Assignment
         </button>
       </div>
     );
@@ -224,6 +224,7 @@ const NewStudentDashboard = () => {
                 <Col md={4} className="mb-3" key={i}>
                   <Card className="student-card flex-row align-items-start justify-content-between m-0">
                     <div>
+                      <h3 className="text-white"> {assignment?.title}</h3>
                       <h4 className="text-white">
                         📘 {assignment?.subject?.subject_name}
                       </h4>
