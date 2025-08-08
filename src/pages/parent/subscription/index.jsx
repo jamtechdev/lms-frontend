@@ -231,7 +231,7 @@ const Subscription = () => {
                   className="dashboard-button mt-auto"
                   onClick={handleMonthlyGetStarted}
                 >
-                  Get Started
+                  Get Started  {selectedSubjects.length > 0 && ` $${getTotalPrice()}`}
                 </Link>
               </div>
             </div>
@@ -278,7 +278,7 @@ const Subscription = () => {
                   className="dashboard-button mt-auto"
                   onClick={handleAnnualGetStarted}
                 >
-                  Get Started
+                  Get Started  {selectedSubjects.length > 0 && ` $${getTotalPrice()}`}
                 </Link>
               </div>
             </div>
