@@ -411,6 +411,7 @@ const NewStudentDashboard = () => {
                 className="kids-select"
               >
                 <option value="">-- Select Topic --</option>
+                <option value="all">All Topic</option>
                 {topics.map((topic) => (
                   <option key={topic.id} value={topic.id}>
                     {topic.name}
