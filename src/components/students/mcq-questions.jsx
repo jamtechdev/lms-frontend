@@ -126,9 +126,12 @@ const McqQuestions = ({ question, index }) => {
                     !isCorrect &&
                     " (Your Answer)"}
                 </label>
-                {isSubmitted && (
+                {isSubmitted && (isCorrect || isUserSelected) && (
                   <div className="ml-4 text-sm w-1/2">
-                    <strong>Explanation:</strong> {parse(opt.explanation)}
+                    <strong>Explanation:</strong>{" "}
+                    {opt?.explanation
+                      ? parse(opt.explanation)
+                      : "No explanation provided."}
                   </div>
                 )}
               </div>
