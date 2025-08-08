@@ -10,6 +10,9 @@ const Subscription = () => {
   const [selectedMonthlyPlan, setSelectedMonthlyPlan] = useState(null);
   const [selectedAnnualPlan, setSelectedAnnualPlan] = useState(null);
   const [selectedPlanId, setSelectedPlanId] = useState(null);
+  const [subjects, setSubjects] = useState([]);
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [showSubjectModal, setShowSubjectModal] = useState(false);
 
   const fetchSubscription = async () => {
     setLoading(true);
@@ -25,7 +28,14 @@ const Subscription = () => {
 
   const CreateSubscription = async (planId) => {
     try {
-      const response = await parentService.createSubscribe({ plan_id: planId });
+      const finalTotal = getTotalPrice();
+
+      const payload = {
+        plan_id: selectedPlanId,
+        subjects: selectedSubjects,
+        total_price: finalTotal,
+      };
+      const response = await parentService.createSubscribe(payload);
       const checkoutUrl = response.data?.checkout_url;
       if (checkoutUrl) {
         toast.success("Subscription created! Redirecting to payment page...");
@@ -38,27 +48,59 @@ const Subscription = () => {
     }
   };
 
-  const trialPlan = plans.trial[0];
-  const monthlyPlans = plans.monthly;
-  const annualPlans = plans.annually;
-
-  useEffect(() => {
-    fetchSubscription();
-  }, []);
-
   const getsubject = async (planId) => {
     try {
       const response = await parentService.getPlanSubject({ plan_id: planId });
+
+      // Find addon_price from the selected plan (monthly or annually)
+      const addonPrice =
+        plans.monthly.find((p) => p.id === planId)?.addon_price ||
+        plans.annually.find((p) => p.id === planId)?.addon_price ||
+        0;
+
+      // Attach addon_price to each subject
+      const subjectsWithPrice = (response.data.subjects || []).map((sub) => ({
+        ...sub,
+        addon_price: sub.addon_price ?? addonPrice,
+      }));
+
+      setSubjects(subjectsWithPrice);
+      setSelectedSubjects([]);
+      setShowSubjectModal(true);
     } catch (error) {
       toast.error("Error fetching plan subjects");
     }
   };
 
+  const handleSubjectSelect = (subjectId) => {
+    setSelectedSubjects((prev) =>
+      prev.includes(subjectId)
+        ? prev.filter((id) => id !== subjectId)
+        : [...prev, subjectId]
+    );
+  };
+
+  const getSelectedPlanPrice = () => {
+    const selectedPlan =
+      plans.monthly.find((p) => p.id === selectedMonthlyPlan) ||
+      plans.annually.find((p) => p.id === selectedAnnualPlan);
+    return Number(selectedPlan?.price || 0);
+  };
+
+  const getTotalPrice = () => {
+    const totalAddonPrice = subjects
+      .filter((sub) => selectedSubjects.includes(sub.id))
+      .reduce((sum, sub) => sum + Number(sub.addon_price || 0), 0);
+    return getSelectedPlanPrice() + totalAddonPrice;
+  };
+
   useEffect(() => {
-    if (selectedPlanId) {
-      getsubject(selectedPlanId);
-    }
-  }, [selectedPlanId]);
+    fetchSubscription();
+  }, []);
+
+  const trialPlan = plans.trial[0];
+  const monthlyPlans = plans.monthly;
+  const annualPlans = plans.annually;
 
   const handleMonthlyGetStarted = () => {
     if (selectedMonthlyPlan) {
@@ -119,6 +161,7 @@ const Subscription = () => {
 
         <div className="card-body">
           <div className="row gy-4 d-flex">
+            {/* Trial Plan */}
             {trialPlan && (
               <div className="col-md-4 col-sm-6">
                 <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative">
@@ -146,6 +189,7 @@ const Subscription = () => {
               </div>
             )}
 
+            {/* Monthly Plans */}
             <div className="col-md-4 col-sm-6">
               <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative">
                 <span className="plan-badge py-1 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-xs">
@@ -171,15 +215,14 @@ const Subscription = () => {
                         />
                         {plan.name} - ${plan.price}/month
                       </label>
-                      <ul
-                        className={`list-unstyled text-gray-600 mb-0 ps-3 plans-list ${
-                          selectedMonthlyPlan === plan.id ? "show-list" : ""
-                        }`}
-                      >
-                        <li>
-                          <strong>Description:</strong> {plan.description}
-                        </li>
-                      </ul>
+                      {selectedMonthlyPlan === plan.id && (
+                        <button
+                          className="btn btn-sm btn-outline-primary mt-2"
+                          onClick={() => getsubject(plan.id)}
+                        >
+                          Add Subject
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -193,6 +236,7 @@ const Subscription = () => {
               </div>
             </div>
 
+            {/* Annual Plans */}
             <div className="col-md-4 col-sm-6">
               <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative">
                 <span className="plan-badge py-1 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-xs">
@@ -218,15 +262,14 @@ const Subscription = () => {
                         />
                         {plan.name} - ${plan.price}/year
                       </label>
-                      <ul
-                        className={`list-unstyled text-gray-600 mb-0 ps-3 plans-list ${
-                          selectedAnnualPlan === plan.id ? "show-list" : ""
-                        }`}
-                      >
-                        <li>
-                          <strong>Description:</strong> {plan.description}
-                        </li>
-                      </ul>
+                      {selectedAnnualPlan === plan.id && (
+                        <button
+                          className="btn btn-sm btn-outline-primary mt-2"
+                          onClick={() => getsubject(plan.id)}
+                        >
+                          Add Subject
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -240,6 +283,7 @@ const Subscription = () => {
               </div>
             </div>
 
+            {/* Terms & Policy */}
             <div className="col-12 mt-4">
               <label className="form-label mb-8 h6 mt-32 fontBold">
                 <strong>Terms & Policy</strong>
@@ -262,6 +306,65 @@ const Subscription = () => {
           </div>
         </div>
       </div>
+
+      {/* Subject Modal */}
+      {showSubjectModal && (
+        <div className="subject-modal-overlay">
+          <div className="subject-modal">
+            <h4>Select Subjects</h4>
+            {subjects.length > 0 ? (
+              <div>
+                {Object.values(
+                  subjects.reduce((groups, sub) => {
+                    const levelName = sub.level?.name || "Unknown";
+                    if (!groups[levelName]) groups[levelName] = [];
+                    groups[levelName].push(sub);
+                    return groups;
+                  }, {})
+                ).map((group, index) => (
+                  <div key={index}>
+                    <h5>Level {group[0].level?.name}</h5>
+                    <ul>
+                      {group.map((sub) => (
+                        <li key={sub.id}>
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={selectedSubjects.includes(sub.id)}
+                              onChange={() => handleSubjectSelect(sub.id)}
+                            />
+                            {sub.name}{" "}
+                            {sub.addon_price ? `- $${sub.addon_price}` : ""}
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>No subjects found.</p>
+            )}
+
+            <p className="mt-3">
+              <strong>Total Price:</strong> ${getTotalPrice()}
+            </p>
+
+            <button
+              className="btn btn-primary mt-3"
+              onClick={() => setShowSubjectModal(false)}
+            >
+              Addon
+            </button>
+            <button
+              className="btn btn-secondary mt-2"
+              onClick={() => setShowSubjectModal(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
