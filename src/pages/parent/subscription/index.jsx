@@ -211,6 +211,7 @@ const Subscription = () => {
                             setSelectedMonthlyPlan(plan.id);
                             setSelectedAnnualPlan(null);
                             setSelectedPlanId(plan.id);
+                            setSelectedSubjects([]);
                           }}
                         />
                         {plan.name} - ${plan.price}/month
@@ -231,7 +232,10 @@ const Subscription = () => {
                   className="dashboard-button mt-auto"
                   onClick={handleMonthlyGetStarted}
                 >
-                  Get Started  {selectedSubjects.length > 0 && ` $${getTotalPrice()}`}
+                  Get Started{" "}
+                  {selectedMonthlyPlan &&
+                    selectedSubjects.length > 0 &&
+                    ` $${getTotalPrice()}`}
                 </Link>
               </div>
             </div>
@@ -258,6 +262,7 @@ const Subscription = () => {
                             setSelectedAnnualPlan(plan.id);
                             setSelectedMonthlyPlan(null);
                             setSelectedPlanId(plan.id);
+                            setSelectedSubjects([]);
                           }}
                         />
                         {plan.name} - ${plan.price}/year
@@ -278,7 +283,10 @@ const Subscription = () => {
                   className="dashboard-button mt-auto"
                   onClick={handleAnnualGetStarted}
                 >
-                  Get Started  {selectedSubjects.length > 0 && ` $${getTotalPrice()}`}
+                  Get Started{" "}
+                  {selectedAnnualPlan &&
+                    selectedSubjects.length > 0 &&
+                    ` $${getTotalPrice()}`}
                 </Link>
               </div>
             </div>
