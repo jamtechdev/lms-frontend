@@ -130,7 +130,7 @@ async function createSubscribe(data) {
     return await axiosInstance.post(`/api/v1/subscription/create`, data);
 }
 async function getGem() {
-    return await axiosInstance.get(`/api/v1/gems/children-gems`);
+    return await axiosInstance.get(`/api/v1/gems/all-children-gems`);
 }
 async function getPlanSubject(data) {
     return await axiosInstance.post(`/api/v1/subscription/get-subject`, data);

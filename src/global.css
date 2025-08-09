@@ -2405,3 +2405,47 @@ label.kbc-option-label:has(input:checked)::after {
     transform: translateY(0);
   }
 }
+
+
+.tabs-content button:nth-child(1){
+  border-radius: 100px 0px 0px 100px;
+}
+
+.tabs-content button:nth-child(2){
+    border-radius: 0px 100px 100px 0px;
+}
+.tabs-content .btn-outline-primary:hover{
+  color: #fff !important;
+}
+
+
+.heading-secondary{
+  font-size: 38px;
+}
+.gems-container {
+  gap: 20px !important;
+}
+.gems-container i{
+  font-size: 38px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background-color: #0099e6;
+  box-shadow: 0px 0px 10px #00000020;
+  border-radius: 10px;
+}
+
+.gems-container .content{
+  width: calc(100% - 50px)
+}
+
+.gems-container .content h5{
+  margin-bottom: 6px;
+}
+
+
+hr.divider{
+    border-top: 1px solid rgb(0 0 0 / 36%);
+}
