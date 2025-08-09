@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getLevel, getStudentType } from "../../../_store/_reducers/auth";
+import { getChildId, getLevel, getStudentType } from "../../../_store/_reducers/auth";
 import userService from "../../../_services/user.service";
 import { useLocation, useNavigate } from "react-router-dom";
 import { removeAttemptQuestions } from "../../../_store/_reducers/question";
@@ -29,7 +29,7 @@ const AllQuestions = () => {
   const education = useSelector(getStudentType);
   const level = useSelector(getLevel);
   const [page, setPage] = useState(1);
-
+  const childId = useSelector(getChildId);
   const navigate = useNavigate();
   const fetchQuestion = async () => {
     setLoading(true);
@@ -40,6 +40,7 @@ const AllQuestions = () => {
         subject_id: subject,
         type: type,
         topic_id: topic,
+        child_id: childId,
       };
       const response = await userService.getAllQuestion(page, data);
       const questionsData = response?.data;
@@ -184,12 +185,18 @@ const AllQuestions = () => {
         </button>
         <button
           className="logout-btn d-flex align-items-center justify-content-center gap-2"
-          onClick={() => {
+          onClick={async () => {
             if (page < questions?.pagination?.total_pages) {
               setPage(page + 1);
             } else {
-              toast.success("You have finished the practice test!");
-              navigate("/student");
+              try {
+                await userService.finishSession({ child_id: childId });
+                toast.success("You have finished the practice test!");
+                navigate("/student");
+              } catch (error) {
+                console.error("Error finishing session:", error);
+                toast.error("Failed to finish session. Please try again.");
+              }
             }
           }}
           disabled={false}

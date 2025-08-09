@@ -112,7 +112,7 @@ const NewStudentDashboard = () => {
   const fetchResults = async () => {
     setResultsLoading(true);
     try {
-      const data = await userService.getresult({
+      const data = await userService.getResult({
         student_id: childId,
       });
       setResults(data?.data);

@@ -9,7 +9,7 @@ const userService = {
     answer,
     getStudentAssignment,
     assignmentAttempt,
-    getresult,
+    getResult,
     feedback,
     getViewPrize,
     redeemRequest,
@@ -17,6 +17,7 @@ const userService = {
     getLogs,
     getPapers,
     getAssignmentPaper,
+    finishSession,
 };
 async function login(data) {
     return await axiosInstance.post(`/api/v1/auth/login`, data);
@@ -42,7 +43,7 @@ async function getStudentAssignment(data) {
 async function assignmentAttempt(data) {
     return await axiosInstance.post(`/api/v1/assignments/attempt`, data);
 }
-async function getresult(data) {
+async function getResult(data) {
     return await axiosInstance.post(`/api/v1/assignments/getPastResults`, data);
 }
 async function feedback(data) {
@@ -65,5 +66,8 @@ async function getPapers(data) {
 }
 async function getAssignmentPaper(data) {
     return await axiosInstance.post(`/api/v1/assignments/get-Questions`, data);
+}
+async function finishSession(data) {
+    return await axiosInstance.post(`/api/v1/questions/finish-sessions`, data);
 }
 export default userService;
