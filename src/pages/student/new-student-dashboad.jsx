@@ -166,7 +166,7 @@ const NewStudentDashboard = () => {
     return (
       <div>
         <button
-          className="dashboard-button width-fit"
+          className="dashboard-button w-100 mt-3"
           disabled={!isEnabled}
           onClick={() => {
             setSelectedAssignmentId(id);
@@ -178,6 +178,9 @@ const NewStudentDashboard = () => {
       </div>
     );
   };
+
+
+  
   function formatDate(dateString) {
     if (!dateString) return "N/A";
     const d = new Date(dateString);
@@ -249,7 +252,7 @@ const NewStudentDashboard = () => {
               assignments.map((assignment, i) => (
                 <Col md={4} className="mb-3" key={i}>
                   <Card className="student-card flex-row align-items-start justify-content-between m-0">
-                    <div>
+                    <div className="w-100">
                       <h3 className="text-white">{assignment?.title}</h3>
                       <h4 className="text-white">
                         📘 {assignment?.subject?.subject_name}
@@ -271,14 +274,15 @@ const NewStudentDashboard = () => {
                           </p>
                         </>
                       )}
-                    </div>
-
-                    <AssignmentButton
+                       <AssignmentButton
                       due_date={assignment?.due_date}
                       id={assignment?.id}
                       status={assignment?.assignment_status}
                       recurrence_type={assignment?.recurrence_type}
                     />
+                    </div>
+
+                   
                   </Card>
                 </Col>
               ))
@@ -448,7 +452,11 @@ const NewStudentDashboard = () => {
           </div>
         </Modal.Footer>
       </Modal>
-      <Modal
+
+
+
+
+      {/* <Modal
         show={papersModalOpen}
         onHide={() => {
           setPapersModalOpen(false);
@@ -514,6 +522,82 @@ const NewStudentDashboard = () => {
             </button>
           </div>
         </Modal.Footer>
+      </Modal> */}
+
+
+      
+      <Modal
+        show={papersModalOpen}
+        onHide={() => {
+          setPapersModalOpen(false);
+          setSelectedPaper("");
+        }}
+        centered
+        dialogClassName="kids-modal"
+        animation={true}
+      >
+        <Modal.Header closeButton className="kids-modal-header">
+          <Modal.Title>📄 Assignment Papers</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body className="kids-modal-body">
+          {loading ? (
+            <div className="text-center py-4">
+              <img src={loader} width={60} alt="Loading..." />
+            </div>
+          ) : papers && papers.length > 0 ? (
+            <div className="row g-3">
+              {papers.map((paper) => (
+                <div className="col-12 col-md-6 col-lg-4" key={paper.id}>
+                  <Card className="student-card">
+                    <Card.Body>
+                      <h5>{paper.title}</h5>
+                      <p>
+                        <strong>Status:</strong>
+                        <span
+                          className={`badge ${
+                            paper.completed ? "bg-success" : "bg-danger"
+                          }`}
+                        >
+                          {paper.completed ? "Completed" : "Not Completed"}
+                        </span>
+                      </p>
+                      <button
+                        className="dashboard-button w-100"
+                        onClick={() => {
+                          setSelectedPaper(paper.id);
+                          navigate(`/student/week-assignment/${paper.id}`);
+                          setPapersModalOpen(false);
+                        }}
+                        disabled={paper.completed}
+                      >
+                      {paper.completed ? "Completed" : "Start"}
+                      </button>
+                    </Card.Body>
+                  </Card>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-muted text-center py-3">
+              💤 No papers found for this assignment.
+            </div>
+          )}
+        </Modal.Body>
+
+        {/* <Modal.Footer>
+          <div className="d-flex gap-3 w-100">
+            <button
+              className="logout-btn w-50"
+              onClick={() => {
+                setPapersModalOpen(false);
+                setSelectedPaper("");
+              }}
+            >
+              ❌ Cancel
+            </button>
+          </div>
+        </Modal.Footer> */}
       </Modal>
     </Container>
   );

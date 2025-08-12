@@ -9999,3 +9999,73 @@ ul.sidebar-menu .sidebar-menu__item.activePage .sidebar-menu__link {
 .shadowBox .card {
   box-shadow: 1px 4px 7px rgb(0 0 0 / 23%);
 }
+
+
+
+.modal-dialog.kids-modal{
+  width: 100%;
+  max-width: 1080px;
+}
+
+.modal-dialog.kids-modal .modal-body{
+  border-radius:0px 0px 15px 15px;
+  max-height: 509px;
+  overflow-y: auto;
+}
+.modal-dialog.kids-modal .modal-body .student-card{
+  margin-top: 0px !important;
+}
+.modal-dialog.kids-modal .modal-body .student-card .card-body{
+  padding: 0px !important;
+}
+
+
+.kids-modal-body {
+  padding: 20px;
+}
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  padding-bottom: 10px;
+}
+
+.subject-item {
+  background-color: #f0f0f0;
+  padding: 15px;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.subject-item:hover {
+  background-color: #e0e0e0;
+}
+
+.subject-item.selected {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topic-checkboxes {
+  display: flex;
+  flex-direction: column;
+}
+
+.logout-btn, .dashboard-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.dashboard-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.logout-btn {
+  background-color: #dc3545;
+  color: white;
+}

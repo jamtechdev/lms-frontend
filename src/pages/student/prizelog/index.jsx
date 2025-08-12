@@ -10,7 +10,6 @@ const STATUS_COLORS = {
   processing: "info",
   shipped: "primary",
   completed: "success",
-  canceled: "secondary",
 };
 
 const toBadge = (status) => {
@@ -199,7 +198,7 @@ const TrackRequests = () => {
                           {typeof r.shipping_address === "string" ? (
                             <span>{r.shipping_address}</span>
                           ) : (
-                            <>
+                            <div>
                               {r.shipping_address.name && (
                                 <>
                                   {r.shipping_address.name}
@@ -222,11 +221,7 @@ const TrackRequests = () => {
                                 r.shipping_address.state ||
                                 r.shipping_address.zip) && (
                                 <>
-                                  {r.shipping_address.city || ""}
-                                  {r.shipping_address.city &&
-                                  r.shipping_address.state
-                                    ? ", "
-                                    : ""}
+                                  {r.shipping_address.city || ""}{" "}
                                   {r.shipping_address.state || ""}{" "}
                                   {r.shipping_address.zip || ""}
                                   <br />
@@ -241,7 +236,7 @@ const TrackRequests = () => {
                                   </small>
                                 </>
                               )}
-                            </>
+                            </div>
                           )}
                         </div>
                       ) : (
@@ -252,10 +247,8 @@ const TrackRequests = () => {
                       <div className="small text-muted">User</div>
                       <div className="fw-semibold">
                         {r.user
-                          ? `${r.user.first_name ?? ""} ${
-                              r.user.last_name ?? ""
-                            }`.trim() || r.user.email
-                          : "-"}
+                          ? `${r.user.first_name ?? ""} ${r.user.last_name ?? ""}`
+                          : "-" }
                       </div>
                       {r.user?.email && (
                         <small className="text-muted">{r.user.email}</small>
@@ -263,8 +256,11 @@ const TrackRequests = () => {
                     </div>
                   </div>
 
-                  {/* Timeline */}
-                  <div className="mt-4">
+                  {/* Scrollable Timeline */}
+                  <div
+                    className="mt-4"
+                    style={{ maxHeight: "200px", overflowY: "auto" }}
+                  >
                     <div className="small text-muted mb-2">Status timeline</div>
                     <ul className="list-group">
                       {r.logs.map((log) => (
