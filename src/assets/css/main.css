@@ -10002,20 +10002,22 @@ ul.sidebar-menu .sidebar-menu__item.activePage .sidebar-menu__link {
 
 
 
-.modal-dialog.kids-modal{
+.modal-dialog.kids-modal {
   width: 100%;
   max-width: 1080px;
 }
 
-.modal-dialog.kids-modal .modal-body{
-  border-radius:0px 0px 15px 15px;
+.modal-dialog.kids-modal .modal-body {
+  border-radius: 0px 0px 15px 15px;
   max-height: 509px;
   overflow-y: auto;
 }
-.modal-dialog.kids-modal .modal-body .student-card{
+
+.modal-dialog.kids-modal .modal-body .student-card {
   margin-top: 0px !important;
 }
-.modal-dialog.kids-modal .modal-body .student-card .card-body{
+
+.modal-dialog.kids-modal .modal-body .student-card .card-body {
   padding: 0px !important;
 }
 
@@ -10054,7 +10056,8 @@ ul.sidebar-menu .sidebar-menu__item.activePage .sidebar-menu__link {
   flex-direction: column;
 }
 
-.logout-btn, .dashboard-button {
+.logout-btn,
+.dashboard-button {
   padding: 10px 20px;
   font-size: 16px;
   border-radius: 8px;
@@ -10068,4 +10071,99 @@ ul.sidebar-menu .sidebar-menu__item.activePage .sidebar-menu__link {
 .logout-btn {
   background-color: #dc3545;
   color: white;
+}
+
+.subject-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.subject-modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.subject-group {
+  margin-bottom: 20px;
+}
+
+.subject-items {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.subject-item {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkbox-input {
+  margin-right: 10px;
+  transform: scale(1.2);
+  transition: all 0.3s;
+}
+
+.checkbox-label.checked .checkbox-input {
+  background-color: #28a745;
+  /* Green when checked */
+}
+
+.checkbox-label.unchecked .checkbox-input {
+  background-color: #ddd;
+  /* Light gray when unchecked */
+}
+
+.checkbox-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.education-level-info {
+  font-size: 0.9rem;
+  background-color: #007bff;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.mt-3 {
+  margin-top: 20px;
+}
+
+.mt-2 {
+  margin-top: 10px;
 }

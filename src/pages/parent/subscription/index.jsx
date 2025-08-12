@@ -35,16 +35,26 @@ const Subscription = () => {
         subjects: selectedSubjects,
         total_price: finalTotal,
       };
+
       const response = await parentService.createSubscribe(payload);
       const checkoutUrl = response.data?.checkout_url;
+
+      // Handle success response
       if (checkoutUrl) {
-        toast.success("Subscription created! Redirecting to payment page...");
+        toast.success(
+          response.data?.message ||
+            "Subscription created! Redirecting to payment page..."
+        );
         window.open(checkoutUrl, "_blank");
       } else {
-        console.log("No checkout URL available");
+        // Handle if there's no checkout URL
+        toast.error("No checkout URL available");
       }
     } catch (error) {
-      toast.error("Error creating subscription");
+      // Handle error response, check if there's a message from backend
+      const errorMessage =
+        error.response?.data?.message || "Error creating subscription";
+      toast.error(errorMessage);
     }
   };
 
@@ -91,7 +101,8 @@ const Subscription = () => {
     const totalAddonPrice = subjects
       .filter((sub) => selectedSubjects.includes(sub.id))
       .reduce((sum, sub) => sum + Number(sub.addon_price || 0), 0);
-    return getSelectedPlanPrice() + totalAddonPrice;
+
+    return parseFloat((getSelectedPlanPrice() + totalAddonPrice).toFixed(2)); // Rounding to two decimal places as a number
   };
 
   useEffect(() => {
@@ -99,6 +110,7 @@ const Subscription = () => {
   }, []);
 
   const trialPlan = plans.trial[0];
+
   const monthlyPlans = plans.monthly;
   const annualPlans = plans.annually;
 
@@ -164,6 +176,12 @@ const Subscription = () => {
             {/* Trial Plan */}
             {trialPlan && (
               <div className="col-md-4 col-sm-6">
+                <h3 className="mb-4 text-right">
+                  {trialPlan.is_subscribed &&
+                    trialPlan.id === trialPlan.subscriberPlan.plan_id && (
+                      <span className="badge badge-success ml-2">Active</span>
+                    )}
+                </h3>
                 <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative">
                   <span className="plan-badge py-1 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-xs">
                     Free Trial
@@ -178,6 +196,37 @@ const Subscription = () => {
                       <strong>Duration:</strong> {trialPlan.duration_days} days
                     </li>
                   </ul>
+
+                  {/* Show subjects for trial plan */}
+                  <div className="d-flex flex-wrap gap-2 mt-2">
+                    <div className="d-flex flex-wrap gap-2 mt-2">
+                      {/* Access */}
+                      <div className="flex-column">
+                        <strong>Access:</strong>
+                        <p>Full access to features for 1 child</p>
+                      </div>
+
+                      {/* Includes Section */}
+                      <div className="flex-column w-100">
+                        <strong>Includes:</strong>
+                        <ul>
+                          <li>📚 Weekly assignments</li>
+                          <li>📝 Practice question bank</li>
+                          <li>📊 Feedback and progress tracking</li>
+                        </ul>
+                      </div>
+
+                      {/* No credit card required */}
+                      <div className="flex-column w-100 text-info">
+                        <strong>No credit card required</strong>
+                        <p>
+                          Start your free trial now and explore everything we
+                          have to offer!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
                   <Link
                     to="#"
                     className="dashboard-button mt-auto"
@@ -199,9 +248,19 @@ const Subscription = () => {
                 <p className="text-gray-600">
                   Starting from ${monthlyPlans[0]?.price}/month
                 </p>
+
                 <div className="mt-3 flex-grow-1">
                   {monthlyPlans.map((plan) => (
                     <div key={plan.id} className="mb-2 plan-accordion-content">
+                      <h3 className="mb-4 text-right w-full">
+                        {plan.is_subscribed &&
+                          plan.id ===
+                            plan.subscriberPlan.subscription_plan_id && (
+                            <span className="badge badge-success ml-2">
+                              Active
+                            </span>
+                          )}
+                      </h3>
                       <label className="d-flex align-items-center gap-2 plan-container">
                         <input
                           type="radio"
@@ -216,6 +275,24 @@ const Subscription = () => {
                         />
                         {plan.name} - ${plan.price}/month
                       </label>
+                      <strong> Description:</strong>
+                      {plan.description}
+                      {/* Show subjects for monthly plan */}
+                      <div className="d-flex flex-wrap gap-2 mt-2">
+                        {plan.subjects.map((subject) => (
+                          <span
+                            className={`badge ${
+                              subject.education_type === "primary"
+                                ? "bg-primary"
+                                : "bg-warning"
+                            } text-white`}
+                            key={subject.id}
+                          >
+                            {subject.name} - {subject.education_type} -{" "}
+                            {subject.level.name}
+                          </span>
+                        ))}
+                      </div>
                       {selectedMonthlyPlan === plan.id && (
                         <button
                           className="btn btn-sm btn-outline-primary mt-2"
@@ -250,9 +327,19 @@ const Subscription = () => {
                 <p className="text-gray-600">
                   Starting from ${annualPlans[0]?.price}/year
                 </p>
+
                 <div className="mt-3 flex-grow-1">
                   {annualPlans.map((plan) => (
                     <div key={plan.id} className="mb-2 plan-accordion-content">
+                      <h3 className="mb-4 text-right w-full">
+                        {plan.is_subscribed &&
+                          plan.id ===
+                            plan.subscriberPlan.subscription_plan_id && (
+                            <span className="badge badge-success ml-2">
+                              Active
+                            </span>
+                          )}
+                      </h3>
                       <label className="d-flex align-items-center gap-2 plan-container">
                         <input
                           type="radio"
@@ -266,7 +353,37 @@ const Subscription = () => {
                           }}
                         />
                         {plan.name} - ${plan.price}/year
+                      
+                        <span>
+                          {plan.description}
+                        </span>
                       </label>
+                      <h3 className="mb-4">
+                        {annualPlans.is_subscribed &&
+                          annualPlans.id ===
+                            annualPlans.subscriptionDetails.plan_id && (
+                            <span className="badge badge-success ml-2">
+                              Active
+                            </span>
+                          )}
+                      </h3>
+                      {/* Show subjects for annual plan */}
+                      <div className="d-flex flex-wrap gap-2 mt-2">
+                        {plan.subjects.map((subject) => (
+                          <span
+                            className={`badge ${
+                              subject.education_type === "primary"
+                                ? "bg-primary"
+                                : "bg-warning"
+                            } text-white`}
+                            key={subject.id}
+                          >
+                            {subject.name} - {subject.education_type} -{" "}
+                            {subject.level.name}
+                          </span>
+                        ))}
+                      </div>
+
                       {selectedAnnualPlan === plan.id && (
                         <button
                           className="btn btn-sm btn-outline-primary mt-2"
@@ -290,27 +407,6 @@ const Subscription = () => {
                 </Link>
               </div>
             </div>
-
-            {/* Terms & Policy */}
-            <div className="col-12 mt-4">
-              <label className="form-label mb-8 h6 mt-32 fontBold">
-                <strong>Terms & Policy</strong>
-              </label>
-              <ul className="list-inside mt-3">
-                <li className="text-gray-600 mb-2">
-                  1. Set up multiple pricing levels with different features and
-                  functionalities to maximize revenue.
-                </li>
-                <li className="text-gray-600 mb-2">
-                  2. Continuously test different price points and discounts to
-                  find the sweet spot that resonates with your target audience.
-                </li>
-                <li className="text-gray-600 mb-2">
-                  3. Price your course based on the perceived value it provides
-                  to students, considering factors.
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
       </div>
@@ -321,7 +417,8 @@ const Subscription = () => {
           <div className="subject-modal">
             <h4>Select Subjects</h4>
             {subjects.length > 0 ? (
-              <div>
+              <div className="subjects-grid">
+                {/* Group subjects by level */}
                 {Object.values(
                   subjects.reduce((groups, sub) => {
                     const levelName = sub.level?.name || "Unknown";
@@ -330,23 +427,44 @@ const Subscription = () => {
                     return groups;
                   }, {})
                 ).map((group, index) => (
-                  <div key={index}>
-                    <h5>Level {group[0].level?.name}</h5>
-                    <ul>
+                  <div key={index} className="subject-group">
+                    <h5>
+                      Level {group[0].level?.name} ({group[0].education_type})
+                    </h5>
+                    <div className="subject-items">
                       {group.map((sub) => (
-                        <li key={sub.id}>
-                          <label>
+                        <div key={sub.id} className="subject-item">
+                          <label
+                            className={`checkbox-label ${
+                              selectedSubjects.includes(sub.id)
+                                ? "checked"
+                                : "unchecked"
+                            }`}
+                          >
                             <input
                               type="checkbox"
-                              checked={selectedSubjects.includes(sub.id)}
-                              onChange={() => handleSubjectSelect(sub.id)}
+                              checked={selectedSubjects.includes(sub.id)} // Check if subject is selected
+                              onChange={() => handleSubjectSelect(sub.id)} // Handle subject selection
+                              className="checkbox-input"
                             />
-                            {sub.name}{" "}
-                            {sub.addon_price ? `- $${sub.addon_price}` : ""}
+                            <div className="checkbox-content">
+                              <span>{sub.name} </span>
+                              {sub.addon_price && `- $${sub.addon_price}`}
+                              <span
+                                className={`education-level-info badge ${
+                                  sub.level.education_type === "primary"
+                                    ? "badge-primary"
+                                    : "badge-warning"
+                                }`}
+                              >
+                                {sub.level.education_type} - Level{" "}
+                                {sub.level?.name}
+                              </span>
+                            </div>
                           </label>
-                        </li>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                 ))}
               </div>
