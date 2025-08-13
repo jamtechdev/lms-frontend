@@ -13,6 +13,7 @@ const Subscription = () => {
   const [subjects, setSubjects] = useState([]);
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [showSubjectModal, setShowSubjectModal] = useState(false);
+  const [assignedSubjectIds, setAssignedSubjectIds] = useState([]);
 
   const fetchSubscription = async () => {
     setLoading(true);
@@ -38,8 +39,6 @@ const Subscription = () => {
 
       const response = await parentService.createSubscribe(payload);
       const checkoutUrl = response.data?.checkout_url;
-
-      // Handle success response
       if (checkoutUrl) {
         toast.success(
           response.data?.message ||
@@ -47,11 +46,9 @@ const Subscription = () => {
         );
         window.open(checkoutUrl, "_blank");
       } else {
-        // Handle if there's no checkout URL
         toast.error("No checkout URL available");
       }
     } catch (error) {
-      // Handle error response, check if there's a message from backend
       const errorMessage =
         error.response?.data?.message || "Error creating subscription";
       toast.error(errorMessage);
@@ -61,15 +58,17 @@ const Subscription = () => {
   const getsubject = async (planId) => {
     try {
       const response = await parentService.getPlanSubject({ plan_id: planId });
-
-      // Find addon_price from the selected plan (monthly or annually)
+      const {
+        subjects: apiSubjects = [],
+        assigned_subject_ids: assignedRaw = [],
+      } = response.data || {};
+      const assigned = assignedRaw.map((id) => Number(id));
+      setAssignedSubjectIds(assigned);
       const addonPrice =
         plans.monthly.find((p) => p.id === planId)?.addon_price ||
         plans.annually.find((p) => p.id === planId)?.addon_price ||
         0;
-
-      // Attach addon_price to each subject
-      const subjectsWithPrice = (response.data.subjects || []).map((sub) => ({
+      const subjectsWithPrice = apiSubjects.map((sub) => ({
         ...sub,
         addon_price: sub.addon_price ?? addonPrice,
       }));
@@ -81,8 +80,9 @@ const Subscription = () => {
       toast.error("Error fetching plan subjects");
     }
   };
-
   const handleSubjectSelect = (subjectId) => {
+    if (assignedSubjectIds.includes(subjectId)) return;
+
     setSelectedSubjects((prev) =>
       prev.includes(subjectId)
         ? prev.filter((id) => id !== subjectId)
@@ -102,7 +102,7 @@ const Subscription = () => {
       .filter((sub) => selectedSubjects.includes(sub.id))
       .reduce((sum, sub) => sum + Number(sub.addon_price || 0), 0);
 
-    return parseFloat((getSelectedPlanPrice() + totalAddonPrice).toFixed(2)); // Rounding to two decimal places as a number
+    return parseFloat((getSelectedPlanPrice() + totalAddonPrice).toFixed(2));
   };
 
   useEffect(() => {
@@ -173,7 +173,6 @@ const Subscription = () => {
 
         <div className="card-body">
           <div className="row gy-4 d-flex">
-            {/* Trial Plan */}
             {trialPlan && (
               <div className="col-md-4 col-sm-6">
                 <h3 className="mb-4 text-right">
@@ -197,16 +196,12 @@ const Subscription = () => {
                     </li>
                   </ul>
 
-                  {/* Show subjects for trial plan */}
                   <div className="d-flex flex-wrap gap-2 mt-2">
                     <div className="d-flex flex-wrap gap-2 mt-2">
-                      {/* Access */}
                       <div className="flex-column">
                         <strong>Access:</strong>
                         <p>Full access to features for 1 child</p>
                       </div>
-
-                      {/* Includes Section */}
                       <div className="flex-column w-100">
                         <strong>Includes:</strong>
                         <ul>
@@ -215,8 +210,6 @@ const Subscription = () => {
                           <li>📊 Feedback and progress tracking</li>
                         </ul>
                       </div>
-
-                      {/* No credit card required */}
                       <div className="flex-column w-100 text-info">
                         <strong>No credit card required</strong>
                         <p>
@@ -237,8 +230,6 @@ const Subscription = () => {
                 </div>
               </div>
             )}
-
-            {/* Monthly Plans */}
             <div className="col-md-4 col-sm-6">
               <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative">
                 <span className="plan-badge py-1 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-xs">
@@ -277,7 +268,6 @@ const Subscription = () => {
                       </label>
                       <strong> Description:</strong>
                       {plan.description}
-                      {/* Show subjects for monthly plan */}
                       <div className="d-flex flex-wrap gap-2 mt-2">
                         {plan.subjects.map((subject) => (
                           <span
@@ -288,8 +278,8 @@ const Subscription = () => {
                             } text-white`}
                             key={subject.id}
                           >
-                            {subject.name} - {subject.education_type} -{" "}
-                            {subject.level.name}
+                            {subject?.name} - {subject?.education_type} -{" "}
+                            {subject?.level?.name}
                           </span>
                         ))}
                       </div>
@@ -316,8 +306,6 @@ const Subscription = () => {
                 </Link>
               </div>
             </div>
-
-            {/* Annual Plans */}
             <div className="col-md-4 col-sm-6">
               <div className="plan-item rounded-16 border border-gray-100 p-3 w-100 d-flex flex-column position-relative">
                 <span className="plan-badge py-1 px-16 bg-main-600 text-white position-absolute inset-inline-end-0 inset-block-start-0 mt-8 text-xs">
@@ -353,10 +341,7 @@ const Subscription = () => {
                           }}
                         />
                         {plan.name} - ${plan.price}/year
-                      
-                        <span>
-                          {plan.description}
-                        </span>
+                        <span>{plan.description}</span>
                       </label>
                       <h3 className="mb-4">
                         {annualPlans.is_subscribed &&
@@ -367,7 +352,6 @@ const Subscription = () => {
                             </span>
                           )}
                       </h3>
-                      {/* Show subjects for annual plan */}
                       <div className="d-flex flex-wrap gap-2 mt-2">
                         {plan.subjects.map((subject) => (
                           <span
@@ -411,14 +395,12 @@ const Subscription = () => {
         </div>
       </div>
 
-      {/* Subject Modal */}
       {showSubjectModal && (
         <div className="subject-modal-overlay">
           <div className="subject-modal">
             <h4>Select Subjects</h4>
             {subjects.length > 0 ? (
               <div className="subjects-grid">
-                {/* Group subjects by level */}
                 {Object.values(
                   subjects.reduce((groups, sub) => {
                     const levelName = sub.level?.name || "Unknown";
@@ -443,8 +425,12 @@ const Subscription = () => {
                           >
                             <input
                               type="checkbox"
-                              checked={selectedSubjects.includes(sub.id)} // Check if subject is selected
-                              onChange={() => handleSubjectSelect(sub.id)} // Handle subject selection
+                              checked={
+                                assignedSubjectIds.includes(sub.id) ||
+                                selectedSubjects.includes(sub.id)
+                              }
+                              disabled={assignedSubjectIds.includes(sub.id)}
+                              onChange={() => handleSubjectSelect(sub.id)}
                               className="checkbox-input"
                             />
                             <div className="checkbox-content">
