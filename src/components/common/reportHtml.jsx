@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import swal from "sweetalert";
 import loader from "../../assets/images/loader.gif";
-
+import logo from "../../assets/images/logo/logo.png";
 export default function WeeklyReport({ studentId, parentService, className }) {
   const [loading, setLoading] = useState(false);
 
@@ -79,7 +79,16 @@ export default function WeeklyReport({ studentId, parentService, className }) {
   );
 }
 
-const buildWeeklyReportHTML = (payload) => {
+const buildWeeklyReportHTML = (payload, theme = {}) => {
+  const brand = {
+    logoUrl: logo,
+  };
+  const colors = {
+    primary: theme.colors?.primary || "#4E6CF3",
+    accent: theme.colors?.accent || "#FF8A3D",
+    chip: theme.colors?.chip || "#F4F6FF",
+  };
+
   const rpt = payload || {};
   const info = rpt.student_data?.student_info || {};
   const assignments = rpt.student_data?.assignments || [];
@@ -101,16 +110,16 @@ const buildWeeklyReportHTML = (payload) => {
     .map(
       (a) => `
       <tr>
-        <td>${a.title}</td>
-        <td>${a.subject}</td>
-        <td>${a.paper_title}</td>
-        <td>${a.total_questions}</td>
-        <td>${a.correct_answers}</td>
-        <td>${a.percentage}%</td>
-        <td>${a.grade}</td>
+        <td>${a.title || "-"}</td>
+        <td>${a.subject || "-"}</td>
+        <td>${a.paper_title || "-"}</td>
+        <td>${a.total_questions ?? "-"}</td>
+        <td>${a.correct_answers ?? "-"}</td>
+        <td>${a.percentage != null ? a.percentage + "%" : "-"}</td>
+        <td>${a.grade || "-"}</td>
         <td>${(a.weaknesses || []).join(", ") || "-"}</td>
-        <td>${a.gems_earned}</td>
-        <td>${a.submitted_at}</td>
+        <td>${a.gems_earned ?? "-"}</td>
+        <td>${a.submitted_at || "-"}</td>
       </tr>`
     )
     .join("");
@@ -120,9 +129,9 @@ const buildWeeklyReportHTML = (payload) => {
       ([subject, q]) => `
       <tr>
         <td>${subject}</td>
-        <td>${q.attempted}</td>
-        <td>${q.correct}</td>
-        <td>${q.percentage}%</td>
+        <td>${q?.attempted ?? "-"}</td>
+        <td>${q?.correct ?? "-"}</td>
+        <td>${q?.percentage != null ? q.percentage + "%" : "-"}</td>
       </tr>`
     )
     .join("");
@@ -131,11 +140,11 @@ const buildWeeklyReportHTML = (payload) => {
     .map(
       (g) => `
       <tr>
-        <td>${g.date}</td>
-        <td>${g.source}</td>
-        <td>${g.subject}</td>
+        <td>${g.date || "-"}</td>
+        <td>${g.source || "-"}</td>
+        <td>${g.subject || "-"}</td>
         <td>${g.assignment || "-"}</td>
-        <td>${g.gems}</td>
+        <td>${g.gems ?? "-"}</td>
       </tr>`
     )
     .join("");
@@ -147,85 +156,261 @@ const buildWeeklyReportHTML = (payload) => {
   <html>
   <head>
     <meta charset="utf-8"/>
-    <title>Weekly Report - ${info.name}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>QTN Vault • Weekly Report ${
+      info?.name ? "– " + info.name : ""
+    }</title>
     <style>
-      body { font-family: Arial, sans-serif; padding: 20px; }
-      h1,h2 { margin-bottom: 8px; }
-      table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-      th, td { border: 1px solid #ccc; padding: 6px; text-align: left; font-size: 14px; }
-      th { background: #f4f4f4; }
-      .grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-bottom: 20px; }
-      .box { border: 1px solid #ddd; padding: 10px; margin-bottom: 20px; border-radius: 4px; }
+      :root{
+        --primary:${colors.primary};
+        --accent:${colors.accent};
+        --chip:${colors.chip};
+        --bg:#fffdfb;
+        --text:#222;
+        --muted:#6b7280;
+        --border:#e6e8f0;
+        --card:#ffffff;
+        --thead:#f3f5ff;
+        --shadow:0 6px 18px rgba(20,22,35,.08);
+        --radius:14px;
+      }
+      *{box-sizing:border-box}
+      html,body{margin:0;padding:0}
+      body{
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+        color:var(--text);
+        background:
+          radial-gradient(24px 24px at 24px 24px, rgba(0,0,0,.02) 1px, transparent 1px),
+          #fff;
+        background-size: 48px 48px;
+      }
+
+      /* Top bar */
+      .topbar{
+        position:sticky; top:0; z-index:10;
+        background: linear-gradient(90deg, var(--accent), #ffb167);
+        padding: 10px 18px;
+        display:flex; align-items:center; gap:12px;
+        box-shadow: var(--shadow);
+      }
+      .brand{
+        display:flex; align-items:center; gap:10px; color:#fff; text-decoration:none;
+      }
+      .brand img{height:34px; width:auto; border-radius:8px; background:#fff1; padding:4px}
+      .brand-title{font-weight:800; letter-spacing:.2px}
+      .chips{
+        margin-left:auto; display:flex; gap:8px; align-items:center;
+      }
+      .chip{
+        background:#ffffff22; border:1px solid #ffffff33; color:#fff;
+        padding:6px 10px; border-radius:999px; font-size:12px;
+      }
+      .btn{
+        border:0; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer;
+        background:#fff; color:var(--accent); display:inline-flex; align-items:center; gap:8px;
+        box-shadow: var(--shadow);
+      }
+      .btn i{font-style:normal}
+      .btn svg{height:16px;width:16px}
+
+      .container{max-width:1100px; margin:24px auto; padding:0 16px}
+
+      /* Card */
+      .card{
+        background:var(--card);
+        border:1px solid var(--border);
+        border-radius:var(--radius);
+        box-shadow: var(--shadow);
+        overflow:hidden;
+        margin-bottom:18px;
+      }
+      .card-header{
+        display:flex; justify-content:space-between; align-items:center;
+        padding:14px 16px;
+        background: var(--thead);
+        border-bottom:1px solid var(--border);
+      }
+      .title{margin:0; font-size:18px}
+      .muted{color:var(--muted); font-size:13px}
+
+      /* Info grid */
+      .grid{
+        display:grid; grid-template-columns: repeat(2,1fr); gap:10px; padding:16px;
+      }
+      .kv{
+        background:var(--chip); padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+      }
+      .kv strong{display:block; font-size:12px; color:var(--muted); margin-bottom:4px}
+
+      /* Tables */
+      table{width:100%; border-collapse:separate; border-spacing:0; font-size:14px}
+      thead th{
+        background:var(--primary); color:#fff; text-align:left; font-weight:700;
+        padding:10px 12px; border:0;
+      }
+      thead th:first-child{border-top-left-radius:10px}
+      thead th:last-child{border-top-right-radius:10px}
+      tbody td{padding:10px 12px; border-bottom:1px solid var(--border); background:#fff}
+      tbody tr:last-child td{border-bottom:0}
+      .section{padding:16px}
+
+      /* Badges */
+      .badge{
+        display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; background:#ffe8d6; color:#7a3a00
+      }
+
+      /* Footer */
+      footer{padding:18px; text-align:right; color:var(--muted); font-size:12px}
+
+      @media (max-width: 720px){
+        .grid{grid-template-columns: 1fr}
+        .card-header{flex-direction:column; align-items:flex-start; gap:8px}
+        .chips{display:none}
+      }
     </style>
   </head>
   <body>
-    <h1>Weekly Learning Report</h1>
-    <div class="grid">
-      <div><strong>Student:</strong> ${info.name}</div>
-      <div><strong>Period:</strong> ${info.week_period}</div>
-      <div><strong>Level:</strong> ${info.level}</div>
-      <div><strong>Total Gems:</strong> ${info.total_gems}</div>
-    </div>
+    <!-- Topbar -->
+    <header class="topbar">
+      <a class="brand" href="javascript:void(0)">
+        <img src="${logo}" alt="logo" />
+      </a>
+      <div class="chips">
+        <button class="btn" onclick="window.print()" title="Print / Save PDF">
+          <!-- pdf icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9V2h12v7"></path>
+            <path d="M6 18H4a2 2 0 0 1-2-2V9h20v7a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8" rx="2"></rect>
+          </svg>
+          Report
+        </button>
+      </div>
+    </header>
 
-    <div class="box">
-      <h2>Overview</h2>
-      ${mdToHtml(reportText)}
-    </div>
+    <main class="container">
+      <!-- Overview / identity -->
+      <section class="card">
+        <div class="card-header">
+          <h1 class="title">Weekly Learning Report</h1>
+          <div class="muted">Period: ${info.week_period || "-"}</div>
+        </div>
+        <div class="grid">
+          <div class="kv"><strong>Student</strong>${info.name || "-"}</div>
+          <div class="kv"><strong>Level</strong>${info.level || "-"}</div>
+          <div class="kv"><strong>Total Gems</strong>${
+            info.total_gems ?? "-"
+          }</div>
+          <div class="kv"><strong>Generated</strong>${today}</div>
+        </div>
+        <div class="section">
+          <div class="badge">Overview</div>
+          ${mdToHtml(reportText)}
+        </div>
+      </section>
 
-    <div class="box">
-      <h2>Assignments</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th><th>Subject</th><th>Paper</th><th>Total Qs</th><th>Correct</th><th>Score</th><th>Grade</th><th>Weaknesses</th><th>Gems</th><th>Submitted</th>
-          </tr>
-        </thead>
-        <tbody>${assignmentRows}</tbody>
-      </table>
-    </div>
+      <!-- Assignments -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="title">Assignments</h2>
+          <span class="muted">Completed: ${perf.assignments_completed ?? 0}/${
+    perf.assignments_given ?? 0
+  }</span>
+        </div>
+        <div class="section">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th><th>Subject</th><th>Paper</th><th>Total Qs</th>
+                <th>Correct</th><th>Score</th><th>Grade</th><th>Weaknesses</th><th>Gems</th><th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody>${
+              assignmentRows ||
+              `<tr><td colspan="10" class="muted">No assignments this week.</td></tr>`
+            }</tbody>
+          </table>
+        </div>
+      </section>
 
-    <div class="box">
-      <h2>Question Bank</h2>
-      <table>
-        <thead>
-          <tr><th>Subject</th><th>Attempted</th><th>Correct</th><th>Accuracy</th></tr>
-        </thead>
-        <tbody>${qbRows}</tbody>
-      </table>
-    </div>
+      <!-- Question Bank -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="title">Question Bank</h2>
+        </div>
+        <div class="section">
+          <table>
+            <thead>
+              <tr><th>Subject</th><th>Attempted</th><th>Correct</th><th>Accuracy</th></tr>
+            </thead>
+            <tbody>${
+              qbRows ||
+              `<tr><td colspan="4" class="muted">No question bank activity.</td></tr>`
+            }</tbody>
+          </table>
+        </div>
+      </section>
 
-    <div class="box">
-      <h2>Gems</h2>
-      <p>From Assignments: ${gems.assignment_gems}, From Question Bank: ${
-    gems.question_bank_gems
-  }, Total (week): ${gems.total_gems}</p>
-      <table>
-        <thead>
-          <tr><th>Date</th><th>Source</th><th>Subject</th><th>Assignment</th><th>Gems</th></tr>
-        </thead>
-        <tbody>${gemRows}</tbody>
-      </table>
-    </div>
+      <!-- Gems -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="title">Gems</h2>
+          <span class="muted">Week Total: ${gems.total_gems ?? 0}</span>
+        </div>
+        <div class="section">
+          <p class="muted">From Assignments: <strong>${
+            gems.assignment_gems ?? 0
+          }</strong> • From Question Bank: <strong>${
+    gems.question_bank_gems ?? 0
+  }</strong></p>
+          <table>
+            <thead>
+              <tr><th>Date</th><th>Source</th><th>Subject</th><th>Assignment</th><th>Gems</th></tr>
+            </thead>
+            <tbody>${
+              gemRows ||
+              `<tr><td colspan="5" class="muted">No gems earned yet.</td></tr>`
+            }</tbody>
+          </table>
+        </div>
+      </section>
 
-    <div class="box">
-      <h2>Performance Summary</h2>
-      <table>
-        <tbody>
-          <tr><td>Assignments Given</td><td>${perf.assignments_given}</td></tr>
-          <tr><td>Assignments Completed</td><td>${
-            perf.assignments_completed
-          }</td></tr>
-          <tr><td>Completion Rate</td><td>${perf.completion_rate}%</td></tr>
-          <tr><td>Total Papers Completed</td><td>${
-            perf.total_papers_completed
-          }</td></tr>
-        </tbody>
-      </table>
-    </div>
+      <!-- Performance -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="title">Performance Summary</h2>
+        </div>
+        <div class="section">
+          <table>
+            <tbody>
+              <tr><td><strong>Assignments Given</strong></td><td>${
+                perf.assignments_given ?? 0
+              }</td></tr>
+              <tr><td><strong>Assignments Completed</strong></td><td>${
+                perf.assignments_completed ?? 0
+              }</td></tr>
+              <tr><td><strong>Completion Rate</strong></td><td>${
+                perf.completion_rate != null ? perf.completion_rate + "%" : "-"
+              }</td></tr>
+              <tr><td><strong>Total Papers Completed</strong></td><td>${
+                perf.total_papers_completed ?? 0
+              }</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-    <footer style="margin-top:30px;font-size:12px;color:#666;">
-      Generated on ${today}
-    </footer>
+   <footer style="background:#4E6CF3; color:#fff; padding:12px 18px; font-size:13px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+  <div style="margin-bottom:0;">
+    &copy; Copyright QTN Vault 2025, All Rights Reserved
+  </div>
+  <div style="display:flex; gap:16px; flex-wrap:wrap;">
+    <span style="cursor:pointer;">License</span>
+    <span style="cursor:pointer;">Documentation</span>
+    <span style="cursor:pointer;">Support</span>
+  </div>
+</footer>
+    </main>
   </body>
   </html>
   `;
