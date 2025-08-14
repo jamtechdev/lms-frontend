@@ -183,7 +183,7 @@ const buildWeeklyReportHTML = (payload, theme = {}) => {
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
         color:var(--text);
         background:
-          url("${brand.background}") center/fit no-repeat fixed,
+          url("${brand.background}") center/cover no-repeat fixed,
           radial-gradient(24px 24px at 24px 24px, rgba(0,0,0,.02) 1px, transparent 1px),
           #fff;
       }
