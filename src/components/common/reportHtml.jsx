@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import swal from "sweetalert";
 import loader from "../../assets/images/loader.gif";
 import logo from "../../assets/images/logo/logo.png";
+import background from "../../assets/images/dashboard-bg.png";
 export default function WeeklyReport({ studentId, parentService, className }) {
   const [loading, setLoading] = useState(false);
 
@@ -16,7 +17,7 @@ export default function WeeklyReport({ studentId, parentService, className }) {
   );
 
   const handleClick = async () => {
-    const reportWindow = window.open("about:blank", "_blank");
+    const reportWindow = window.open("QTN Vault", "_blank");
     if (!reportWindow) {
       swal(
         "Pop-up Blocked",
@@ -31,9 +32,10 @@ export default function WeeklyReport({ studentId, parentService, className }) {
       <html>
       <head><meta charset="utf-8"><title>Loading Report...</title></head>
       <body style="font-family:Arial,sans-serif;padding:20px">
-         <div className="text-center mt-5">
-        <img src=${loader} width={100} />
-      </div>
+        <div style="text-align:center;margin-top:40px">
+          <img src=${loader} width="100" alt="Loading..." />
+          <p>Preparing your weekly report…</p>
+        </div>
       </body>
       </html>
     `);
@@ -82,6 +84,7 @@ export default function WeeklyReport({ studentId, parentService, className }) {
 const buildWeeklyReportHTML = (payload, theme = {}) => {
   const brand = {
     logoUrl: logo,
+    background: background,
   };
   const colors = {
     primary: theme.colors?.primary || "#4E6CF3",
@@ -171,7 +174,7 @@ const buildWeeklyReportHTML = (payload, theme = {}) => {
         --border:#e6e8f0;
         --card:#ffffff;
         --thead:#f3f5ff;
-        --shadow:0 6px 18px rgba(20,22,35,.08);
+        --shadow:0 6px 18px rgba(20,22,35,.12);
         --radius:14px;
       }
       *{box-sizing:border-box}
@@ -180,19 +183,21 @@ const buildWeeklyReportHTML = (payload, theme = {}) => {
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
         color:var(--text);
         background:
+          url("${brand.background}") center/fit no-repeat fixed,
           radial-gradient(24px 24px at 24px 24px, rgba(0,0,0,.02) 1px, transparent 1px),
           #fff;
-        background-size: 48px 48px;
       }
 
-      /* Top bar */
       .topbar{
         position:sticky; top:0; z-index:10;
-        background: linear-gradient(90deg, var(--accent), #ffb167);
+        background: rgba(255, 138, 61, 0.90);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
         padding: 10px 18px;
         display:flex; align-items:center; gap:12px;
         box-shadow: var(--shadow);
       }
+
       .brand{
         display:flex; align-items:center; gap:10px; color:#fff; text-decoration:none;
       }
@@ -210,26 +215,28 @@ const buildWeeklyReportHTML = (payload, theme = {}) => {
         background:#fff; color:var(--accent); display:inline-flex; align-items:center; gap:8px;
         box-shadow: var(--shadow);
       }
-      .btn i{font-style:normal}
       .btn svg{height:16px;width:16px}
 
       .container{max-width:1100px; margin:24px auto; padding:0 16px}
 
-      /* Card */
       .card{
-        background:var(--card);
-        border:1px solid var(--border);
-        border-radius:var(--radius);
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: var(--radius);
         box-shadow: var(--shadow);
         overflow:hidden;
         margin-bottom:18px;
       }
+
       .card-header{
         display:flex; justify-content:space-between; align-items:center;
         padding:14px 16px;
-        background: var(--thead);
-        border-bottom:1px solid var(--border);
+        background: rgba(243, 245, 255, 0.75);
+        border-bottom:1px solid rgba(230,232,240,0.7);
       }
+
       .title{margin:0; font-size:18px}
       .muted{color:var(--muted); font-size:13px}
 
@@ -238,34 +245,66 @@ const buildWeeklyReportHTML = (payload, theme = {}) => {
         display:grid; grid-template-columns: repeat(2,1fr); gap:10px; padding:16px;
       }
       .kv{
-        background:var(--chip); padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+        background: rgba(244, 246, 255, 0.8);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        padding:10px 12px; border-radius:10px; border:1px solid rgba(230,232,240,0.7);
       }
       .kv strong{display:block; font-size:12px; color:var(--muted); margin-bottom:4px}
 
-      /* Tables */
       table{width:100%; border-collapse:separate; border-spacing:0; font-size:14px}
       thead th{
-        background:var(--primary); color:#fff; text-align:left; font-weight:700;
+        background: ${colors.primary};
+        color:#fff; text-align:left; font-weight:700;
         padding:10px 12px; border:0;
       }
       thead th:first-child{border-top-left-radius:10px}
       thead th:last-child{border-top-right-radius:10px}
-      tbody td{padding:10px 12px; border-bottom:1px solid var(--border); background:#fff}
+
+      tbody td{
+        padding:10px 12px;
+        border-bottom:1px solid rgba(230,232,240,0.8);
+        background: rgba(255, 255, 255, 0.8);
+      }
       tbody tr:last-child td{border-bottom:0}
+
       .section{padding:16px}
 
-      /* Badges */
       .badge{
-        display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; background:#ffe8d6; color:#7a3a00
+        display:inline-block; font-size:12px; padding:4px 8px; border-radius:999px; background:rgba(255,232,214,0.9); color:#7a3a00
       }
 
-      /* Footer */
-      footer{padding:18px; text-align:right; color:var(--muted); font-size:12px}
+      footer{
+        padding:12px 18px; font-size:13px; border-radius:8px;
+        display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;
+        color:#fff;
+        background: rgba(78, 108, 243, 0.85);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        box-shadow: var(--shadow);
+      }
 
       @media (max-width: 720px){
         .grid{grid-template-columns: 1fr}
         .card-header{flex-direction:column; align-items:flex-start; gap:8px}
         .chips{display:none}
+      }
+
+      @media print {
+        body{
+          background:#fff; /* printers ignore background images */
+        }
+        .card,
+        .kv,
+        tbody td,
+        .card-header,
+        footer,
+        .topbar{ 
+          background:#fff !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        .topbar, footer { box-shadow: none; }
       }
     </style>
   </head>
@@ -273,12 +312,12 @@ const buildWeeklyReportHTML = (payload, theme = {}) => {
     <!-- Topbar -->
     <header class="topbar">
       <a class="brand" href="javascript:void(0)">
-        <img src="${logo}" alt="logo" />
+        <img src="${brand.logoUrl}" alt="logo" />
       </a>
       <div class="chips">
         <button class="btn" onclick="window.print()" title="Print / Save PDF">
           <!-- pdf icon -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M6 9V2h12v7"></path>
             <path d="M6 18H4a2 2 0 0 1-2-2V9h20v7a2 2 0 0 1-2 2h-2"></path>
             <rect x="6" y="14" width="12" height="8" rx="2"></rect>
@@ -400,16 +439,14 @@ const buildWeeklyReportHTML = (payload, theme = {}) => {
         </div>
       </section>
 
-   <footer style="background:#4E6CF3; color:#fff; padding:12px 18px; font-size:13px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-  <div style="margin-bottom:0;">
-    &copy; Copyright QTN Vault 2025, All Rights Reserved
-  </div>
-  <div style="display:flex; gap:16px; flex-wrap:wrap;">
-    <span style="cursor:pointer;">License</span>
-    <span style="cursor:pointer;">Documentation</span>
-    <span style="cursor:pointer;">Support</span>
-  </div>
-</footer>
+      <footer>
+        <div style="margin-bottom:0;">&copy; Copyright QTN Vault 2025, All Rights Reserved</div>
+        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+          <span style="cursor:pointer;">License</span>
+          <span style="cursor:pointer;">Documentation</span>
+          <span style="cursor:pointer;">Support</span>
+        </div>
+      </footer>
     </main>
   </body>
   </html>
