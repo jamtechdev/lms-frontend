@@ -1,6 +1,6 @@
-// src/components/WeeklyReport.jsx
 import { useState, useMemo } from "react";
 import swal from "sweetalert";
+import loader from "../../assets/images/loader.gif";
 
 export default function WeeklyReport({ studentId, parentService, className }) {
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,6 @@ export default function WeeklyReport({ studentId, parentService, className }) {
   );
 
   const handleClick = async () => {
-    // 1️⃣ Open the tab synchronously to avoid popup blocking
     const reportWindow = window.open("about:blank", "_blank");
     if (!reportWindow) {
       swal(
@@ -26,16 +25,15 @@ export default function WeeklyReport({ studentId, parentService, className }) {
       );
       return;
     }
-
-    // Show temporary loading page in the new tab
     reportWindow.document.open();
     reportWindow.document.write(`
       <!doctype html>
       <html>
       <head><meta charset="utf-8"><title>Loading Report...</title></head>
       <body style="font-family:Arial,sans-serif;padding:20px">
-        <h2>Loading weekly report...</h2>
-        <p>Please wait.</p>
+         <div className="text-center mt-5">
+        <img src=${loader} width={100} />
+      </div>
       </body>
       </html>
     `);
@@ -44,8 +42,6 @@ export default function WeeklyReport({ studentId, parentService, className }) {
     setLoading(true);
     try {
       const res = await parentService.getReport({ child_id: studentId });
-
-      // 2️⃣ PDF Blob case → open directly in the tab
       if (res?.data instanceof Blob && (res.data.type || "").includes("pdf")) {
         const pdfUrl = URL.createObjectURL(res.data);
         reportWindow.location.href = pdfUrl;
@@ -53,7 +49,6 @@ export default function WeeklyReport({ studentId, parentService, className }) {
         return;
       }
 
-      // 3️⃣ JSON case → build HTML and write into tab
       const data =
         typeof res?.data === "object" ? res.data : JSON.parse(res.data);
       const html = buildWeeklyReportHTML(data);
@@ -84,7 +79,6 @@ export default function WeeklyReport({ studentId, parentService, className }) {
   );
 }
 
-/* HTML Builder without print dialog */
 const buildWeeklyReportHTML = (payload) => {
   const rpt = payload || {};
   const info = rpt.student_data?.student_info || {};
