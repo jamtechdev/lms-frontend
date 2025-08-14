@@ -5,6 +5,7 @@ import swal from "sweetalert";
 import ResponsivePagination from "react-responsive-pagination";
 import "react-responsive-pagination/themes/classic-light-dark.css";
 import loader from "../../../assets/images/loader.gif";
+import WeeklyReport from "../../../components/common/reportHtml";
 
 const StudentList = () => {
   const [students, setStudents] = useState();
@@ -16,22 +17,19 @@ const StudentList = () => {
     setLoading(true);
     await parentService
       .getAllStudents(page)
-      .then((data) => {
-        setStudents(data?.data);
-      })
+      .then((data) => setStudents(data?.data))
       .catch((error) => {
         console.log("Error", error);
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   };
+
   useEffect(() => {
     fetchStudents();
   }, [page]);
-  const handlePage = (value) => {
-    setPage(value);
-  };
+
+  const handlePage = (value) => setPage(value);
+
   const handleToggle = async (student) => {
     setLockCodeUpdating(true);
     const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -41,19 +39,32 @@ const StudentList = () => {
     };
     await parentService
       .updateLockCode(student?.id, payload)
-      .then(async (data) => {
+      .then(fetchStudents)
+      .catch((error) => {
+        console.error("Error", error);
+      })
+      .finally(() => setLockCodeUpdating(false));
+  };
+
+  const handleEdit = (id) => navigate(`/parent/students/${id}`);
+
+  const handleDeleteConfirm = async (id) => {
+    await parentService
+      .deleteStudentByParent(id)
+      .then(async () => {
+        await swal(
+          "Deleted",
+          "Student has been deleted successfully!",
+          "success"
+        );
         await fetchStudents();
       })
       .catch((error) => {
         console.error("Error", error);
-      })
-      .finally(() => {
-        setLockCodeUpdating(false);
+        swal("Failed", "Could not delete the student.", "error");
       });
   };
-  const handleEdit = (id) => {
-    navigate(`/parent/students/${id}`);
-  };
+
   const handleDelete = async (id) => {
     await swal({
       title: "Are you sure?",
@@ -62,30 +73,15 @@ const StudentList = () => {
       icon: "warning",
     })
       .then((willDelete) => {
-        if (willDelete) {
-          handleDeleteConfirm(id);
-        }
+        if (willDelete) handleDeleteConfirm(id);
       })
-      .catch((error) => {
-        console.error("Error", error);
-      });
-  };
-  const handleDeleteConfirm = async (id) => {
-    await parentService
-      .deleteStudentByParent(id)
-      .then(async (data) => {
-        await swal("Deleted", "Student has been successfully!", "success");
-        await fetchStudents();
-      })
-      .catch((error) => {
-        console.error("Error", error);
-      });
+      .catch((error) => console.error("Error", error));
   };
 
   if (loading && !lockCodeUpdating)
     return (
       <div className="text-center mt-5">
-        <img src={loader} width={100} />
+        <img src={loader} width={100} alt="Loading..." />
       </div>
     );
 
@@ -105,7 +101,7 @@ const StudentList = () => {
               </li>
               <li>
                 <span className="text-gray-500 fw-normal d-flex">
-                  <i className="ph ph-caret-right"></i>
+                  <i className="ph ph-caret-right" />
                 </span>
               </li>
               <li>
@@ -123,6 +119,7 @@ const StudentList = () => {
             Create
           </Link>
         </div>
+
         <div className="table-responsive">
           <table className="student-table table table-bordered">
             <thead>
@@ -147,6 +144,7 @@ const StudentList = () => {
                         src={student?.avatar}
                         alt="avatar"
                         className="avatar-img"
+                        style={{ width: 40, height: 40, borderRadius: "50%" }}
                       />
                     </td>
                     <td>
@@ -158,20 +156,28 @@ const StudentList = () => {
                     <td>{student?.student_level}</td>
                     <td>{student?.address}</td>
                     <td>{student?.lock_code}</td>
-                    <td style={{ textAlign: "center" }}>
-                      <label className="switch">
+                    <td style={{ textAlign: "center", whiteSpace: "nowrap" }}>
+                      <label className="switch" style={{ marginRight: 8 }}>
                         <input
                           type="checkbox"
-                          checked={student?.lock_code_enabled}
+                          checked={!!student?.lock_code_enabled}
                           onChange={() => handleToggle(student)}
                           disabled={lockCodeUpdating}
                         />
                         <span className="slider round"></span>
                       </label>
+
+                      <WeeklyReport
+                        studentId={student.id}
+                        parentService={parentService}
+                        className="icon-button ms-2"
+                      />
+
                       <button
                         className="icon-button"
                         onClick={() => handleEdit(student.id)}
                         title="Edit"
+                        style={{ marginLeft: 6, marginRight: 6 }}
                       >
                         <i className="ph ph-pencil-simple"></i>
                       </button>
@@ -205,4 +211,5 @@ const StudentList = () => {
     </>
   );
 };
+
 export default StudentList;

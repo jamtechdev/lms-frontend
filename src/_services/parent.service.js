@@ -29,6 +29,7 @@ const parentService = {
     getAssignSubject,
     getStudentGems,
     getGemHistory,
+    getReport,
 };
 
 async function getStudentLevel() {
@@ -143,5 +144,8 @@ async function getStudentGems(id) {
 }
 async function getGemHistory(id) {
     return await axiosInstance.get(`/api/v1/gems/children-gems?child_id=${id}`);
+}
+async function getReport(data) {
+    return await axiosInstance.post(`/api/v1/reports/generateWeeklyReport`, data);
 }
 export default parentService;
